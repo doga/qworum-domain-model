@@ -1,0 +1,9 @@
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//macOS 12.7.6//EN
+N:;;;;
+FN:Acme Inc.
+ORG:Acme Inc.;
+EMAIL;type=INTERNET;type=WORK;type=pref:https://site.example
+X-ABShowAs:COMPANY
+END:VCARD

@@ -1,0 +1,11 @@
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//macOS 12.7.6//EN
+N:;;;;
+FN:Balexert
+ORG:Balexert;
+ADR;type=HOME;type=pref:;;Avenue Louis-Casaï 27;Genève 28;;1211;Suisse
+item1.URL;type=pref:https://balexert.ch/
+item1.X-ABLabel:_$!<HomePage>!$_
+X-ABShowAs:COMPANY
+END:VCARD

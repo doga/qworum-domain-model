@@ -1,0 +1,38 @@
+{
+  "version": "4",
+  "specifiers": {
+    "jsr:@std/assert@1": "1.0.12",
+    "jsr:@std/internal@^1.0.6": "1.0.6"
+  },
+  "jsr": {
+    "@std/assert@1.0.12": {
+      "integrity": "08009f0926dda9cbd8bef3a35d3b6a4b964b0ab5c3e140a4e0351fbf34af5b9a",
+      "dependencies": [
+        "jsr:@std/internal"
+      ]
+    },
+    "@std/internal@1.0.6": {
+      "integrity": "9533b128f230f73bd209408bb07a4b12f8d4255ab2a4d22a1fd6d87304aca9a4"
+    }
+  },
+  "redirects": {
+    "https://unpkg.com/ical.js/dist/ical.min.js": "https://unpkg.com/ical.js@2.1.0/dist/ical.min.js"
+  },
+  "remote": {
+    "https://esm.sh/gh/doga/IRI@3.0.0/denonext/mod.mjs": "be94d5b2c0c909d88644a3f368b24e9496326f097598b59444e00f9a9a25ba20",
+    "https://esm.sh/gh/doga/IRI@3.0.0/mod.mjs": "1462c638f369bca36415bcaaeb7f26b0a26aa66df54ca24e1810d085c7c79a02",
+    "https://esm.sh/gh/doga/IRI@3.1.2/denonext/mod.mjs": "c83be4fef51d3ede159955aa786921885746688af1e632c9bb72efdad619db37",
+    "https://esm.sh/gh/doga/IRI@3.1.2/mod.mjs": "a44115a0a341789922b13da9d64a6ed2b656551be9f3a2d5e61f129803fe8ccb",
+    "https://esm.sh/gh/doga/base64@1.0.0/denonext/mod.mjs": "b8473de8503718ecd17af86c9aaa00e8054e0ecdb9787e8f55827f7224385d5a",
+    "https://esm.sh/gh/doga/base64@1.0.0/mod.mjs": "70714d2677cf6ff1f731dfd66cc5f1a9ac029392ff27978b2024e6d434ec3e17",
+    "https://esm.sh/gh/doga/punycode@1.0.0/mod.mjs": "4448b30deb82ecf333360321ee2e05b7a87f873c141fe0eec91b983a7e381152",
+    "https://esm.sh/gh/doga/rdf-json-parser@1.1.1/denonext/mod.mjs": "918f232679a878499786aa3bc09a34559169c70a49dabb8390d7e178c5eb102a",
+    "https://esm.sh/gh/doga/rdf-json-parser@1.1.1/mod.mjs": "e101867b5516942efe541c2244868897f1321f2aae88c997a5b1ab009add310c",
+    "https://esm.sh/gh/rdfjs/data-model@v2.1.0": "9bfd3d16878c50e4da8ba379e37f827e057b7ff9095550b423e145697fa028fa",
+    "https://esm.sh/gh/rdfjs/data-model@v2.1.0/denonext/data-model.mjs": "a0a7331b2d11669ce20bb6de04b1cf343674f9b97dbd6e9775487b00077f15a0",
+    "https://esm.sh/gh/rdfjs/dataset@v2.0.2": "66eadbc4b78d2d917216ff48ddfca496e424181cd36c66b23a4f4379b942b0a8",
+    "https://esm.sh/gh/rdfjs/dataset@v2.0.2/denonext/dataset.mjs": "190534eea7503589971267aa775db135f3285135fbb13aa555fcf39d0e03b2d5",
+    "https://esm.sh/v135/gh/doga/punycode@1.0.0/denonext/mod.js": "0487c25f67df311ae32ce8b85d2fe56f571e6af6eb5ae8bee3060ac4c3a956bf",
+    "https://unpkg.com/ical.js@2.1.0/dist/ical.min.js": "4a8ca1647b5b93e5fcf5fee59c4ad1c597138d108cc2c7e88854f688f711436d"
+  }
+}
