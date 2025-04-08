@@ -8,13 +8,13 @@ import {
 import { rdf } from '../deps.mjs';
 
 import { 
-  baregroupid, bareorgid, bareuserid,
+  OrgId, bareorgid, 
+  GroupId, baregroupid, 
+  bareuserid,
 
-  UserRole, userrole,
+  OrgPersona, GroupPersona,
+
   ownerRole, rootGroupsManagerRole, subgroupsManagerRole, collabManagerRole, membershipsManagerRole, memberRole,
-  Persona, OrgPersona, GroupPersona,
-  OrgId,
-  GroupId, 
 } from '../mod.mjs';
 
 type PersonaType = {

@@ -8,6 +8,7 @@ A JavaScript client library that provides classes that collectively represent Qw
 
 - `Org`,
 - `Group`,
+- `Collab`,
 - `User`.
 
 This library is/will be used by:
@@ -15,86 +16,6 @@ This library is/will be used by:
 - Qworum's API server at the backend.
 - The [Qworum browser extension](https://chromewebstore.google.com/detail/qworum-the-service-web/leaofcglebjeebmnmlapbnfbjgfiaokg).
 - The [Qworum JavaScript library](https://github.com/doga/qworum-for-web-pages) that is used for developing Qworum applications and services.
-
-## Usage examples
-
-<details data-mdrb>
-<summary>Calling an API endpoint</summary>
-
-<pre>
-description = '''
-
-'''
-</pre>
-</details>
-
-```javascript
-import {User} from "./mod.mjs";
-// TODO usage example
-```
-
-Sample output for the code above:
-
-```text
-
-```
-
-_Tip: Run the examples below by typing this in your terminal (requires [Deno](https://deno.com/) 2+):_
-
-```shell
-deno run --allow-net --allow-run --allow-env --allow-read jsr:@andrewbrey/mdrb@3.0.4 --dax=false --mode=isolated README.md
-```
-
-## Lifecycle of a domain model
-
-1. On the client side, domain model instances are first put into an in-memory RDF dataset.
-1. This dataset is then serialised into a text format before being sent to the server.
-1. The server does the reverse, by using the same domain model.
-
-What is meant by a client and a server:
-
-- Client: a Qworum application or service. Server: the Qworum browser extension.
-- Client: the Qworum browser extension. Server: the Qworum API in the cloud.
-
-The following are out-of-scope for this domain model:
-
-- RDF serialisation,
-- Data persistence.
-
-```mermaid
-flowchart LR
-  domainModelClass[Domain model classes created during architecting phase]
-
-  clientInstance[Class instances used during operations]
-  clientRdfDataset[RDF dataset]
-  clientRdfSerialisation[RDF serialisation]
-  clientStorage[Client-side storage]
-
-  serverInstance[Class instances used during operations]
-  serverRdfDataset[RDF dataset]
-  serverRdfSerialisation[RDF serialisation]
-  rdfStore[RDF store]
-
-  domainModelClass -- instantiation --> clientInstance
-  domainModelClass -- instantiation --> serverInstance
-
-  subgraph Client
-    clientInstance -- output --> clientRdfDataset
-    clientRdfDataset -- input --> clientInstance
-    clientRdfDataset -- to text --> clientRdfSerialisation
-    clientRdfSerialisation -- from text --> clientRdfDataset
-    clientRdfSerialisation <-- data persistence --> clientStorage
-  end
-  subgraph Server
-    serverInstance -- output --> serverRdfDataset
-    serverRdfDataset -- input --> serverInstance
-    serverRdfDataset -- to text --> serverRdfSerialisation
-    serverRdfSerialisation -- from text --> serverRdfDataset
-    serverRdfDataset <-- data persistence --> rdfStore
-  end
-
-  clientRdfSerialisation <--network--> serverRdfSerialisation
-```
 
 ## Domain model in detail
 
@@ -257,6 +178,135 @@ In a `Persona`, allowed user roles are _owner_, _root groups manager_ (for orgs)
 
 The members of a group are all members of the parent group or org. If a group belongs to an org, then all managers of the group must be members of the org. If a group doesn't belong to an org, then anyone can be a group manager if the group owner sees it fit.
 
-Collabs are for multi-group teamwork. Collab connections must be 2-way to be valid, the others are only collab proposals pending confirmation by the other party.
+Collabs are for multi-group teamwork. Collab connections must be 2-way to be valid, the others are only collab proposals pending confirmation by the other party. Here is how it works:
+
+1. A collab manager in a group creates a collab object and adds the IDs of groups that he/she wishes to invite to the collab.
+1. Any previous collab object that the group was linking to is forgotten by that group. Groups can link to one collab at most at any given time.
+1. The collab managers of the invited groups are notified and can link their group to the collab.
+1. A collab is for Internet-wide teamwork; it is valid for all Qworum applications.
+
+## Lifecycle of a domain model
+
+1. On the client side, domain model instances are first put into an in-memory RDF dataset.
+1. This dataset is then serialised into a text format before being sent to the server.
+1. The server does the reverse, by using the same domain model.
+
+What is meant by a client and a server:
+
+- Client: a Qworum application or service. Server: the Qworum browser extension.
+- Client: the Qworum browser extension. Server: the Qworum API in the cloud.
+
+The following are out-of-scope for this domain model:
+
+- RDF serialisation,
+- Data persistence.
+
+```mermaid
+flowchart LR
+  domainModelClass[Domain model classes created during architecting phase]
+
+  clientInstance[Class instances used during operations]
+  clientRdfDataset[RDF dataset]
+  clientRdfSerialisation[RDF serialisation]
+  clientStorage[Client-side storage]
+
+  serverInstance[Class instances used during operations]
+  serverRdfDataset[RDF dataset]
+  serverRdfSerialisation[RDF serialisation]
+  rdfStore[RDF store]
+
+  domainModelClass -- instantiation --> clientInstance
+  domainModelClass -- instantiation --> serverInstance
+
+  subgraph Client
+    clientInstance -- output --> clientRdfDataset
+    clientRdfDataset -- input --> clientInstance
+    clientRdfDataset -- to text --> clientRdfSerialisation
+    clientRdfSerialisation -- from text --> clientRdfDataset
+    clientRdfSerialisation <-- data persistence --> clientStorage
+  end
+  subgraph Server
+    serverInstance -- output --> serverRdfDataset
+    serverRdfDataset -- input --> serverInstance
+    serverRdfDataset -- to text --> serverRdfSerialisation
+    serverRdfSerialisation -- from text --> serverRdfDataset
+    serverRdfDataset <-- data persistence --> rdfStore
+  end
+
+  clientRdfSerialisation <--network--> serverRdfSerialisation
+```
+
+## Usage example
+
+<details data-mdrb>
+<summary>Handle personas</summary>
+
+<pre>
+description = '''
+Create a persona that assigns roles to a user within an organisation.
+'''
+</pre>
+</details>
+
+```typescript
+import rdf from 'https://esm.sh/gh/rdfjs/dataset@v2.0.2';
+
+import { 
+  OrgId, bareorgid, bareuserid,
+  OrgPersona, ownerRole, rootGroupsManagerRole, subgroupsManagerRole, collabManagerRole, membershipsManagerRole, memberRole,
+} from './mod.mjs';
+
+type PersonaType = {
+  orgId    : any,
+  groupId  : any,
+  userId   : any,
+  userRoles: any,
+};
+
+// Create a persona that assigns roles to a user within an organisation.
+const
+orgId     = bareorgid`w-5678`,
+userId    = bareuserid`r-1234`,
+userRoles = [ownerRole, rootGroupsManagerRole, membershipsManagerRole, memberRole],
+persona   = new OrgPersona({orgId, userId, userRoles} as PersonaType),
+dataset   = rdf.dataset();
+
+// Write the persona to an RDF dataset, and read it back.
+persona.writeTo(dataset);
+const orgPersonas = OrgPersona.readFrom(dataset);
+
+// Print out the persona.
+console.group(`Org ID: ${orgId}`);
+for (const persona of orgPersonas) {
+  console.group(`User ID: ${persona.userId}`);
+  console.group('Role IDs:');
+  for (const userRole of persona.userRoles) {
+    console.debug(`${userRole}`);
+  }
+  console.groupEnd();
+  console.groupEnd();
+}
+console.groupEnd();
+```
+
+Sample output for the code above:
+
+```text
+Org ID: urn:qworum:org:w-5678
+    User ID: urn:qworum:user:r-1234
+        Role IDs:
+            https://vocab.qworum.net/id/role/owner
+            https://vocab.qworum.net/id/role/root-groups-manager
+            https://vocab.qworum.net/id/role/memberships-manager
+            https://vocab.qworum.net/id/role/member
+```
+
+### Running the usage example
+
+Run the examples above by typing this in your terminal (requires [Deno](https://deno.com/) 2+):
+
+```shell
+deno run --allow-net --allow-run --allow-env --allow-read jsr:@andrewbrey/mdrb@3.0.4 --dax=false --mode=isolated README.md
+```
 
 ∎
