@@ -1,29 +1,35 @@
-// deno test --allow-import ./test/id_test.mts
+// deno test --allow-import ./test/persona_test.mts
 
 import {
   assertInstanceOf, assertEquals, assertNotEquals, 
   assertThrows, assertFalse, assert,
-} from "jsr:@std/assert@1";
+} from 'jsr:@std/assert@1';
 
-import {rdf} from '../deps.mjs';
+import { rdf } from '../deps.mjs';
 
 import { 
-  OrgId, GroupId, UserId,
-  OrgPersona, GroupPersona,
+  baregroupid, bareorgid, bareuserid,
+
+  UserRole, userrole,
+  ownerRole, rootGroupsManagerRole, subgroupsManagerRole, collabManagerRole, membershipsManagerRole, memberRole,
+  Persona, OrgPersona, GroupPersona,
+  OrgId,
+  GroupId, 
 } from '../mod.mjs';
 
-
 type PersonaType = {
-  orgId: OrgId | undefined, groupId: GroupId | undefined, 
-  userId: UserId, userRoles: string[]
+  orgId    : any,
+  groupId  : any,
+  userId   : any,
+  userRoles: any
 };
 
 
 Deno.test('org persona can be written as rdf and then read back', () => {
   const
-  orgId      = OrgId.create('5678'),
-  userId     = UserId.create('1234'),
-  userRoles  = ['owner', 'root groups manager', 'memberships manager', 'member'],
+  orgId      = bareorgid`5678`,
+  userId     = bareuserid`1234`,
+  userRoles  = [ownerRole, rootGroupsManagerRole, membershipsManagerRole, memberRole],
   orgPersona = new OrgPersona({orgId, userId, userRoles} as PersonaType),
   dataset    = rdf.dataset();
 
@@ -31,30 +37,31 @@ Deno.test('org persona can be written as rdf and then read back', () => {
   // console.debug(dataset);
   const orgPersonas = OrgPersona.readFrom(dataset);
 
-  console.debug(orgPersonas);
+  // console.debug(orgPersonas);
   assertInstanceOf(orgPersonas, Array);
   assertEquals(orgPersonas.length, 1);
   assertInstanceOf(orgPersonas[0], OrgPersona);
-  assert(orgPersonas[0].orgId?.equals(orgId));
+  assert((orgId as OrgId).equals(orgPersonas[0].orgId));
 });
 
 
 Deno.test('group persona can be written as rdf and then read back', () => {
   const
-  groupId      = GroupId.create('5678'),
-  userId       = UserId.create('1234'),
-  userRoles    = ['owner', 'collabs manager', 'subgroups manager', 'memberships manager', 'member'],
+  groupId      = baregroupid`5678`,
+  userId       = bareuserid`1234`,
+  userRoles    = [ownerRole, collabManagerRole, subgroupsManagerRole, membershipsManagerRole, memberRole],
   groupPersona = new GroupPersona({groupId, userId, userRoles} as PersonaType),
   dataset      = rdf.dataset();
+  // console.debug(groupId);
 
   groupPersona.writeTo(dataset);
   // console.debug(dataset);
   const groupPersonas = GroupPersona.readFrom(dataset);
 
-  console.debug(groupPersonas);
+  // console.debug(groupPersonas);
   assertInstanceOf(groupPersonas, Array);
   assertEquals(groupPersonas.length, 1);
   assertInstanceOf(groupPersonas[0], GroupPersona);
-  assert(groupPersonas[0].groupId?.equals(groupId));
+  assert((groupId as GroupId).equals(groupPersonas[0].groupId));
 });
 

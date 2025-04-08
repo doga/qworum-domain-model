@@ -5,7 +5,11 @@ import {
   rdfTerm as t, rdf,
   ICAL, IRI, URN, iri 
 } from "../deps.mjs";
-import { OrgVcard, GroupVcard, IndividualVcard, Email, PhoneUrl, Photo } from '../mod.mjs';
+import { 
+  OrgVcard, GroupVcard, IndividualVcard, 
+  Email, PhoneUrl, Photo, 
+  Id, OrgId, GroupId, UserId,
+} from '../mod.mjs';
 
 const 
 individualVcardFiles = [
@@ -46,16 +50,17 @@ Deno.test("ical can parse vcard string", async () => {
 Deno.test("individual vcard objects can be created from vcard strings", async () => {
   for (const vcardFile of individualVcardFiles) {
     const
+    userId   = UserId.create('1234'),
     vcardStr = await Deno.readTextFile(`./test/assets/${vcardFile}`),
-    vcard    = IndividualVcard.fromString(vcardStr);
+    vcard    = IndividualVcard.fromString(userId, vcardStr);
 
-    (vcard as {vcardId: any}).vcardId = iri`urn:qworum:vcard:1234`;
+    (vcard as {ownerId: any}).ownerId = iri`urn:qworum:vcard:1234`;
 
-    console.debug(`[test] vcard:`, vcard);
+    // console.debug(`[test] vcard:`, vcard);
 
     assertInstanceOf(vcard, IndividualVcard);
-    assertInstanceOf(vcard.vcardId, IRI);
-    assertInstanceOf(vcard.vcardId, URN);
+    assertInstanceOf(vcard.ownerId, IRI);
+    assertInstanceOf(vcard.ownerId, URN);
     assert(typeof vcard?.formattedName === 'string');
     if(vcard?.org) assert(typeof vcard?.org === 'string');
     if(vcard?.nickname) assert(typeof vcard?.nickname === 'string');
@@ -75,8 +80,9 @@ Deno.test("org vcard objects can be created from vcard strings", async () => {
   for (const vcardFile of orgVcardFiles) {
     // console.debug(`[test] vcardFile: ${vcardFile}`);
     const
+    orgId    = OrgId.create('5678'),
     vcardStr = await Deno.readTextFile(`./test/assets/${vcardFile}`),
-    vcard    = OrgVcard.fromString(vcardStr);
+    vcard    = OrgVcard.fromString(orgId, vcardStr);
 
     assertInstanceOf(vcard, OrgVcard);
     assert(typeof vcard?.formattedName === 'string');
@@ -98,8 +104,9 @@ Deno.test("group vcard objects can be created from vcard strings", async () => {
   for (const vcardFile of groupVcardFiles) {
     // console.debug(`[test] vcardFile: ${vcardFile}`);
     const
+    groupId  = GroupId.create('5678'),
     vcardStr = await Deno.readTextFile(`./test/assets/${vcardFile}`),
-    vcard    = GroupVcard.fromString(vcardStr);
+    vcard    = GroupVcard.fromString(groupId, vcardStr);
 
     assertInstanceOf(vcard, GroupVcard);
     assert(typeof vcard?.formattedName === 'string');
@@ -119,19 +126,19 @@ Deno.test("group vcard objects can be created from vcard strings", async () => {
 
 Deno.test("Vcards are written to an RDF dataset and then read back", async () => {
   for (const vcardFile of groupVcardFiles) {
-    // console.debug(`[test] vcardFile: ${vcardFile}`);
+    // console.debug(`[test] reading vcard from file: ${vcardFile}`);
     const
+    groupId  = GroupId.create('5678'),
     vcardStr = await Deno.readTextFile(`./test/assets/${vcardFile}`),
-    vcardIn    = GroupVcard.fromString(vcardStr),
+    vcardIn  = GroupVcard.fromString(groupId, vcardStr),
     dataset  = rdf.dataset();
 
-    assertThrows(() => {
-      vcardIn.writeTo(dataset);
-    });
-    (vcardIn as {vcardId: any}).vcardId = iri`urn:qworum:vcard:1234`;
     vcardIn.writeTo(dataset);
+    // console.debug(dataset);
+    // console.debug(`[test] reading vcard from dataset`, dataset);
+
     const 
-    vcards = GroupVcard.readFrom(dataset),
+    vcards   = GroupVcard.readFrom(dataset),
     vcardOut = vcards[0];
 
     assertEquals(vcards.length, 1);
@@ -188,7 +195,7 @@ Deno.test("Vcards are written to an RDF dataset and then read back", async () =>
 
 
 Deno.test("bad vcard string throws error", () => {
-  assertThrows(() => IndividualVcard.fromString('vcardStr'));
+  assertThrows(() => IndividualVcard.fromString(UserId.create('1234'), 'vcardStr'));
 });
 
 
