@@ -71,10 +71,10 @@ classDiagram
     +writeTo(rdfDataset)
     +equals(other) boolean
   }
-  class Collab {
+  class Collab{
     +CollabId collabId
     +GroupId ownerGroupId
-    +GroupId[] memberGroupIds
+    +GroupId[] invitedGroupIds
     +readFrom(rdfDataset) Collab[]$
     +writeTo(rdfDataset)
     +equals(other) boolean
@@ -255,12 +255,12 @@ Create a persona that assigns roles to a user within an organisation.
 </details>
 
 ```typescript
-import rdf from 'https://esm.sh/gh/rdfjs/dataset@v2.0.2';
-
 import { 
   OrgId, bareorgid, bareuserid,
   OrgPersona, ownerRole, rootGroupsManagerRole, subgroupsManagerRole, collabManagerRole, membershipsManagerRole, memberRole,
 } from 'https://esm.sh/gh/doga/qworum-domain-model@0.9.2/mod.mjs';
+
+import rdf from 'https://esm.sh/gh/rdfjs/dataset@v2.0.2';
 
 type PersonaType = {
   orgId    : any,

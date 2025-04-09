@@ -9,27 +9,28 @@ import { rdf } from '../deps.mjs';
 
 import { 
   GroupId, baregroupid, 
-  barecollabid, 
-  Collab,
-  CollabId, 
+  CollabId, barecollabid, 
+  Collab, 
 } from '../mod.mjs';
 
 
 Deno.test('collab can be written as rdf and then read back', () => {
   const
-  collabId       = barecollabid`5678`,
-  ownerGroupId   = baregroupid`g-6kjh`,
-  memberGroupIds = [ baregroupid`mdfgh765`, baregroupid`m-rbc-443` ];
+  collabId        = barecollabid`5678`,
+  ownerGroupId    = baregroupid`g-6kjh`,
+  invitedGroupId1 = baregroupid`mdfgh765`,
+  invitedGroupId2 = baregroupid`m-rbc-443`,
+  invitedGroupIds = [ invitedGroupId1, invitedGroupId2 ];
 
-  if(!(collabId && ownerGroupId && memberGroupIds))return;
+  if(!(collabId && ownerGroupId && invitedGroupId1 && invitedGroupId2))return;
 
   assertInstanceOf(collabId, CollabId);
   assertInstanceOf(ownerGroupId, GroupId);
-  assertInstanceOf(memberGroupIds, Array);
-  assert(memberGroupIds.every(id => id instanceof GroupId));
+  assertInstanceOf(invitedGroupIds, Array);
+  assert(invitedGroupIds.every(id => id instanceof GroupId));
 
   const
-  collabIn = new Collab(collabId, ownerGroupId, memberGroupIds),
+  collabIn = new Collab(collabId, ownerGroupId, invitedGroupIds as GroupId[]),
   dataset  = rdf.dataset();
 
   collabIn.writeTo(dataset);
@@ -44,8 +45,9 @@ Deno.test('collab can be written as rdf and then read back', () => {
   assertInstanceOf(collabOut, Collab);
   assert(collabOut.equals(collabIn));
   assert(collabOut.ownerGroupId.equals(collabIn.ownerGroupId));
-  assertEquals(collabOut.memberGroupIds.length, collabIn.memberGroupIds.length);
-  assert(collabOut.memberGroupIds.every(groupId => collabIn.memberGroupIds.find(id => groupId.equals(id))));
+  assertEquals(collabOut.invitedGroupIds.length, collabIn.invitedGroupIds.length);
+  assert(collabOut.invitedGroupIds.every(groupId => collabIn.invitedGroupIds.find(id => groupId.equals(id))));
+  assert(collabIn.invitedGroupIds.every(groupId => collabOut.invitedGroupIds.find(id => groupId.equals(id))));
 });
 
 
