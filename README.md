@@ -35,21 +35,27 @@ classDiagram
     +string idType
     +string bareId
     +create(idString) Id$
+    +random() Id$
   }
   class UserId{
     +create(idString) UserId$
+    +random() UserId$
   }
   class GroupId{
     +create(idString) GroupId$
+    +random() GroupId$
   }
   class CollabId{
     +create(idString) CollabId$
+    +random() CollabId$
   }
   class OrgId{
     +create(idString) OrgId$
+    +random() OrgId$
   }
   class User{
     +UserId userId
+    +GroupId personalGroupId
     +Password password
     +readFrom(rdfDataset) User[]$
     +writeTo(rdfDataset)
@@ -254,7 +260,7 @@ import rdf from 'https://esm.sh/gh/rdfjs/dataset@v2.0.2';
 import { 
   OrgId, bareorgid, bareuserid,
   OrgPersona, ownerRole, rootGroupsManagerRole, subgroupsManagerRole, collabManagerRole, membershipsManagerRole, memberRole,
-} from 'https://esm.sh/gh/doga/qworum-domain-model@0.9.1/mod.mjs';
+} from 'https://esm.sh/gh/doga/qworum-domain-model@0.9.2/mod.mjs';
 
 type PersonaType = {
   orgId    : any,
