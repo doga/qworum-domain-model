@@ -254,7 +254,7 @@ import rdf from 'https://esm.sh/gh/rdfjs/dataset@v2.0.2';
 import { 
   OrgId, bareorgid, bareuserid,
   OrgPersona, ownerRole, rootGroupsManagerRole, subgroupsManagerRole, collabManagerRole, membershipsManagerRole, memberRole,
-} from './mod.mjs';
+} from 'https://esm.sh/gh/doga/qworum-domain-model@0.9.0/mod.mjs';
 
 type PersonaType = {
   orgId    : any,
@@ -306,7 +306,7 @@ Org ID: urn:qworum:org:w-5678
 Run the examples above by typing this in your terminal (requires [Deno](https://deno.com/) 2+):
 
 ```shell
-deno run --allow-net --allow-run --allow-env --allow-read jsr:@andrewbrey/mdrb@3.0.4 --dax=false --mode=isolated README.md
+deno run --allow-net --allow-run --allow-env --allow-read jsr:@andrewbrey/mdrb@3.0.4 --dax=false --mode=isolated https://raw.githubusercontent.com/doga/qworum-domain-model/refs/heads/main/README.md
 ```
 
 ∎
