@@ -1,0 +1,29 @@
+{
+	"files": [
+		{
+			"path": "lib/vcard.mjs",
+			"bookmarks": [
+				{
+					"line": 313,
+					"column": 30,
+					"label": ""
+				},
+				{
+					"line": 742,
+					"column": 9,
+					"label": ""
+				},
+				{
+					"line": 843,
+					"column": 0,
+					"label": ""
+				},
+				{
+					"line": 1021,
+					"column": 28,
+					"label": ""
+				}
+			]
+		}
+	]
+}

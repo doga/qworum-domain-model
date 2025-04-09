@@ -1,18 +1,16 @@
 
 export { 
-  IRI, iri, 
-  IRL, irl, 
-  url, 
-  URN, urn, 
   IriParser,
+  IRI, URN, IRL, 
+  iri, urn, irl, url, 
 } from "./deps.mjs";
 
 export { 
   Id, 
   OrgId,    orgid,    bareorgid, 
   GroupId,  groupid,  baregroupid, 
-  UserId,   userid,   bareuserid,
   CollabId, collabid, barecollabid,
+  UserId,   userid,   bareuserid,
 } from './lib/id.mjs';
 
 export { Org, Group, PersonalGroup } from './lib/group.mjs';
@@ -25,8 +23,8 @@ export {
 } from './lib/vcard.mjs';
 
 export {
+  Persona, OrgPersona, GroupPersona, 
   UserRole, userrole, 
   ownerRole, rootGroupsManagerRole, subgroupsManagerRole, collabManagerRole, membershipsManagerRole, memberRole,
-  Persona, OrgPersona, GroupPersona, 
 } from './lib/persona.mjs';
 

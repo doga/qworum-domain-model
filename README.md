@@ -268,11 +268,11 @@ const
 orgId     = bareorgid`w-5678`,
 userId    = bareuserid`r-1234`,
 userRoles = [ownerRole, rootGroupsManagerRole, membershipsManagerRole, memberRole],
-persona   = new OrgPersona({orgId, userId, userRoles} as PersonaType),
+personaIn = new OrgPersona({orgId, userId, userRoles} as PersonaType),
 dataset   = rdf.dataset();
 
-// Write the persona to an RDF dataset, and read it back.
-persona.writeTo(dataset);
+// Write the persona to an RDF dataset and read it back.
+personaIn.writeTo(dataset);
 const orgPersonas = OrgPersona.readFrom(dataset);
 
 // Print out the persona.
