@@ -254,7 +254,7 @@ import rdf from 'https://esm.sh/gh/rdfjs/dataset@v2.0.2';
 import { 
   OrgId, bareorgid, bareuserid,
   OrgPersona, ownerRole, rootGroupsManagerRole, subgroupsManagerRole, collabManagerRole, membershipsManagerRole, memberRole,
-} from 'https://esm.sh/gh/doga/qworum-domain-model@0.9.0/mod.mjs';
+} from 'https://esm.sh/gh/doga/qworum-domain-model@0.9.1/mod.mjs';
 
 type PersonaType = {
   orgId    : any,
