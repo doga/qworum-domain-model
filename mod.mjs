@@ -24,7 +24,6 @@ export {
 
 export {
   Persona, OrgPersona, GroupPersona, 
-  UserRole, userrole, 
-  ownerRole, rootGroupsManagerRole, subgroupsManagerRole, collabManagerRole, membershipsManagerRole, memberRole,
+  UserRole,
 } from './lib/persona.mjs';
 

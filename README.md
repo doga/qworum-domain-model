@@ -127,10 +127,9 @@ classDiagram
   }
 
   note for Collab "Only groups that link back are in the collab."
-  note for Persona "One of orgId or groupId is set."
   note for User "Vcard excluded from serialization?"
   note for Vcard "The only objects that can be generated on the client"
-  note for PersonalGroup "Does not have org or parent/sub groups."
+  note for PersonalGroup "Does not have an org or parent/sub groups. Owner cannot be removed, new owners cannot be added."
 
   Id --|> URN : extends
   URN --|> IRI
@@ -161,7 +160,6 @@ classDiagram
   style GroupId fill:#229,stroke:#333,stroke-width:4px
   style CollabId fill:#229,stroke:#333,stroke-width:4px
   style OrgId fill:#229,stroke:#333,stroke-width:4px
-  style UserRole fill:#E3342C,stroke:#333,stroke-width:4px
 
   style Org fill:#641DA4,stroke:#333,stroke-width:4px
   style Group fill:#6D1FB3,stroke:#333,stroke-width:4px
@@ -178,9 +176,35 @@ classDiagram
   style Persona fill:#E3342C,stroke:#333,stroke-width:4px
   style OrgPersona fill:#E3342C,stroke:#333,stroke-width:4px
   style GroupPersona fill:#E3342C,stroke:#333,stroke-width:4px
+
+  style UserRole fill:#AE251C,stroke:#333,stroke-width:4px
 ```
 
-In a `Persona`, allowed user roles are _owner_, _root groups manager_ (for orgs), _subgroups manager_ (for groups that are not personal groups), _collabs manager_ (for all groups), _memberships manager_, _member_. All roles except _member_ are manager roles. Managers and members are collectively called _participants_.
+In a `Persona`, the allowed user roles are _owner_, _root groups manager_ (for orgs), _subgroups manager_ (for groups that are not personal groups), _collabs manager_ (for all groups), _memberships manager_, _member_. All roles except _member_ are manager roles. Managers and members are collectively called _participants_. The _member_ role confers the org/group member full permissions. More restrictive predefined member roles are available, such as the _reader_ role which confers its holder a read-only access to the user's group data. Each Qworum service owner can also define their own member roles.
+
+```mermaid
+flowchart TD
+  o[Oganisation]
+  g[Group]
+  oo[Org owner]
+  rgm[Root groups manager]
+  omm[Memberships manager]
+  go[Group owner]
+  sm[Subgroups manager]
+  cm[Collabs manager]
+  m[Member]
+  r[Reader]
+
+  o -- manager role --> oo
+  o -- manager role --> rgm
+  o -- manager role --> omm
+  g -- manager role --> go
+  g -- manager role --> sm
+  g -- manager role --> cm
+  o  -- membership role with full permissions --> m
+  g  -- membership role with full permissions --> m
+  m  -- restrictive membership role --> r
+```
 
 The members of a group are all members of the parent group or org. If a group belongs to an org, then all managers of the group must be members of the org. If a group doesn't belong to an org, then anyone can be a group manager if the group owner sees it fit.
 
@@ -256,9 +280,8 @@ Create a persona that assigns roles to a user within an organisation.
 
 ```typescript
 import { 
-  OrgId, bareorgid, bareuserid,
-  OrgPersona, ownerRole, rootGroupsManagerRole, subgroupsManagerRole, collabManagerRole, membershipsManagerRole, memberRole,
-} from 'https://esm.sh/gh/doga/qworum-domain-model@0.9.2/mod.mjs';
+  baregroupid, bareuserid, GroupPersona, UserRole,
+} from 'https://esm.sh/gh/doga/qworum-domain-model@0.9.3/mod.mjs';
 
 import rdf from 'https://esm.sh/gh/rdfjs/dataset@v2.0.2';
 
@@ -271,19 +294,25 @@ type PersonaType = {
 
 // Create a persona that assigns roles to a user within an organisation.
 const
-orgId     = bareorgid`w-5678`,
+groupId   = baregroupid`w-5678`,
 userId    = bareuserid`r-1234`,
-userRoles = [ownerRole, rootGroupsManagerRole, membershipsManagerRole, memberRole],
-personaIn = new OrgPersona({orgId, userId, userRoles} as PersonaType),
+userRoles = [
+  UserRole.groupOwner,
+  UserRole.groupSubgroupsManager,
+  UserRole.groupCollabManager,
+  UserRole.groupMembershipsManager,
+  UserRole.member,
+],
+personaIn = new GroupPersona({groupId, userId, userRoles} as PersonaType),
 dataset   = rdf.dataset();
 
 // Write the persona to an RDF dataset and read it back.
 personaIn.writeTo(dataset);
-const orgPersonas = OrgPersona.readFrom(dataset);
+const personas = GroupPersona.readFrom(dataset);
 
 // Print out the persona.
-console.group(`Org ID: ${orgId}`);
-for (const persona of orgPersonas) {
+console.group(`Org ID: ${groupId}`);
+for (const persona of personas) {
   console.group(`User ID: ${persona.userId}`);
   console.group('Role IDs:');
   for (const userRole of persona.userRoles) {
@@ -298,12 +327,16 @@ console.groupEnd();
 Sample output for the code above:
 
 ```text
-Org ID: urn:qworum:org:w-5678
+step 1 of 1 // Create a persona
+     Create a persona that assigns roles to a user within a group.
+
+Org ID: urn:qworum:group:w-5678
     User ID: urn:qworum:user:r-1234
         Role IDs:
-            https://vocab.qworum.net/id/role/owner
-            https://vocab.qworum.net/id/role/root-groups-manager
-            https://vocab.qworum.net/id/role/memberships-manager
+            https://vocab.qworum.net/id/role/group/owner
+            https://vocab.qworum.net/id/role/group/subgroups-manager
+            https://vocab.qworum.net/id/role/group/collabs-manager
+            https://vocab.qworum.net/id/role/group/memberships-manager
             https://vocab.qworum.net/id/role/member
 ```
 
