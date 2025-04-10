@@ -281,7 +281,7 @@ Create a persona that assigns roles to a user within an organisation.
 ```typescript
 import { 
   baregroupid, bareuserid, GroupPersona, UserRole,
-} from 'https://esm.sh/gh/doga/qworum-domain-model@0.9.3/mod.mjs';
+} from 'https://esm.sh/gh/doga/qworum-domain-model@0.9.4/mod.mjs';
 
 import rdf from 'https://esm.sh/gh/rdfjs/dataset@v2.0.2';
 
@@ -311,12 +311,13 @@ personaIn.writeTo(dataset);
 const personas = GroupPersona.readFrom(dataset);
 
 // Print out the persona.
-console.group(`Org ID: ${groupId}`);
 for (const persona of personas) {
   console.group(`User ID: ${persona.userId}`);
+  if(persona.groupId)console.info(`Org ID: ${persona.groupId}`);
+  if(persona.orgId)console.info(`Group ID: ${persona.orgId}`);
   console.group('Role IDs:');
   for (const userRole of persona.userRoles) {
-    console.debug(`${userRole}`);
+    console.info(`${userRole}`);
   }
   console.groupEnd();
   console.groupEnd();
@@ -327,22 +328,19 @@ console.groupEnd();
 Sample output for the code above:
 
 ```text
-step 1 of 1 // Create a persona
-     Create a persona that assigns roles to a user within a group.
-
-Org ID: urn:qworum:group:w-5678
-    User ID: urn:qworum:user:r-1234
-        Role IDs:
-            https://vocab.qworum.net/id/role/group/owner
-            https://vocab.qworum.net/id/role/group/subgroups-manager
-            https://vocab.qworum.net/id/role/group/collabs-manager
-            https://vocab.qworum.net/id/role/group/memberships-manager
-            https://vocab.qworum.net/id/role/member
+User ID: urn:qworum:user:r-1234
+    Org ID: urn:qworum:group:w-5678
+    Role IDs:
+        https://vocab.qworum.net/id/role/group/owner
+        https://vocab.qworum.net/id/role/group/subgroups-manager
+        https://vocab.qworum.net/id/role/group/collabs-manager
+        https://vocab.qworum.net/id/role/group/memberships-manager
+        https://vocab.qworum.net/id/role/member
 ```
 
 ### Running the usage example
 
-Run the examples above by typing this in your terminal (requires [Deno](https://deno.com/) 2+):
+Run the example above by typing this in your terminal (requires [Deno](https://deno.com/) 2+):
 
 ```shell
 deno run --allow-net --allow-run --allow-env --allow-read jsr:@andrewbrey/mdrb@3.0.4 --dax=false --mode=isolated https://raw.githubusercontent.com/doga/qworum-domain-model/refs/heads/main/README.md
