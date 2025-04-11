@@ -281,7 +281,7 @@ Create a persona that assigns roles to a user within an organisation.
 ```typescript
 import { 
   baregroupid, bareuserid, GroupPersona, UserRole,
-} from 'https://esm.sh/gh/doga/qworum-domain-model@0.9.4/mod.mjs';
+} from 'https://esm.sh/gh/doga/qworum-domain-model@0.9.6/mod.mjs';
 
 import rdf from 'https://esm.sh/gh/rdfjs/dataset@v2.0.2';
 
