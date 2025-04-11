@@ -17,6 +17,7 @@ import {
 } from '../mod.mjs';
 
 type PersonaType = {
+  personaId: any,
   orgId    : any,
   groupId  : any,
   userId   : any,

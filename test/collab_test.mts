@@ -30,7 +30,7 @@ Deno.test('collab can be written as rdf and then read back', () => {
   assert(invitedGroupIds.every(id => id instanceof GroupId));
 
   const
-  collabIn = new Collab(collabId, ownerGroupId, invitedGroupIds as GroupId[]),
+  collabIn = new Collab({collabId, ownerGroupId, invitedGroupIds: invitedGroupIds as GroupId[]}),
   dataset  = rdf.dataset();
 
   collabIn.writeTo(dataset);

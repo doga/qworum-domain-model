@@ -42,7 +42,7 @@ Deno.test('user is written to rdf dataset and read back', () => {
 Deno.test('user is created with random id and password', () => {
   const 
   user = User.create();
-  console.debug('[test] user', user);
+  // console.debug('[test] user', user);
 
   assertInstanceOf(user, User);
   assertInstanceOf(user.userId, UserId);

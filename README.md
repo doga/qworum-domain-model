@@ -35,23 +35,27 @@ classDiagram
     +string idType
     +string bareId
     +create(idString) Id$
-    +random() Id$
+    +uuid() Id$
   }
   class UserId{
     +create(idString) UserId$
-    +random() UserId$
+    +uuid() UserId$
   }
   class GroupId{
     +create(idString) GroupId$
-    +random() GroupId$
+    +uuid() GroupId$
   }
   class CollabId{
     +create(idString) CollabId$
-    +random() CollabId$
+    +uuid() CollabId$
   }
   class OrgId{
     +create(idString) OrgId$
-    +random() OrgId$
+    +uuid() OrgId$
+  }
+  class PersonaId{
+    +create(idString) PersonaId$
+    +uuid() PersonaId$
   }
   class User{
     +UserId userId
@@ -86,6 +90,7 @@ classDiagram
     +equals(other) boolean
   }
   class Persona{
+    +PersonaId personaId
     +OrgId orgId?
     +GroupId groupId?
     +UserId userId
@@ -139,6 +144,7 @@ classDiagram
   OrgId --|> Id
   GroupId --|> Id
   CollabId --|> Id
+  PersonaId --|> Id
   IndividualVcard --|> Vcard
   GroupVcard --|> Vcard
   OrgVcard --|> Vcard
@@ -160,6 +166,7 @@ classDiagram
   style GroupId fill:#229,stroke:#333,stroke-width:4px
   style CollabId fill:#229,stroke:#333,stroke-width:4px
   style OrgId fill:#229,stroke:#333,stroke-width:4px
+  style PersonaId fill:#229,stroke:#333,stroke-width:4px
 
   style Org fill:#641DA4,stroke:#333,stroke-width:4px
   style Group fill:#6D1FB3,stroke:#333,stroke-width:4px
