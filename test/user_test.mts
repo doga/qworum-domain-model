@@ -3,7 +3,7 @@
 import { assertInstanceOf, assertEquals, assertNotEquals, assert } from 'jsr:@std/assert@1';
 import { QRM, } from '../lib/util/rdf-prefixes.mjs';
 import { rdf } from '../deps.mjs';
-import { iri, Password, User, bareuserid, baregroupid } from '../mod.mjs';
+import { iri, Password, User, bareuserid, baregroupid, UserId } from '../mod.mjs';
 
 
 Deno.test('user is written to rdf dataset and read back', () => {
@@ -36,4 +36,16 @@ Deno.test('user is written to rdf dataset and read back', () => {
   assertInstanceOf(userOut.password, Password);
   assert(userOut.password.equals(password));
   assertEquals(`${userOut.password.passwordId}`, `${passwordId}`);
+});
+
+
+Deno.test('user is created with random id and password', () => {
+  const 
+  user = User.create();
+  console.debug('[test] user', user);
+
+  assertInstanceOf(user, User);
+  assertInstanceOf(user.userId, UserId);
+  assertInstanceOf(user.password, Password);
+  
 });
