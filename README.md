@@ -323,25 +323,23 @@ const personas = Persona.readFrom(dataset);
 
 // Print out the persona.
 for (const persona of personas) {
-  console.group(`User:  ${persona.userId}`);
-   console.info(`Group: ${persona.groupId}`);
+  console.info(`Group: ${persona.groupId}`);
+  console.info(`User:  ${persona.userId}`);
   console.group('Roles:');
   for (const role of persona.memberRoles) {
     console.info(`${role}`);
   }
   console.groupEnd();
-  console.groupEnd();
 }
-console.groupEnd();
 ```
 
 Sample output for the code above:
 
 ```text
-User: urn:qworum:user:be480fe6-a180-402b-b390-9ecad677350a
-    Group: urn:qworum:group:378b84e3-3896-44ce-bbbe-2ed8f4c4ac0d
-    Roles:
-        https://vocab.qworum.net/id/memberrole/reader
+Group: urn:qworum:group:4f5aca14-150b-4bc6-82a1-d06d932cea09
+User:  urn:qworum:user:fbc797e5-796d-417e-b1ae-c682c83a61ba
+Roles:
+    https://vocab.qworum.net/id/memberrole/reader
 ```
 
 ### Running the usage example
