@@ -338,8 +338,8 @@ console.groupEnd();
 Sample output for the code above:
 
 ```text
-User: urn:qworum:user:2f7189e7-1b03-4e9d-a051-1ef89524736e
-    Group: urn:qworum:group:************************************
+User: urn:qworum:user:be480fe6-a180-402b-b390-9ecad677350a
+    Group: urn:qworum:group:378b84e3-3896-44ce-bbbe-2ed8f4c4ac0d
     Roles:
         https://vocab.qworum.net/id/memberrole/reader
 ```
