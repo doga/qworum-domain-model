@@ -98,8 +98,7 @@ classDiagram
   class Persona{
     +PersonaId personaId
     +UserId userId
-    +OrgId orgId?
-    +GroupId groupId?
+    +GroupId groupId
     +MemberRole[] memberRoles
     +readFrom(rdfDataset) Persona[]$
     +writeTo(rdfDataset)
@@ -162,7 +161,6 @@ classDiagram
   Org -- User : memberships manager
   Org -- User : member
   Persona -- MemberRole
-  Persona -- Org
   Persona -- Group
   Persona -- User
   Collab *-- Group

@@ -24,7 +24,6 @@ export {
 } from './lib/vcard.mjs';
 
 export {
-  Persona, OrgPersona, GroupPersona, 
-  MemberRole, memberrole,
+  Persona, MemberRole, memberrole,
 } from './lib/membership-annotations/persona.mjs';
 
