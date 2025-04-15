@@ -293,7 +293,7 @@ flowchart LR
 
 <pre>
 description = '''
-Create a persona that assigns roles to a user within an organisation.
+Restrict the role of a group member to a read-only capacity.
 '''
 </pre>
 </details>
@@ -305,27 +305,26 @@ import {
   Org, Group, PersonalGroup, Collab, Password, User,
   Vcard, IndividualVcard, GroupVcard, OrgVcard, Name, Email, EmailUrl, Phone, PhoneUrl, Photo, Address, 
   Persona, OrgPersona, GroupPersona, MemberRole, memberrole,
-} from './mod.mjs';
+} from 'https://esm.sh/gh/doga/qworum-domain-model@0.9.9/mod.mjs';
 
 import rdf from 'https://esm.sh/gh/rdfjs/dataset@v2.0.2';
 
-// Create a persona that assigns roles to a user within an organisation.
+// Create a persona that assigns a read-only role to a user within a group.
 const
-orgId       = OrgId.uuid(),
+groupId     = GroupId.uuid(),
 userId      = UserId.uuid(),
-memberRoles = [MemberRole.reader],
-orgPersona  = new OrgPersona({orgId, userId, memberRoles} as PersonaType),
+memberRoles = [ MemberRole.reader ],
+persona     = new Persona({groupId, userId, memberRoles} as PersonaType),
 dataset     = rdf.dataset();
 
-orgPersona.writeTo(dataset);
-// console.debug(dataset);
-const personas = OrgPersona.readFrom(dataset);
+persona.writeTo(dataset);
+const personas = Persona.readFrom(dataset);
 
 // Print out the persona.
 for (const persona of personas) {
   console.group(`User: ${persona.userId}`);
-  if(persona.groupId)console.info(`Group: ${persona.groupId}`);
   if(persona.orgId)console.info(`Org: ${persona.orgId}`);
+  if(persona.groupId)console.info(`Group: ${persona.groupId}`);
   console.group('Roles:');
   for (const role of persona.memberRoles) {
     console.info(`${role}`);
@@ -339,14 +338,10 @@ console.groupEnd();
 Sample output for the code above:
 
 ```text
-User ID: urn:qworum:user:r-1234
-    Org ID: urn:qworum:group:w-5678
-    Role IDs:
-        https://vocab.qworum.net/id/role/group/owner
-        https://vocab.qworum.net/id/role/group/subgroups-manager
-        https://vocab.qworum.net/id/role/group/collabs-manager
-        https://vocab.qworum.net/id/role/group/memberships-manager
-        https://vocab.qworum.net/id/role/member
+User: urn:qworum:user:2f7189e7-1b03-4e9d-a051-1ef89524736e
+    Group: urn:qworum:group:************************************
+    Roles:
+        https://vocab.qworum.net/id/memberrole/reader
 ```
 
 ### Running the usage example
