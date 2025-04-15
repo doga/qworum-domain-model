@@ -312,17 +312,19 @@ const
 groupId     = GroupId.uuid(),
 userId      = UserId.uuid(),
 memberRoles = [ MemberRole.reader ],
-persona     = new Persona({groupId, userId, memberRoles} as PersonaType),
+persona     = new Persona({groupId, userId, memberRoles}),
 dataset     = rdf.dataset();
 
+// Store in in-memory RDF dataset
 persona.writeTo(dataset);
+
+// Read from in-memory RDF dataset
 const personas = Persona.readFrom(dataset);
 
 // Print out the persona.
 for (const persona of personas) {
-  console.group(`User: ${persona.userId}`);
-  if(persona.orgId)console.info(`Org: ${persona.orgId}`);
-  if(persona.groupId)console.info(`Group: ${persona.groupId}`);
+  console.group(`User:  ${persona.userId}`);
+   console.info(`Group: ${persona.groupId}`);
   console.group('Roles:');
   for (const role of persona.memberRoles) {
     console.info(`${role}`);
