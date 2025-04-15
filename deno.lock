@@ -100,6 +100,8 @@
     "https://esm.sh/gh/doga/qworum-domain-model@0.9.3/mod.mjs": "816b95802cc3ba9b0de2d80b96932484834d212b9bb895ceb3dc8b242a21c6da",
     "https://esm.sh/gh/doga/qworum-domain-model@0.9.4/denonext/mod.mjs": "059b60cd0a90885883caa6deced3c90428c02a87b237e426ecfa58c2e36501e6",
     "https://esm.sh/gh/doga/qworum-domain-model@0.9.4/mod.mjs": "06a265a373b27744ff88cd125d24a3b23bd517717ad894edefee87161a1beee5",
+    "https://esm.sh/gh/doga/qworum-domain-model@0.9.7/denonext/mod.mjs": "4c2352cadf51177d3e5f027903fb40b01b79baca0b7e0a5ffa8b120c483f0ab7",
+    "https://esm.sh/gh/doga/qworum-domain-model@0.9.7/mod.mjs": "7eb17ae20caf7a42ee19e10eee154cb114f53c9e157959e7f834c13b10f6d19a",
     "https://esm.sh/gh/doga/rdf-json-parser@1.1.1/denonext/mod.mjs": "918f232679a878499786aa3bc09a34559169c70a49dabb8390d7e178c5eb102a",
     "https://esm.sh/gh/doga/rdf-json-parser@1.1.1/mod.mjs": "e101867b5516942efe541c2244868897f1321f2aae88c997a5b1ab009add310c",
     "https://esm.sh/gh/rdfjs/data-model@v2.1.0": "9bfd3d16878c50e4da8ba379e37f827e057b7ff9095550b423e145697fa028fa",

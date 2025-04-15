@@ -24,6 +24,31 @@
 					"label": ""
 				}
 			]
+		},
+		{
+			"path": "lib/membership-annotations/persona.mjs",
+			"bookmarks": [
+				{
+					"line": 8,
+					"column": 30,
+					"label": ""
+				},
+				{
+					"line": 38,
+					"column": 15,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "lib/id.mjs",
+			"bookmarks": [
+				{
+					"line": 138,
+					"column": 28,
+					"label": ""
+				}
+			]
 		}
 	]
 }

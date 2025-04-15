@@ -11,6 +11,7 @@ export {
   GroupId,  groupid,  baregroupid, 
   CollabId, collabid, barecollabid,
   UserId,   userid,   bareuserid,
+  PersonaId, personaid,
 } from './lib/id.mjs';
 
 export { Org, Group, PersonalGroup } from './lib/group.mjs';
@@ -24,6 +25,6 @@ export {
 
 export {
   Persona, OrgPersona, GroupPersona, 
-  UserRole,
-} from './lib/persona.mjs';
+  MemberRole, memberrole,
+} from './lib/membership-annotations/persona.mjs';
 
