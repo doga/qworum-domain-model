@@ -8,7 +8,7 @@ import {
 import { rdf } from '../deps.mjs';
 
 import { 
-  Org, Group, userid,
+  Org, Group, userid, PersonalGroup,
   OrgId, GroupId, UserId,
 } from '../mod.mjs';
 
@@ -64,6 +64,38 @@ Deno.test('org can be written as rdf and then read back', () => {
   assertInstanceOf(orgOut, Org);
   assert(orgIn.equals(orgOut));
   assert(orgIn.orgId.equals(orgOut.orgId));
+});
+
+
+Deno.test('personal group can be written as rdf and then read back', () => {
+  const
+  groupId         = GroupId.uuid(),
+  isPersonalGroup = true,
+  ownerIds        = [UserId.uuid()];
+
+  assertInstanceOf(groupId, GroupId);
+  assertInstanceOf(ownerIds, Array);
+  assertInstanceOf(ownerIds[0], UserId);
+  
+  const
+  groupIn = new PersonalGroup({ groupId, isPersonalGroup, ownerIds, collabManagerIds: ownerIds, membershipsManagerIds: ownerIds, memberIds: ownerIds } as GroupType),
+  dataset = rdf.dataset();
+  
+  groupIn.writeTo(dataset);
+  // console.debug(dataset);
+  // console.debug('reading groups from dataset');
+  const groupsOut = PersonalGroup.readFrom(dataset);
+  console.debug('read groups from dataset');
+  console.debug(groupsOut);
+
+  assertInstanceOf(groupsOut, Array);
+  assertEquals(groupsOut.length, 1);
+  
+  const groupOut = groupsOut[0];
+  assertInstanceOf(groupOut, Group);
+  assertInstanceOf(groupOut, PersonalGroup);
+  assert(groupIn.equals(groupOut));
+  assert(groupIn.groupId.equals(groupOut.groupId));
 });
 
 
