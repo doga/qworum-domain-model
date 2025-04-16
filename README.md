@@ -38,6 +38,9 @@ classDiagram
     +create(idString) UserId$
     +uuid() UserId$
   }
+  class PasswordId{
+    +forUser(userId) PasswordId$
+  }
   class GroupId{
     +create(idString) GroupId$
     +uuid() GroupId$
@@ -141,6 +144,7 @@ classDiagram
   URN --|> IRI : extends
   MemberRole --|> IRI
   UserId --|> Id
+  PasswordId --|> Id
   PersonaId --|> Id
   OrgId --|> Id
   GroupId --|> Id
@@ -169,6 +173,7 @@ classDiagram
 
   style Id fill:#229,stroke:#333,stroke-width:4px
   style UserId fill:#229,stroke:#333,stroke-width:4px
+  style PasswordId fill:#229,stroke:#333,stroke-width:4px
   style GroupId fill:#229,stroke:#333,stroke-width:4px
   style CollabId fill:#229,stroke:#333,stroke-width:4px
   style OrgId fill:#229,stroke:#333,stroke-width:4px

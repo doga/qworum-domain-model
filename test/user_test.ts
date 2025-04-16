@@ -4,16 +4,20 @@ import { assertInstanceOf, assertEquals, assertNotEquals, assert } from 'jsr:@st
 import { QRM, } from '../lib/util/rdf-prefixes.mjs';
 import { rdf } from '../deps.mjs';
 import { iri, Password, User, bareuserid, baregroupid, UserId } from '../mod.mjs';
+import { PasswordId } from '../lib/id.mjs';
 
 
 Deno.test('user is written to rdf dataset and read back', () => {
   // console.debug('[test]');
   const 
   userId          = bareuserid`1234`,
-  personalGroupId = baregroupid`1234`,
-  passwordId      = iri`${QRM}id/password/1234`;
+  personalGroupId = baregroupid`1234`;
+  if(!(userId && personalGroupId)) return;
 
-  if(!(userId && passwordId && personalGroupId)) return;
+  const
+  passwordId      = PasswordId.forUser(userId);
+
+  if(!passwordId) return;
 
   const
   passwordCleartext = 'a-password',
