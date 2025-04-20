@@ -85,8 +85,8 @@ Deno.test('personal group can be written as rdf and then read back', () => {
   // console.debug(dataset);
   // console.debug('reading groups from dataset');
   const groupsOut = PersonalGroup.readFrom(dataset);
-  console.debug('read groups from dataset');
-  console.debug(groupsOut);
+  // console.debug('read groups from dataset');
+  // console.debug(groupsOut);
 
   assertInstanceOf(groupsOut, Array);
   assertEquals(groupsOut.length, 1);

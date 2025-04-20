@@ -38,6 +38,7 @@ Deno.test('user is written to rdf dataset and read back', () => {
   assertInstanceOf(userOut, User);
   assert(userOut.userId.equals(userId));
   assertInstanceOf(userOut.password, Password);
+  assertInstanceOf(userOut.password.passwordId, PasswordId);
   assert(userOut.password.equals(password));
   assertEquals(`${userOut.password.passwordId}`, `${passwordId}`);
 });
@@ -51,5 +52,6 @@ Deno.test('user is created with random id and password', () => {
   assertInstanceOf(user, User);
   assertInstanceOf(user.userId, UserId);
   assertInstanceOf(user.password, Password);
+  assertInstanceOf(user.password.passwordId, PasswordId);
   
 });

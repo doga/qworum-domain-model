@@ -11,6 +11,7 @@ export {
   GroupId,  groupid,  baregroupid, 
   CollabId, collabid, barecollabid,
   UserId,   userid,   bareuserid,
+  PasswordId,
   PersonaId, personaid,
 } from './lib/id.mjs';
 

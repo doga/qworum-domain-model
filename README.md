@@ -140,8 +140,7 @@ classDiagram
   note for PersonalGroup "Does not have an org or parent/sub groups. Owner cannot be removed, new owners cannot be added."
   note for Persona "Makes an enforceable statement about a user's membership in a group or org."
 
-  Id --|> URN
-  URN --|> IRI : extends
+  Id --|> IRI : extends
   MemberRole --|> IRI
   UserId --|> Id
   PasswordId --|> Id
