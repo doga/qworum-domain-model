@@ -2,7 +2,6 @@
 
 import {assertInstanceOf, assertEquals, assertGreaterOrEqual, assertThrows, assertNotEquals, assert } from "jsr:@std/assert@1";
 import { 
-  rdfTerm as t, rdf,
   ICAL, IRI, URN, iri 
 } from "../deps.mjs";
 import { 
@@ -131,9 +130,7 @@ Deno.test("Vcards are written to an RDF dataset and then read back", async () =>
     groupId  = GroupId.create('5678'),
     vcardStr = await Deno.readTextFile(`./test/assets/${vcardFile}`),
     vcardIn  = GroupVcard.fromString(groupId, vcardStr),
-    dataset  = rdf.dataset();
-
-    vcardIn.writeTo(dataset);
+    dataset  = vcardIn.toDataset();
     // console.debug(dataset);
     // console.debug(`[test] reading vcard from dataset`, dataset);
 

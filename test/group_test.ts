@@ -5,7 +5,6 @@ import {
   assertThrows, assertFalse, assert,
 } from 'jsr:@std/assert@1';
 
-import { rdf } from '../deps.mjs';
 
 import { 
   Org, Group, userid, PersonalGroup,
@@ -50,9 +49,7 @@ Deno.test('org can be written as rdf and then read back', () => {
 
   const
   orgIn   = new Org({orgId, ownerIds, rootGroupsManagerIds: ownerIds, membershipsManagerIds: ownerIds, memberIds: ownerIds}),
-  dataset = rdf.dataset();
-
-  orgIn.writeTo(dataset);
+  dataset = orgIn.toDataset();
   // console.debug(dataset);
   const orgsOut = Org.readFrom(dataset);
 
@@ -79,9 +76,7 @@ Deno.test('personal group can be written as rdf and then read back', () => {
   
   const
   groupIn = new PersonalGroup({ groupId, isPersonalGroup, ownerIds, collabManagerIds: ownerIds, membershipsManagerIds: ownerIds, memberIds: ownerIds } as GroupType),
-  dataset = rdf.dataset();
-  
-  groupIn.writeTo(dataset);
+  dataset = groupIn.toDataset();
   // console.debug(dataset);
   // console.debug('reading groups from dataset');
   const groupsOut = PersonalGroup.readFrom(dataset);
@@ -115,9 +110,7 @@ Deno.test('group can be written as rdf and then read back', () => {
 
   const
   groupIn = new Group({groupId, orgId, isPersonalGroup, parentGroupId, ownerIds, subgroupsManagerIds: ownerIds, collabManagerIds: ownerIds, membershipsManagerIds: ownerIds, memberIds: ownerIds} as GroupType),
-  dataset = rdf.dataset();
-
-  groupIn.writeTo(dataset);
+  dataset = groupIn.toDataset();
   // console.debug(dataset);
   const groupsOut = Group.readFrom(dataset);
 

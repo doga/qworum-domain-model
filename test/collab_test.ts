@@ -5,8 +5,6 @@ import {
   assertThrows, assertFalse, assert,
 } from 'jsr:@std/assert@1';
 
-import { rdf } from '../deps.mjs';
-
 import { 
   GroupId, baregroupid, 
   CollabId, barecollabid, 
@@ -31,9 +29,7 @@ Deno.test('collab can be written as rdf and then read back', () => {
 
   const
   collabIn = new Collab({collabId, ownerGroupId, invitedGroupIds: invitedGroupIds as GroupId[]}),
-  dataset  = rdf.dataset();
-
-  collabIn.writeTo(dataset);
+  dataset  = collabIn.toDataset();
   // console.debug(dataset);
   const collabsOut = Collab.readFrom(dataset);
 

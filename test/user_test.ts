@@ -2,7 +2,6 @@
 
 import { assertInstanceOf, assertEquals, assertNotEquals, assert } from 'jsr:@std/assert@1';
 import { QRM, } from '../lib/util/rdf-prefixes.mjs';
-import { rdf } from '../deps.mjs';
 import { iri, Password, User, bareuserid, baregroupid, UserId } from '../mod.mjs';
 import { PasswordId } from '../lib/id.mjs';
 
@@ -23,10 +22,7 @@ Deno.test('user is written to rdf dataset and read back', () => {
   passwordCleartext = 'a-password',
   password          = new Password(passwordId, passwordCleartext),
   userIn            = new User({userId, personalGroupId, password}),
-  dataset           = rdf.dataset();
-
-  // console.debug('[test] userIn', userIn);
-  userIn.writeTo(dataset);
+  dataset           = userIn.toDataset();
   // console.debug('[test] dataset', dataset);
 
   const usersOut = User.readFrom(dataset);

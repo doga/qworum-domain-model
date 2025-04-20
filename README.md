@@ -11,6 +11,8 @@ A JavaScript client library that provides classes that collectively represent Qw
 - `Collab`,
 - `User`.
 
+Each domain object can be read from, and written to, an [RDF dataset](https://rdf.js.org/dataset-spec/#datasetcore-interface).
+
 This library is/will be used by:
 
 - Qworum's API server at the backend.
@@ -57,12 +59,14 @@ classDiagram
     +create(idString) OrgId$
     +uuid() OrgId$
   }
+
   class User{
     +UserId userId
     +GroupId personalGroupId
     +Password password
-    +readFrom(rdfDataset) User[]$
-    +writeTo(rdfDataset)
+    +readFrom(dataset) User[]$
+    +writeTo(dataset)
+    +toDataset() object
     +equals(other) boolean
   }
   class Group{
@@ -76,16 +80,18 @@ classDiagram
     +UserId[] collabManagerIds
     +UserId[] membershipsManagerIds
     +UserId[] memberIds
-    +readFrom(rdfDataset) Group[]$
-    +writeTo(rdfDataset)
+    +readFrom(dataset) Group[]$
+    +writeTo(dataset)
+    +toDataset() object
     +equals(other) boolean
   }
   class Collab{
     +CollabId collabId
     +GroupId ownerGroupId
     +GroupId[] invitedGroupIds
-    +readFrom(rdfDataset) Collab[]$
-    +writeTo(rdfDataset)
+    +readFrom(dataset) Collab[]$
+    +writeTo(dataset)
+    +toDataset() object
     +equals(other) boolean
   }
   class Org{
@@ -94,8 +100,9 @@ classDiagram
     +UserId[] rootGroupsManagerIds
     +UserId[] membershipsManagerIds
     +UserId[] memberIds
-    +readFrom(rdfDataset) Org[]$
-    +writeTo(rdfDataset)
+    +readFrom(dataset) Org[]$
+    +writeTo(dataset)
+    +toDataset() object
     +equals(other) boolean
   }
   class Persona{
@@ -103,35 +110,38 @@ classDiagram
     +UserId userId
     +GroupId groupId
     +MemberRole[] memberRoles
-    +readFrom(rdfDataset) Persona[]$
-    +writeTo(rdfDataset)
+    +readFrom(dataset) Persona[]$
+    +writeTo(dataset)
+    +toDataset() object
     +equals(other) boolean
-  }
-  class Password{
-    +IRI passwordId
-    +string passwordCleartext
   }
   class Vcard{
     +Id ownerId
     +string kind
     +string formattedName
     ...
-    +readFrom(rdfDataset) Vcard[]$
-    +writeTo(rdfDataset)
+    +readFrom(dataset) Vcard[]$
+    +writeTo(dataset)
+    +toDataset() object
     -fromString(vcardString) object
     +toString() string
   }
   class IndividualVcard{
-    +readFrom(rdfDataset) IndividualVcard[]$
+    +readFrom(dataset) IndividualVcard[]$
     +fromString(ownerId, vcardString) IndividualVcard$
   }
   class GroupVcard{
-    +readFrom(rdfDataset) GroupVcard[]$
+    +readFrom(dataset) GroupVcard[]$
     +fromString(ownerId, vcardString) GroupVcard$
   }
   class OrgVcard{
-    +readFrom(rdfDataset) OrgVcard[]$
+    +readFrom(dataset) OrgVcard[]$
     +fromString(ownerId, vcardString) OrgVcard$
+  }
+
+  class Password{
+    +IRI passwordId
+    +string passwordCleartext
   }
 
   note for Collab "Only groups that link back are in the collab."
