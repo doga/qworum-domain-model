@@ -317,7 +317,7 @@ import {
   Org, Group, PersonalGroup, Collab, Password, User,
   Vcard, IndividualVcard, GroupVcard, OrgVcard, Name, Email, EmailUrl, Phone, PhoneUrl, Photo, Address, 
   Persona, OrgPersona, GroupPersona, MemberRole, memberrole,
-} from 'https://esm.sh/gh/doga/qworum-domain-model@0.9.12/mod.mjs';
+} from 'https://esm.sh/gh/doga/qworum-domain-model@0.9.14/mod.mjs';
 
 import rdf from 'https://esm.sh/gh/rdfjs/dataset@v2.0.2';
 
