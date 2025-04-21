@@ -51,6 +51,10 @@ classDiagram
     +create(idString) CollabId$
     +uuid() CollabId$
   }
+  class CollabCheckpointId{
+    +create(idString) CollabCheckpointId$
+    +uuid() CollabCheckpointId$
+  }
   class OrgId{
     +create(idString) OrgId$
     +uuid() OrgId$
@@ -95,7 +99,8 @@ classDiagram
     +equals(other) boolean
   }
   class CollabCheckpoint{
-    +CollabId collabCheckpointId
+    +CollabCheckpointId collabCheckpointId
+    +CollabId collabId
     +GroupId groupId
     +MemberRole[] memberRoles
     +readFrom(dataset) CollabCheckpoint[]$
@@ -153,8 +158,8 @@ classDiagram
     +string passwordCleartext
   }
 
+  note for CollabCheckpoint "🎗 Not implemented yet."
   note for Collab "Only groups that link back are in the collab."
-  note for Collab "🎗 Add Persona-like restrictions to invitee groups."
   note for Group "In an org, only top-level groups must have an orgId."
   note for Vcard "The only objects that can be generated on the client"
   note for PersonalGroup "Does not have an org or parent/sub groups. Owner cannot be removed, new owners cannot be added."
@@ -169,6 +174,7 @@ classDiagram
   OrgId --|> Id
   GroupId --|> Id
   CollabId --|> Id
+  CollabCheckpointId --|> Id
   IndividualVcard --|> Vcard
   GroupVcard --|> Vcard
   OrgVcard --|> Vcard
@@ -200,6 +206,7 @@ classDiagram
   style PasswordId fill:#229,stroke:#333,stroke-width:4px
   style GroupId fill:#229,stroke:#333,stroke-width:4px
   style CollabId fill:#229,stroke:#333,stroke-width:4px
+  style CollabCheckpointId fill:#229,stroke:#333,stroke-width:4px
   style OrgId fill:#229,stroke:#333,stroke-width:4px
   style PersonaId fill:#229,stroke:#333,stroke-width:4px
 
