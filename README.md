@@ -87,9 +87,18 @@ classDiagram
   }
   class Collab{
     +CollabId collabId
-    +GroupId ownerGroupId
-    +GroupId[] invitedGroupIds
+    +GroupId ownerId
+    +GroupId[] memberIds
     +readFrom(dataset) Collab[]$
+    +writeTo(dataset)
+    +toDataset() object
+    +equals(other) boolean
+  }
+  class CollabCheckpoint{
+    +CollabId collabCheckpointId
+    +GroupId groupId
+    +MemberRole[] memberRoles
+    +readFrom(dataset) CollabCheckpoint[]$
     +writeTo(dataset)
     +toDataset() object
     +equals(other) boolean
@@ -145,10 +154,12 @@ classDiagram
   }
 
   note for Collab "Only groups that link back are in the collab."
+  note for Collab "🎗 Add Persona-like restrictions to invitee groups."
   note for Group "In an org, only top-level groups must have an orgId."
   note for Vcard "The only objects that can be generated on the client"
   note for PersonalGroup "Does not have an org or parent/sub groups. Owner cannot be removed, new owners cannot be added."
   note for Persona "Makes an enforceable statement about a user's membership in a group or org."
+  note for Persona "Empty memberRoles means default role or no role?"
 
   Id --|> IRI : extends
   MemberRole --|> IRI
@@ -173,10 +184,14 @@ classDiagram
   Org -- User : root groups manager
   Org -- User : memberships manager
   Org -- User : member
-  Persona -- MemberRole
-  Persona -- Group
-  Persona -- User
-  Collab *-- Group
+  Persona -- Group : group
+  Persona -- User : member
+  Persona -- MemberRole : role
+  CollabCheckpoint -- Collab : collab
+  CollabCheckpoint -- Group : member
+  CollabCheckpoint -- MemberRole : role
+  Collab *-- Group : owner
+  Collab *-- Group : member
   User *-- IndividualVcard : has vCard
   User *-- Password : has password
 
@@ -202,6 +217,7 @@ classDiagram
 
   style MemberRole fill:#AE251C,stroke:#333,stroke-width:4px
   style Persona fill:#AE251C,stroke:#333,stroke-width:4px
+  style CollabCheckpoint fill:#AE251C,stroke:#333,stroke-width:4px
 ```
 
 In a `Group` or `Org`, the allowed user roles are _owner_, _root groups manager_ (for orgs), _subgroups manager_ (for groups that are not personal groups), _collab manager_ (for all groups), _memberships manager_, _member_. All roles except _member_ are manager roles. Managers and members are collectively called _participants_.
@@ -213,6 +229,15 @@ Note that personas are only one type of membership annotation. For instance, ann
 
 - A group membership may be active only for a given time period.
 - A group membership may be activated only after a certain event has occurred.
+
+Similary to how the actions of the members of a group can be restricted through personas, the actions of all members of a member group within collab can also be restricted through `CollabCheckpoint`s.
+
+For users that are members of a group which are in turn members of a collab, an action is only allowed if:
+
+- at least one of the `CollabCheckpoint` rules of the user's group allows the action, __and__
+- at least one of the `Persona` rules of the user within the group allows the action.
+
+Both `Persona` and `CollabCheckpoint` are [reifications](https://www.w3.org/TR/rdf12-concepts/#section-triple-terms-reification) (statements about membership statements).
 
 ```mermaid
 flowchart TD
