@@ -9,7 +9,7 @@ import { rdf } from '../deps.mjs';
 
 import { 
   GroupId, MemberRole, memberrole,
-  UserId, Persona,
+  UserId, Persona, PersonaId,
 } from '../mod.mjs';
 
 type PersonaType = {
@@ -20,12 +20,28 @@ type PersonaType = {
 };
 
 
-Deno.test('org persona can be written as rdf and then read back', () => {
+Deno.test('persona without id cannot be written as rdf', () => {
   const
   groupId     = GroupId.uuid(),
   userId      = UserId.uuid(),
   memberRoles = [MemberRole.reader],
   persona     = new Persona({groupId, userId, memberRoles} as PersonaType),
+  dataset     = rdf.dataset();
+
+  assertThrows(
+    () => persona.writeTo(dataset)
+  );
+
+});
+
+
+Deno.test('persona with id can be written as rdf and then read back', () => {
+  const
+  personaId   = PersonaId.uuid(),
+  groupId     = GroupId.uuid(),
+  userId      = UserId.uuid(),
+  memberRoles = [MemberRole.reader],
+  persona     = new Persona({personaId, groupId, userId, memberRoles} as PersonaType),
   dataset     = rdf.dataset();
 
   persona.writeTo(dataset);
