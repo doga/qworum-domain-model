@@ -319,18 +319,16 @@ import {
   Persona, OrgPersona, GroupPersona, MemberRole, memberrole,
 } from 'https://esm.sh/gh/doga/qworum-domain-model@0.9.15/mod.mjs';
 
-import rdf from 'https://esm.sh/gh/rdfjs/dataset@v2.0.2';
-
 // Create a persona that assigns a read-only role to a user within a group.
 const
+personaId   = PersonaId.uuid(),
 groupId     = GroupId.uuid(),
 userId      = UserId.uuid(),
 memberRoles = [ MemberRole.reader ],
-persona     = new Persona({groupId, userId, memberRoles}),
-dataset     = rdf.dataset();
+persona     = new Persona({personaId, groupId, userId, memberRoles}),
 
-// Store in in-memory RDF dataset
-persona.writeTo(dataset);
+// Store the persona in an in-memory RDF dataset
+dataset = persona.toDataset();
 
 // Read from in-memory RDF dataset
 const personas = Persona.readFrom(dataset);
