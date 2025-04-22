@@ -66,20 +66,20 @@ Deno.test('org can be written as rdf and then read back', () => {
 
 Deno.test('personal group can be written as rdf and then read back', () => {
   const
-  groupId         = GroupId.uuid(),
-  isPersonalGroup = true,
-  ownerIds        = [UserId.uuid()];
+  groupId  = GroupId.uuid(),
+  ownerIds = [UserId.uuid()];
 
   assertInstanceOf(groupId, GroupId);
   assertInstanceOf(ownerIds, Array);
   assertInstanceOf(ownerIds[0], UserId);
   
   const
-  groupIn = new PersonalGroup({ groupId, isPersonalGroup, ownerIds, collabManagerIds: ownerIds, membershipsManagerIds: ownerIds, memberIds: ownerIds } as GroupType),
-  dataset = groupIn.toDataset();
-  // console.debug(dataset);
-  // console.debug('reading groups from dataset');
-  const groupsOut = PersonalGroup.readFrom(dataset);
+  groupIn = new PersonalGroup({ 
+    groupId, ownerIds, 
+  } as GroupType),
+
+  dataset = groupIn.toDataset(),
+  groupsOut = PersonalGroup.readFrom(dataset);
   // console.debug('read groups from dataset');
   // console.debug(groupsOut);
 
