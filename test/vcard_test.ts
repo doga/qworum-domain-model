@@ -5,7 +5,7 @@ import {
   ICAL, IRI, URN, iri 
 } from "../deps.mjs";
 import { 
-  OrgVcard, GroupVcard, IndividualVcard, 
+  OrgVcard, GroupVcard, IndividualVcard, Vcard,
   Email, PhoneUrl, Photo, 
   Id, OrgId, GroupId, UserId,
 } from '../mod.mjs';
@@ -43,6 +43,29 @@ Deno.test("ical can parse vcard string", async () => {
       assert(typeof item[2] === 'string');
     }
   }
+});
+
+
+Deno.test('case 1', async () => {
+    const
+    userId   = UserId.create('1234'),
+    vcardData = Vcard.fromString(
+`BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//macOS 12.7.6//EN
+N:B;A;;;
+FN:A B
+EMAIL;type=INTERNET;type=HOME;type=pref:a.b@email.example
+NOTE:Fake vcard for testing Qworum\\n\\n#fake\\n
+END:VCARD`);
+    console.debug('vcard data', vcardData);
+    
+    const vcard = new Vcard(userId, vcardData);
+    console.debug('vcard', vcard);
+    
+    const ds = vcard.toDataset();
+    console.debug('vcard ds', ds);
+
 });
 
 
