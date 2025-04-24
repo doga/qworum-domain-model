@@ -39,16 +39,6 @@
 					"label": ""
 				}
 			]
-		},
-		{
-			"path": "lib/id.mjs",
-			"bookmarks": [
-				{
-					"line": 137,
-					"column": 28,
-					"label": ""
-				}
-			]
 		}
 	]
 }
