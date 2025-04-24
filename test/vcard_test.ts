@@ -58,13 +58,13 @@ FN:A B
 EMAIL;type=INTERNET;type=HOME;type=pref:a.b@email.example
 NOTE:Fake vcard for testing Qworum\\n\\n#fake\\n
 END:VCARD`);
-    console.debug('vcard data', vcardData);
+    // console.debug('vcard data', vcardData);
     
     const vcard = new Vcard(userId, vcardData);
-    console.debug('vcard', vcard);
+    // console.debug('vcard', vcard);
     
     const ds = vcard.toDataset();
-    console.debug('vcard ds', ds);
+    // console.debug('vcard ds', ds);
 
 });
 

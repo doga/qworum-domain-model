@@ -349,7 +349,7 @@ import {
   Org, Group, PersonalGroup, Collab, Password, User,
   Vcard, IndividualVcard, GroupVcard, OrgVcard, Name, Email, EmailUrl, Phone, PhoneUrl, Photo, Address, 
   Persona, OrgPersona, GroupPersona, MemberRole, memberrole,
-} from 'https://esm.sh/gh/doga/qworum-domain-model@0.9.18/mod.mjs';
+} from 'https://esm.sh/gh/doga/qworum-domain-model@0.9.19/mod.mjs';
 
 // Create a persona that assigns a read-only role to a user within a group.
 const
