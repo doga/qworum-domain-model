@@ -10,13 +10,18 @@ Deno.test('ids can be written as rdf and then read back', () => {
       const
       id      = idClass.uuid(),
       dataset = id.toDataset(),
-      ids     = idClass.readFrom(dataset);
+      ids     = idClass.readFrom(dataset),
+      oneId   = idClass.readOneFrom(dataset);
     
       // console.debug(`id`,id);
       // console.debug(`dataset`,dataset);
       // console.debug(`ids`,ids);
     
+      assertEquals(dataset.size, 1);
+      assert(id.equals(ids[0]));
+      assert(id.equals(oneId));
       assertEquals(`${id}`, `${ids[0]}`);
+      assertEquals(`${id}`, `${oneId}`);
     }
   );
 
