@@ -8,7 +8,7 @@ A JavaScript client library that provides classes that collectively represent Qw
 
 - `Org`,
 - `Group`,
-- `Collab`,
+- `Membership`,
 - `User`.
 
 Each domain object can be read from, and written to, an [RDF dataset](https://rdf.js.org/dataset-spec/#datasetcore-interface).
@@ -19,94 +19,66 @@ This library is/will be used by:
 - The [Qworum browser extension](https://chromewebstore.google.com/detail/qworum-the-service-web/leaofcglebjeebmnmlapbnfbjgfiaokg).
 - The [Qworum JavaScript library](https://github.com/doga/qworum-for-web-pages) that is used for developing Qworum applications and services.
 
-## Domain model in detail
+## Domain model in some detail
 
 ```mermaid
 ---
-title: Qworum domain model classes
+title: The main Qworum domain model classes
 ---
 classDiagram
   class IRI{
-    +equals(other) boolean
-    +toString() string
+  }
+  class URN{
   }
   class Id{
     +string idType
     +string bareId
-    +create(idString) Id$
-    +uuid() Id$
   }
   class UserId{
-    +create(idString) UserId$
-    +uuid() UserId$
-  }
-  class PasswordId{
-    +forUser(userId) PasswordId$
   }
   class GroupId{
-    +create(idString) GroupId$
-    +uuid() GroupId$
-  }
-  class CollabId{
-    +create(idString) CollabId$
-    +uuid() CollabId$
-  }
-  class CollabCheckpointId{
-    +create(idString) CollabCheckpointId$
-    +uuid() CollabCheckpointId$
-  }
-  class OrgId{
-    +create(idString) OrgId$
-    +uuid() OrgId$
   }
   class PersonaId{
-    +create(idString) OrgId$
-    +uuid() OrgId$
   }
-
+  class MembershipId{
+  }
+  class PartnershipId{
+  }
+  class OrgId{
+  }
   class User{
     +UserId userId
     +GroupId personalGroupId
     +Password password
-    +readFrom(dataset) User[]$
-    +writeTo(dataset)
-    +toDataset() object
-    +equals(other) boolean
   }
   class Group{
     +GroupId groupId
     +boolean isPersonalGroup
     +OrgId orgId?
     +GroupId parentGroupId?
-    +CollabId collabId?
+    +MembershipId membershipId?
     +UserId[] ownerIds
     +UserId[] subgroupsManagerIds
     +UserId[] collabManagerIds
     +UserId[] membershipsManagerIds
     +UserId[] memberIds
-    +readFrom(dataset) Group[]$
-    +writeTo(dataset)
-    +toDataset() object
-    +equals(other) boolean
   }
-  class Collab{
-    +CollabId collabId
-    +GroupId ownerId
-    +GroupId[] memberIds
-    +readFrom(dataset) Collab[]$
-    +writeTo(dataset)
-    +toDataset() object
-    +equals(other) boolean
-  }
-  class CollabCheckpoint{
-    +CollabCheckpointId collabCheckpointId
-    +CollabId collabId
+  class Persona{
+    +PersonaId personaId
+    +UserId userId
     +GroupId groupId
-    +MemberRole[] memberRoles
-    +readFrom(dataset) CollabCheckpoint[]$
-    +writeTo(dataset)
-    +toDataset() object
-    +equals(other) boolean
+  }
+  class Membership{
+    +MembershipId membershipId
+    +GroupId groupId
+    +UserId memberId
+    +MemberRoleId[] memberRoles
+  }
+  class Partnership{
+    +PartnershipId partnershipId
+    +GroupId hostGroupId
+    +GroupId partnerGroupId
+    +MemberRoleId[] partnerMemberRoles
   }
   class Org{
     +OrgId orgId
@@ -114,67 +86,30 @@ classDiagram
     +UserId[] rootGroupsManagerIds
     +UserId[] membershipsManagerIds
     +UserId[] memberIds
-    +readFrom(dataset) Org[]$
-    +writeTo(dataset)
-    +toDataset() object
-    +equals(other) boolean
   }
-  class Persona{
-    +PersonaId personaId
-    +UserId userId
-    +GroupId groupId
-    +MemberRole[] memberRoles
-    +readFrom(dataset) Persona[]$
-    +writeTo(dataset)
-    +toDataset() object
-    +equals(other) boolean
-  }
+
   class Vcard{
     +Id ownerId
     +string kind
     +string formattedName
     ...
-    +readFrom(dataset) Vcard[]$
-    +writeTo(dataset)
-    +toDataset() object
-    -fromString(vcardString) object
-    +toString() string
   }
   class IndividualVcard{
-    +readFrom(dataset) IndividualVcard[]$
-    +fromString(ownerId, vcardString) IndividualVcard$
   }
   class GroupVcard{
-    +readFrom(dataset) GroupVcard[]$
-    +fromString(ownerId, vcardString) GroupVcard$
   }
   class OrgVcard{
-    +readFrom(dataset) OrgVcard[]$
-    +fromString(ownerId, vcardString) OrgVcard$
   }
 
-  class Password{
-    +IRI passwordId
-    +string passwordCleartext
-  }
-
-  note for CollabCheckpoint "🎗 Not implemented yet."
-  note for Collab "Only groups that link back are in the collab."
-  note for Group "In an org, only top-level groups must have an orgId."
-  note for Vcard "The only objects that can be generated on the client"
-  note for PersonalGroup "Does not have an org or parent/sub groups. Owner cannot be removed, new owners cannot be added."
-  note for Persona "Makes an enforceable statement about a user's membership in a group or org."
-  note for Persona "Empty memberRoles means default role or no role?"
-
-  Id --|> IRI : extends
-  MemberRole --|> IRI
+  URN --|> IRI
+  Id --|> URN : extends
+  MemberRoleId --|> IRI
   UserId --|> Id
-  PasswordId --|> Id
   PersonaId --|> Id
   OrgId --|> Id
   GroupId --|> Id
-  CollabId --|> Id
-  CollabCheckpointId --|> Id
+  MembershipId --|> Id
+  PartnershipId --|> Id
   IndividualVcard --|> Vcard
   GroupVcard --|> Vcard
   OrgVcard --|> Vcard
@@ -190,29 +125,28 @@ classDiagram
   Org -- User : root groups manager
   Org -- User : memberships manager
   Org -- User : member
-  Persona -- Group : group
-  Persona -- User : member
-  Persona -- MemberRole : role
-  CollabCheckpoint -- Collab : collab
-  CollabCheckpoint -- Group : member
-  CollabCheckpoint -- MemberRole : role
-  Collab *-- Group : owner
-  Collab *-- Group : member
+  Persona *-- User : user's identity during a Qworum session
+  Persona *-- Group : the group that the user is acting on behalf of in a Qworum session
+  Partnership *-- Group : host group
+  Partnership *-- Group : partner group
+  Partnership *-- MemberRoleId : role of partner group's member
+  Membership *-- MemberRoleId : group member's role
+  Membership *-- Group : group
+  Membership *-- Group : member
   User *-- IndividualVcard : has vCard
-  User *-- Password : has password
+ 
 
   style Id fill:#229,stroke:#333,stroke-width:4px
   style UserId fill:#229,stroke:#333,stroke-width:4px
   style PasswordId fill:#229,stroke:#333,stroke-width:4px
   style GroupId fill:#229,stroke:#333,stroke-width:4px
-  style CollabId fill:#229,stroke:#333,stroke-width:4px
-  style CollabCheckpointId fill:#229,stroke:#333,stroke-width:4px
+  style MembershipId fill:#229,stroke:#333,stroke-width:4px
+  style PartnershipId fill:#229,stroke:#333,stroke-width:4px
   style OrgId fill:#229,stroke:#333,stroke-width:4px
   style PersonaId fill:#229,stroke:#333,stroke-width:4px
 
   style Org fill:#641DA4,stroke:#333,stroke-width:4px
   style Group fill:#6D1FB3,stroke:#333,stroke-width:4px
-  style Collab fill:#005B9B,stroke:#333,stroke-width:4px
   style PersonalGroup fill:#6D1FB3,stroke:black,stroke-width:4px
   style User fill:#641DA4,stroke:#333,stroke-width:4px
   style Password fill:#616161,stroke:#333,stroke-width:4px
@@ -222,9 +156,11 @@ classDiagram
   style GroupVcard fill:#292,stroke:#333,stroke-width:4px
   style OrgVcard fill:#292,stroke:#333,stroke-width:4px
 
-  style MemberRole fill:#AE251C,stroke:#333,stroke-width:4px
-  style Persona fill:#AE251C,stroke:#333,stroke-width:4px
-  style CollabCheckpoint fill:#AE251C,stroke:#333,stroke-width:4px
+  style MemberRoleId fill:#AE251C,stroke:#333,stroke-width:4px
+  style Membership fill:#AE251C,stroke:#333,stroke-width:4px
+  style Partnership fill:#AE251C,stroke:#333,stroke-width:4px
+
+  style Persona fill:#4C6C31,stroke:#333,stroke-width:4px
 ```
 
 In a `Group` or `Org`, the allowed user roles are _owner_, _root groups manager_ (for orgs), _subgroups manager_ (for groups that are not personal groups), _collab manager_ (for all groups), _memberships manager_, _member_. All roles except _member_ are manager roles. Managers and members are collectively called _participants_.
@@ -237,14 +173,14 @@ Note that personas are only one type of membership annotation. For instance, ann
 - A group membership may be active only for a given time period.
 - A group membership may be activated only after a certain event has occurred.
 
-Similary to how the actions of the members of a group can be restricted through personas, the actions of all members of a member group within collab can also be restricted through `CollabCheckpoint`s.
+Similary to how the actions of the members of a group can be restricted through personas, the actions of all members of a member group within collab can also be restricted through `Partnership`s.
 
 For users that are members of a group which are in turn members of a collab, an action is only allowed if:
 
-- at least one of the `CollabCheckpoint` rules of the user's group allows the action, __and__
+- at least one of the `Partnership` rules of the user's group allows the action, __and__
 - at least one of the `Persona` rules of the user within the group allows the action.
 
-Both `Persona` and `CollabCheckpoint` are [reifications](https://www.w3.org/TR/rdf12-concepts/#section-triple-terms-reification) (statements about membership statements).
+Both `Persona` and `Partnership` are [reifications](https://www.w3.org/TR/rdf12-concepts/#section-triple-terms-reification) (statements about membership statements).
 
 ```mermaid
 flowchart TD
@@ -255,7 +191,7 @@ flowchart TD
   omm[Memberships manager]
   go[Group owner]
   sm[Subgroups manager]
-  cm[Collab manager]
+  cm[Membership manager]
   m[Member]
   r[Reader]
 
@@ -272,7 +208,7 @@ flowchart TD
 
 The members of a group are all members of the parent group or org. If a group belongs to an org, then all managers of the group must be members of the org. If a group doesn't belong to an org, then anyone can be a group manager if the group owner sees it fit.
 
-Collabs are for multi-group teamwork. Collab connections must be 2-way to be valid, the others are only collab proposals pending confirmation by the other party. Here is how it works:
+Memberships are for multi-group teamwork. Membership connections must be 2-way to be valid, the others are only collab proposals pending confirmation by the other party. Here is how it works:
 
 1. A collab manager in a group creates a collab object and adds the IDs of groups that he/she wishes to invite to the collab.
 1. Any previous collab object that the group was linking to is forgotten by that group. Groups can link to one collab at most at any given time.
@@ -345,10 +281,10 @@ Restrict the role of a group member to a read-only capacity.
 ```javascript
 import { 
   IriParser, IRI, iri, URN, urn, IRL, irl, url, 
-  Id, OrgId, orgid, GroupId, groupid, CollabId, collabid, UserId, userid, PersonaId, personaid,
-  Org, Group, PersonalGroup, Collab, Password, User,
+  Id, OrgId, orgid, GroupId, groupid, MembershipId, collabid, UserId, userid, PersonaId, personaid,
+  Org, Group, PersonalGroup, Membership, Password, User,
   Vcard, IndividualVcard, GroupVcard, OrgVcard, Name, Email, EmailUrl, Phone, PhoneUrl, Photo, Address, 
-  Persona, OrgPersona, GroupPersona, MemberRole, memberrole,
+  Persona, OrgPersona, GroupPersona, MemberRoleId, memberrole,
 } from 'https://esm.sh/gh/doga/qworum-domain-model@0.9.21/mod.mjs';
 
 // Create a persona that assigns a read-only role to a user within a group.
@@ -356,7 +292,7 @@ const
 personaId   = PersonaId.uuid(),
 groupId     = GroupId.uuid(),
 userId      = UserId.uuid(),
-memberRoles = [ MemberRole.reader ],
+memberRoles = [ MemberRoleId.reader ],
 persona     = new Persona({personaId, groupId, userId, memberRoles}),
 
 // Store the persona in an in-memory RDF dataset
