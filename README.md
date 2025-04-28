@@ -49,6 +49,8 @@ classDiagram
   class User{
     +UserId userId
     +GroupId personalGroupId
+    +GroupId[] groupIds
+    +OrgId[] orgIds
     +Password password
   }
   class Group{
@@ -56,10 +58,10 @@ classDiagram
     +boolean isPersonalGroup
     +OrgId orgId?
     +GroupId parentGroupId?
-    +MembershipId membershipId?
+    +PartnershipId partnershipId?
     +UserId[] ownerIds
     +UserId[] subgroupsManagerIds
-    +UserId[] collabManagerIds
+    +UserId[] partnershipManagerIds
     +UserId[] membershipsManagerIds
     +UserId[] memberIds
   }
@@ -72,12 +74,14 @@ classDiagram
     +MembershipId membershipId
     +GroupId groupId
     +UserId memberId
+    +TemporalEntity[] validityPeriods
     +MemberRoleId[] memberRoles
   }
   class Partnership{
     +PartnershipId partnershipId
     +GroupId hostGroupId
-    +GroupId partnerGroupId
+    +GroupId[] partnerGroupIds
+    +TemporalEntity[] validityPeriods
     +MemberRoleId[] partnerMemberRoles
   }
   class Org{
@@ -101,6 +105,11 @@ classDiagram
   class OrgVcard{
   }
 
+  note for Partnership "Groups must link back"
+  note for Org "Users must link back"
+  note for Group "Users must link back"
+  note for Membership "Annotation on the 'member' link going from a Group to a User"
+
   URN --|> IRI
   Id --|> URN : extends
   MemberRoleId --|> IRI
@@ -118,17 +127,17 @@ classDiagram
   Group *-- GroupVcard : has vCard
   Group -- User : member
   Group -- User : owner
-  Group -- User : subgroups manager
-  Group -- User : collab manager
-  Group -- User : memberships manager
+  Group -- User : subgroupsManager
+  Group -- User : collabManager
+  Group -- User : membershipsManager
   Org -- User : owner
-  Org -- User : root groups manager
-  Org -- User : memberships manager
+  Org -- User : rootGroupsManager
+  Org -- User : membershipsManager
   Org -- User : member
   Persona *-- User : user's identity during a Qworum session
   Persona *-- Group : the group that the user is acting on behalf of in a Qworum session
-  Partnership *-- Group : host group
-  Partnership *-- Group : partner group
+  Partnership *-- Group : hostGroup
+  Partnership *-- Group : partnerGroup
   Partnership *-- MemberRoleId : role of partner group's member
   Membership *-- MemberRoleId : group member's role
   Membership *-- Group : group
@@ -147,7 +156,7 @@ classDiagram
 
   style Org fill:#641DA4,stroke:#333,stroke-width:4px
   style Group fill:#6D1FB3,stroke:#333,stroke-width:4px
-  style PersonalGroup fill:#6D1FB3,stroke:black,stroke-width:4px
+  style PersonalGroup fill:#6D1FB3,stroke:#333,stroke-width:4px
   style User fill:#641DA4,stroke:#333,stroke-width:4px
   style Password fill:#616161,stroke:#333,stroke-width:4px
 
@@ -165,22 +174,21 @@ classDiagram
 
 In a `Group` or `Org`, the allowed user roles are _owner_, _root groups manager_ (for orgs), _subgroups manager_ (for groups that are not personal groups), _collab manager_ (for all groups), _memberships manager_, _member_. All roles except _member_ are manager roles. Managers and members are collectively called _participants_.
 
-By default, a group membership grants the user full permissions when using Qworum-based services. User permissions may be made more restrictive through `Persona` annotations on group membership relations. For example a group member may be given a read-only access to Qworum-based services.
-Note that Qworum's definition of what a `role` or a `permission` is differs slightly from the conventional use of those terms. Indeed, traditionally [roles are bags of permissions](https://www.ibm.com/docs/en/ram/7.5.4.5?topic=management-roles-permissions), and each role and permission is application-specific, which means that two applications may use very different sets of roles and permissions, and even if two applications use the same tag name for a role or permission, the meaning that each application attaches to those tags can vary considerably. In contrast, with `Persona` Qworum aims to establish a roles & permissions framework that is common to all applications and services.
+By default, a group membership grants the user full permissions when using Qworum-based services. User permissions may be made more restrictive through `Membership` annotations on group membership relations. For example a group member may be given a read-only access to Qworum-based services.
 
-Note that personas are only one type of membership annotation. For instance, annotations may serve membership activation purposes. For example:
+Note that memberships can have many dimensions beyond member roles. For example:
 
-- A group membership may be active only for a given time period.
-- A group membership may be activated only after a certain event has occurred.
+- memberships may be active only during specified time periods.
+- memberships may be activated only after a certain event has occurred.
 
 Similary to how the actions of the members of a group can be restricted through personas, the actions of all members of a member group within collab can also be restricted through `Partnership`s.
 
 For users that are members of a group which are in turn members of a collab, an action is only allowed if:
 
 - at least one of the `Partnership` rules of the user's group allows the action, __and__
-- at least one of the `Persona` rules of the user within the group allows the action.
+- at least one of the `Membership` rules of the user within the group allows the action.
 
-Both `Persona` and `Partnership` are [reifications](https://www.w3.org/TR/rdf12-concepts/#section-triple-terms-reification) (statements about membership statements).
+A `Membership` is a [reification](https://www.w3.org/TR/rdf12-concepts/#section-triple-terms-reification) (a statement about a membership statement).
 
 ```mermaid
 flowchart TD
