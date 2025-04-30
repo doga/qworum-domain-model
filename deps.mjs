@@ -9,3 +9,6 @@ export { rdfTerm, rdf };
 // Vcard-parsing
 import ICAL from "https://unpkg.com/ical.js/dist/ical.min.js";
 export { ICAL };
+
+// Human languages
+export { Language } from "https://esm.sh/gh/doga/language@1.0.2/mod.mjs";

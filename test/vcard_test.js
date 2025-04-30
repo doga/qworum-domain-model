@@ -1,4 +1,4 @@
-// deno test --allow-import --allow-read ./test/vcard_test.mts
+// deno test --allow-import --allow-read ./test/vcard_test.js
 
 import {assertInstanceOf, assertEquals, assertGreaterOrEqual, assertThrows, assertNotEquals, assert } from "jsr:@std/assert@1";
 import { 
@@ -76,7 +76,8 @@ Deno.test("individual vcard objects can be created from vcard strings", async ()
     vcardStr = await Deno.readTextFile(`./test/assets/${vcardFile}`),
     vcard    = IndividualVcard.fromString(userId, vcardStr);
 
-    (vcard as {ownerId: any}).ownerId = iri`urn:qworum:vcard:1234`;
+    vcard.ownerId = iri`urn:qworum:vcard:1234`;
+    // (vcard as {ownerId: any}).ownerId = iri`urn:qworum:vcard:1234`;
 
     // console.debug(`[test] vcard:`, vcard);
 

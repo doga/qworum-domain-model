@@ -91,6 +91,7 @@
     "https://esm.sh/gh/doga/IRI@3.1.3/mod.mjs": "4c9b7a75faecce263bfa3233366c7ca9a0f99e2631ff0d32c99061f835b68620",
     "https://esm.sh/gh/doga/base64@1.0.0/denonext/mod.mjs": "b8473de8503718ecd17af86c9aaa00e8054e0ecdb9787e8f55827f7224385d5a",
     "https://esm.sh/gh/doga/base64@1.0.0/mod.mjs": "70714d2677cf6ff1f731dfd66cc5f1a9ac029392ff27978b2024e6d434ec3e17",
+    "https://esm.sh/gh/doga/language@1.0.2/mod.mjs": "ab55f04297172510609ddc77f54affe6f378a4ade2b71427a0e963b2e2d3f0c8",
     "https://esm.sh/gh/doga/punycode@1.0.0/mod.mjs": "4448b30deb82ecf333360321ee2e05b7a87f873c141fe0eec91b983a7e381152",
     "https://esm.sh/gh/doga/qworum-domain-model@0.9.0/denonext/mod.mjs": "3871635441e19e7e49c4ec737b46ed2af33dd994e54b49252bd0014be3c67311",
     "https://esm.sh/gh/doga/qworum-domain-model@0.9.0/mod.mjs": "09cf4f8529b3d069f9284e399844bceb07f95f2f0f891969172077e84a3b1a53",
@@ -120,6 +121,7 @@
     "https://esm.sh/gh/rdfjs/data-model@v2.1.0/denonext/data-model.mjs": "a0a7331b2d11669ce20bb6de04b1cf343674f9b97dbd6e9775487b00077f15a0",
     "https://esm.sh/gh/rdfjs/dataset@v2.0.2": "66eadbc4b78d2d917216ff48ddfca496e424181cd36c66b23a4f4379b942b0a8",
     "https://esm.sh/gh/rdfjs/dataset@v2.0.2/denonext/dataset.mjs": "190534eea7503589971267aa775db135f3285135fbb13aa555fcf39d0e03b2d5",
+    "https://esm.sh/v135/gh/doga/language@1.0.2/denonext/mod.js": "d3fea7bf3fe3e62a35d1fd94285160bd5a17c688f9aefa79a15766dd89964cc1",
     "https://esm.sh/v135/gh/doga/punycode@1.0.0/denonext/mod.js": "0487c25f67df311ae32ce8b85d2fe56f571e6af6eb5ae8bee3060ac4c3a956bf",
     "https://unpkg.com/ical.js@2.1.0/dist/ical.min.js": "4a8ca1647b5b93e5fcf5fee59c4ad1c597138d108cc2c7e88854f688f711436d"
   }

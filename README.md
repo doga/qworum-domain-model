@@ -38,17 +38,22 @@ classDiagram
   }
   class GroupId{
   }
-  class PersonaId{
-  }
   class MembershipId{
   }
   class PartnershipId{
   }
+  class PartnershipMembershipId{
+  }
   class OrgId{
+  }
+  class RoleId{
+  }
+  class Role{
+    +RoleId roleId
+    +I18nText description
   }
   class User{
     +UserId userId
-    +GroupId personalGroupId
     +GroupId[] groupIds
     +OrgId[] orgIds
     +Password password
@@ -58,7 +63,7 @@ classDiagram
     +boolean isPersonalGroup
     +OrgId orgId?
     +GroupId parentGroupId?
-    +PartnershipId partnershipId?
+    +PartnershipId[] partnershipIds
     +UserId[] ownerIds
     +UserId[] subgroupsManagerIds
     +UserId[] partnershipManagerIds
@@ -66,23 +71,33 @@ classDiagram
     +UserId[] memberIds
   }
   class Persona{
-    +PersonaId personaId
     +UserId userId
     +GroupId groupId
+    +RoleId[] userRoles
+    +RoleId[] groupRoles
+    +GroupId[] partnerGroupIds
+    +userFitsAnyOf(roles ) boolean
+    +userIdSha256() string
+    +groupIdSha256() string
   }
   class Membership{
     +MembershipId membershipId
     +GroupId groupId
-    +UserId memberId
+    +UserId userId
     +TemporalEntity[] validityPeriods
-    +MemberRoleId[] memberRoles
+    +RoleId[] roles
   }
   class Partnership{
     +PartnershipId partnershipId
-    +GroupId hostGroupId
-    +GroupId[] partnerGroupIds
+    +GroupId ownerId
+    +GroupId[] memberIds
+  }
+  class PartnershipMembership{
+    +PartnershipMembershipId partnerMembershipId
+    +PartnershipId partnershipId
+    +GroupId groupId
     +TemporalEntity[] validityPeriods
-    +MemberRoleId[] partnerMemberRoles
+    +RoleId[] roles
   }
   class Org{
     +OrgId orgId
@@ -105,19 +120,23 @@ classDiagram
   class OrgVcard{
   }
 
+  note for Membership "Annotation on the 'member' link going from a Group to a User"
+  note for PartnershipMembership "Annotation on the 'member' link going from a Partnership to a Group"
   note for Partnership "Groups must link back"
   note for Org "Users must link back"
   note for Group "Users must link back"
-  note for Membership "Annotation on the 'member' link going from a Group to a User"
+  note for Persona "The end-user, as seen by Qworum services"
 
   URN --|> IRI
+  IRL --|> IRI
+  RoleId --|> IRL
   Id --|> URN : extends
-  MemberRoleId --|> IRI
+  RoleId -- Role
   UserId --|> Id
-  PersonaId --|> Id
   OrgId --|> Id
   GroupId --|> Id
   MembershipId --|> Id
+  PartnershipMembershipId --|> Id
   PartnershipId --|> Id
   IndividualVcard --|> Vcard
   GroupVcard --|> Vcard
@@ -125,23 +144,20 @@ classDiagram
   PersonalGroup --|> Group
   Org *-- OrgVcard : has vCard
   Group *-- GroupVcard : has vCard
-  Group -- User : member
-  Group -- User : owner
-  Group -- User : subgroupsManager
-  Group -- User : collabManager
-  Group -- User : membershipsManager
+  Group *-- User : member
+  Group *-- User : owner
+  Group *-- User : subgroupsManager
+  Group *-- User : collabManager
+  Group *-- User : membershipsManager
   Org -- User : owner
   Org -- User : rootGroupsManager
   Org -- User : membershipsManager
   Org -- User : member
-  Persona *-- User : user's identity during a Qworum session
-  Persona *-- Group : the group that the user is acting on behalf of in a Qworum session
-  Partnership *-- Group : hostGroup
-  Partnership *-- Group : partnerGroup
-  Partnership *-- MemberRoleId : role of partner group's member
-  Membership *-- MemberRoleId : group member's role
-  Membership *-- Group : group
-  Membership *-- Group : member
+  Persona *-- User : user
+  Persona *-- Group : the group that the user is acting on behalf of
+  Partnership *-- Group : owner
+  Partnership *-- Group : member
+  Partnership *-- RoleId : role of partner group's member
   User *-- IndividualVcard : has vCard
  
 
@@ -150,12 +166,13 @@ classDiagram
   style PasswordId fill:#229,stroke:#333,stroke-width:4px
   style GroupId fill:#229,stroke:#333,stroke-width:4px
   style MembershipId fill:#229,stroke:#333,stroke-width:4px
+  style PartnershipMembershipId fill:#229,stroke:#333,stroke-width:4px
   style PartnershipId fill:#229,stroke:#333,stroke-width:4px
   style OrgId fill:#229,stroke:#333,stroke-width:4px
-  style PersonaId fill:#229,stroke:#333,stroke-width:4px
 
   style Org fill:#641DA4,stroke:#333,stroke-width:4px
   style Group fill:#6D1FB3,stroke:#333,stroke-width:4px
+  style Partnership fill:#6D1FB3,stroke:#333,stroke-width:4px
   style PersonalGroup fill:#6D1FB3,stroke:#333,stroke-width:4px
   style User fill:#641DA4,stroke:#333,stroke-width:4px
   style Password fill:#616161,stroke:#333,stroke-width:4px
@@ -165,9 +182,10 @@ classDiagram
   style GroupVcard fill:#292,stroke:#333,stroke-width:4px
   style OrgVcard fill:#292,stroke:#333,stroke-width:4px
 
-  style MemberRoleId fill:#AE251C,stroke:#333,stroke-width:4px
+  style Role fill:#AE251C,stroke:#333,stroke-width:4px
+  style RoleId fill:#AE251C,stroke:#333,stroke-width:4px
   style Membership fill:#AE251C,stroke:#333,stroke-width:4px
-  style Partnership fill:#AE251C,stroke:#333,stroke-width:4px
+  style PartnershipMembership fill:#AE251C,stroke:#333,stroke-width:4px
 
   style Persona fill:#4C6C31,stroke:#333,stroke-width:4px
 ```
@@ -176,14 +194,15 @@ In a `Group` or `Org`, the allowed user roles are _owner_, _root groups manager_
 
 By default, a group membership grants the user full permissions when using Qworum-based services. User permissions may be made more restrictive through `Membership` annotations on group membership relations. For example a group member may be given a read-only access to Qworum-based services.
 
-Note that memberships can have many dimensions beyond member roles. For example:
+Note that memberships can have many dimensions beyond member roles. For example memberships may be active:
 
-- memberships may be active only during specified time periods.
-- memberships may be activated only after a certain event has occurred.
+- only during specified time periods.
+- only after a certain event has occurred.
+- only if the user has a certain type of credential.
 
 Similary to how the actions of the members of a group can be restricted through personas, the actions of all members of a member group within collab can also be restricted through `Partnership`s.
 
-For users that are members of a group which are in turn members of a collab, an action is only allowed if:
+For users that are members of a group which are in turn partners in a `Partnership`, an action is only allowed in a Qworum service if:
 
 - at least one of the `Partnership` rules of the user's group allows the action, __and__
 - at least one of the `Membership` rules of the user within the group allows the action.
@@ -216,12 +235,15 @@ flowchart TD
 
 The members of a group are all members of the parent group or org. If a group belongs to an org, then all managers of the group must be members of the org. If a group doesn't belong to an org, then anyone can be a group manager if the group owner sees it fit.
 
-Memberships are for multi-group teamwork. Membership connections must be 2-way to be valid, the others are only collab proposals pending confirmation by the other party. Here is how it works:
+`Partnership`s are for multi-group teamwork. Partnership connections must be 2-way to be valid, the others are only partnership proposals pending confirmation by the other party.
 
-1. A collab manager in a group creates a collab object and adds the IDs of groups that he/she wishes to invite to the collab.
-1. Any previous collab object that the group was linking to is forgotten by that group. Groups can link to one collab at most at any given time.
-1. The collab managers of the invited groups are notified and can link their group to the collab.
-1. A collab is for Internet-wide teamwork; it is valid for all Qworum applications.
+A group can have at most one partnership that is active at any given time. If multiple partnerships are eligible, then only one of them is chosen at random by the Qworum platform.
+
+Here is how it works:
+
+1. A partnership manager in a group creates a `Partnership` object and adds the IDs of the partner groups that he/she wishes to invite to the partnership.
+1. The partnership managers of the partner groups are notified and can link their group to the partnership.
+1. A partnership is for Internet-wide teamwork; it is valid on all Qworum applications.
 
 ## Lifecycle of a domain model
 
@@ -289,19 +311,24 @@ Restrict the role of a group member to a read-only capacity.
 ```javascript
 import { 
   IriParser, IRI, iri, URN, urn, IRL, irl, url, 
-  Id, OrgId, orgid, GroupId, groupid, MembershipId, collabid, UserId, userid, PersonaId, personaid,
-  Org, Group, PersonalGroup, Membership, Password, User,
+
+  Id, OrgId, GroupId, UserId, PasswordId, MembershipId, PartnershipId, PartnershipMembershipId, RoleId,
+  orgid, group_id, user_id, membership_id, partnership_id, partnership_membership_id, role_id,
+  bareorgid, baregroup_id, bareuser_id, barepartnership_id,
+
+  Org, Group, PersonalGroup, Membership, Partnership, PartnershipMembership, Password, User, Role, wellKnownRoles,
+
   Vcard, IndividualVcard, GroupVcard, OrgVcard, Name, Email, EmailUrl, Phone, PhoneUrl, Photo, Address, 
-  Persona, OrgPersona, GroupPersona, MemberRoleId, memberrole,
-} from 'https://esm.sh/gh/doga/qworum-domain-model@0.9.21/mod.mjs';
+
+  Persona
+} from 'https://esm.sh/gh/doga/qworum-domain-model@0.10.0/mod.mjs';
 
 // Create a persona that assigns a read-only role to a user within a group.
 const
-personaId   = PersonaId.uuid(),
 groupId     = GroupId.uuid(),
 userId      = UserId.uuid(),
-memberRoles = [ MemberRoleId.reader ],
-persona     = new Persona({personaId, groupId, userId, memberRoles}),
+memberRoles = [ RoleId.reader ],
+persona     = new Persona({groupId, userId, memberRoles}),
 
 // Store the persona in an in-memory RDF dataset
 dataset = persona.toDataset();

@@ -1,4 +1,4 @@
-// deno test --allow-import ./test/group_test.mts
+// deno test --allow-import ./test/group_test.js
 
 import {
   assertInstanceOf, assertEquals, assertNotEquals, 
@@ -7,37 +7,37 @@ import {
 
 
 import { 
-  Org, Group, userid, PersonalGroup,
+  Org, Group, user_id, PersonalGroup,
   OrgId, GroupId, UserId,
 } from '../mod.mjs';
 
-type GroupType = {
-  groupId              : any,
+// type GroupType = {
+//   groupId              : any,
 
-  orgId                : any,
-  isPersonalGroup      : any,
-  parentGroupId        : any,
-  collabId             : any,
+//   orgId                : any,
+//   isPersonalGroup      : any,
+//   parentGroupId        : any,
+//   collabId             : any,
 
-  // managers
-  ownerIds             : any,
-  subgroupsManagerIds  : any,
-  collabManagerIds     : any,
-  membershipsManagerIds: any,
+//   // managers
+//   ownerIds             : any,
+//   subgroupsManagerIds  : any,
+//   collabManagerIds     : any,
+//   membershipsManagerIds: any,
 
-  memberIds            : any,
-};
+//   memberIds            : any,
+// };
 
-type OrgType = {
-  orgId                : any,
+// type OrgType = {
+//   orgId                : any,
 
-  // managers
-  ownerIds             : any,
-  rootGroupsManagerIds : any,
-  membershipsManagerIds: any,
+//   // managers
+//   ownerIds             : any,
+//   rootGroupsManagerIds : any,
+//   membershipsManagerIds: any,
 
-  memberIds            : any,
-};
+//   memberIds            : any,
+// };
 
 
 Deno.test('org can be written as rdf and then read back', () => {
@@ -76,7 +76,8 @@ Deno.test('personal group can be written as rdf and then read back', () => {
   const
   groupIn = new PersonalGroup({ 
     groupId, ownerIds, 
-  } as GroupType),
+  } ),
+  // } as GroupType),
 
   dataset = groupIn.toDataset(),
   groupsOut = PersonalGroup.readFrom(dataset);
@@ -109,7 +110,8 @@ Deno.test('group can be written as rdf and then read back', () => {
   assertInstanceOf(ownerIds[0], UserId);
 
   const
-  groupIn = new Group({groupId, orgId, isPersonalGroup, parentGroupId, ownerIds, subgroupsManagerIds: ownerIds, collabManagerIds: ownerIds, membershipsManagerIds: ownerIds, memberIds: ownerIds} as GroupType),
+  groupIn = new Group({groupId, orgId, isPersonalGroup, parentGroupId, ownerIds, subgroupsManagerIds: ownerIds, partnershipsManagersIds: ownerIds, membershipsManagerIds: ownerIds, memberIds: ownerIds} ),
+  // groupIn = new Group({groupId, orgId, isPersonalGroup, parentGroupId, ownerIds, subgroupsManagerIds: ownerIds, collabManagerIds: ownerIds, membershipsManagerIds: ownerIds, memberIds: ownerIds} as GroupType),
   dataset = groupIn.toDataset();
   // console.debug(dataset);
   const groupsOut = Group.readFrom(dataset);

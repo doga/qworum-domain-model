@@ -1,11 +1,11 @@
-// deno test --allow-import ./test/id_test.mts
+// deno test --allow-import ./test/id_test.js
 
 import {assertInstanceOf, assertEquals, assertNotEquals, assertThrows, assertFalse, assert } from "jsr:@std/assert@1";
-import {IRI, iri, Id, PersonaId, CollabId, OrgId, GroupId, UserId, PasswordId, userid, orgid } from '../mod.mjs';
+import {IRI, iri, Id, OrgId, GroupId, UserId, MembershipId, PartnershipId, partnership_id, PartnershipMembershipId, partnership_membership_id, RoleId, role_id, PasswordId, user_id, orgid } from '../mod.mjs';
 
 
 Deno.test('ids can be written as rdf and then read back', () => {
-  [CollabId, OrgId, GroupId, UserId, PersonaId].forEach(
+  [OrgId, GroupId, UserId, MembershipId, PartnershipId, PartnershipMembershipId].forEach(
     idClass => {
       const
       id      = idClass.uuid(),
@@ -41,7 +41,7 @@ Deno.test('generate org id', () => {
 });
 
 Deno.test('generate user id', () => {
-  const id = userid`urn:qworum:user:1234`;
+  const id = user_id`urn:qworum:user:1234`;
   // console.debug(`[test] id: ${id}`, id);
   assertInstanceOf(id, UserId); 
 });

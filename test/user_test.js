@@ -1,16 +1,16 @@
-// deno test --allow-import ./test/user_test.mts
+// deno test --allow-import ./test/user_test.js
 
 import { assertInstanceOf, assertEquals, assertNotEquals, assert } from 'jsr:@std/assert@1';
 import { QRM, } from '../lib/util/rdf-prefixes.mjs';
-import { iri, Password, User, bareuserid, baregroupid, UserId } from '../mod.mjs';
+import { iri, Password, User, bareuser_id, baregroup_id, UserId } from '../mod.mjs';
 import { PasswordId } from '../lib/id.mjs';
 
 
 Deno.test('user is written to rdf dataset and read back', () => {
   // console.debug('[test]');
   const 
-  userId          = bareuserid`1234`,
-  personalGroupId = baregroupid`1234`;
+  userId          = bareuser_id`1234`,
+  personalGroupId = baregroup_id`1234`;
   if(!(userId && personalGroupId)) return;
 
   const
