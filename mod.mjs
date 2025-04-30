@@ -1,28 +1,45 @@
 
-export { 
+import { 
   IriParser,
   IRI, URN, IRL, 
   iri, urn, irl, url, 
 } from "./deps.mjs";
 
-export { 
+import { 
   Id, OrgId, GroupId, UserId, PasswordId, MembershipId, PartnershipId, PartnershipMembershipId, RoleId,
   orgid, group_id, user_id, membership_id, partnership_id, partnership_membership_id, role_id,
   bareorgid, baregroup_id, bareuser_id, barepartnership_id,
 } from './lib/id.mjs';
 
-export { Org, Group, PersonalGroup } from './lib/group.mjs';
-export { Partnership } from './lib/partnership.mjs';
-export { Password } from './lib/user/password.mjs';
-export { User } from './lib/user.mjs';
+import { Org, Group, PersonalGroup } from './lib/group.mjs';
+import { Partnership } from './lib/partnership.mjs';
+import { Password } from './lib/user/password.mjs';
+import { User } from './lib/user.mjs';
 
-export { Membership } from './lib/membership-annotations/membership.mjs';
-export { PartnershipMembership } from './lib/membership-annotations/partnership-membership.mjs';
-export { Role, wellKnownRoles } from './lib/membership-annotations/role.mjs';
+import { Membership } from './lib/membership-annotations/membership.mjs';
+import { PartnershipMembership } from './lib/membership-annotations/partnership-membership.mjs';
+import { Role, wellKnownRoles } from './lib/membership-annotations/role.mjs';
+import { I18nText } from "./lib/util/i18n-text.mjs";
+import { Language } from "./deps.mjs";
 
-export {
+import {
   Vcard, IndividualVcard, GroupVcard, OrgVcard, Name, Email, EmailUrl, Phone, PhoneUrl, Photo, Address, 
 } from './lib/vcard.mjs';
 
-export { Persona } from './lib/persona.mjs';
+import { Persona } from './lib/persona.mjs';
 
+export { 
+  IriParser, IRI, iri, URN, urn, IRL, irl, url, 
+
+  Id, OrgId, GroupId, UserId, PasswordId, MembershipId, PartnershipId, PartnershipMembershipId, RoleId,
+  orgid, group_id, user_id, membership_id, partnership_id, partnership_membership_id, role_id,
+  bareorgid, baregroup_id, bareuser_id, barepartnership_id,
+
+  I18nText, Language,
+
+  Org, Group, PersonalGroup, Membership, Partnership, PartnershipMembership, Password, User, Role, wellKnownRoles,
+
+  Vcard, IndividualVcard, GroupVcard, OrgVcard, Name, Email, EmailUrl, Phone, PhoneUrl, Photo, Address, 
+
+  Persona
+};

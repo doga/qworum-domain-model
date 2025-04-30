@@ -316,12 +316,14 @@ import {
   orgid, group_id, user_id, membership_id, partnership_id, partnership_membership_id, role_id,
   bareorgid, baregroup_id, bareuser_id, barepartnership_id,
 
+  I18nText, Language,
+
   Org, Group, PersonalGroup, Membership, Partnership, PartnershipMembership, Password, User, Role, wellKnownRoles,
 
   Vcard, IndividualVcard, GroupVcard, OrgVcard, Name, Email, EmailUrl, Phone, PhoneUrl, Photo, Address, 
 
   Persona
-} from 'https://esm.sh/gh/doga/qworum-domain-model@0.10.0/mod.mjs';
+} from 'https://esm.sh/gh/doga/qworum-domain-model@0.10.1/mod.mjs';
 
 const
 // Create a group
