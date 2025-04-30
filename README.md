@@ -323,7 +323,7 @@ import {
   Vcard, IndividualVcard, GroupVcard, OrgVcard, Name, Email, EmailUrl, Phone, PhoneUrl, Photo, Address, 
 
   Persona
-} from 'https://esm.sh/gh/doga/qworum-domain-model@0.10.1/mod.mjs';
+} from 'https://esm.sh/gh/doga/qworum-domain-model@0.10.2/mod.mjs';
 
 const
 // Create a group
