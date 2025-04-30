@@ -93,6 +93,8 @@
     "https://esm.sh/gh/doga/base64@1.0.0/mod.mjs": "70714d2677cf6ff1f731dfd66cc5f1a9ac029392ff27978b2024e6d434ec3e17",
     "https://esm.sh/gh/doga/language@1.0.2/mod.mjs": "ab55f04297172510609ddc77f54affe6f378a4ade2b71427a0e963b2e2d3f0c8",
     "https://esm.sh/gh/doga/punycode@1.0.0/mod.mjs": "4448b30deb82ecf333360321ee2e05b7a87f873c141fe0eec91b983a7e381152",
+    "https://esm.sh/gh/doga/qworum-domain-model@0.10.0/denonext/mod.mjs": "23b7bb2b656ca36e47f43292700a950a6a9158ed2e815121d0ceff24d78d59cd",
+    "https://esm.sh/gh/doga/qworum-domain-model@0.10.0/mod.mjs": "97cc8e1d99d23a87ad1c24b48d4ad19d4c86d5ebba2704e1640a8243a4426deb",
     "https://esm.sh/gh/doga/qworum-domain-model@0.9.0/denonext/mod.mjs": "3871635441e19e7e49c4ec737b46ed2af33dd994e54b49252bd0014be3c67311",
     "https://esm.sh/gh/doga/qworum-domain-model@0.9.0/mod.mjs": "09cf4f8529b3d069f9284e399844bceb07f95f2f0f891969172077e84a3b1a53",
     "https://esm.sh/gh/doga/qworum-domain-model@0.9.10/denonext/mod.mjs": "be59a433a9f0cfc385cc2a50c7bdb85a13659f3741010a759cf7517f6583270e",

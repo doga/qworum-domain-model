@@ -299,7 +299,7 @@ flowchart LR
 ## Usage example
 
 <details data-mdrb>
-<summary>Handle personas</summary>
+<summary>Handle group memberships</summary>
 
 <pre>
 description = '''
@@ -323,38 +323,70 @@ import {
   Persona
 } from 'https://esm.sh/gh/doga/qworum-domain-model@0.10.0/mod.mjs';
 
-// Create a persona that assigns a read-only role to a user within a group.
 const
-groupId     = GroupId.uuid(),
-userId      = UserId.uuid(),
-memberRoles = [ RoleId.reader ],
-persona     = new Persona({groupId, userId, memberRoles}),
+// Create a group
+user1_Id  = UserId.uuid(),
+user2_Id  = UserId.uuid(),
+ownerIds  = [user1_Id],
+memberIds = [user1_Id, user2_Id],
+groupIn   = new Group({ownerIds, memberIds}),
 
-// Store the persona in an in-memory RDF dataset
-dataset = persona.toDataset();
+// Create membership restrictions for a member
+membershipIn = new Membership({
+  userId : user2_Id,
+  groupId: groupIn.groupId,
+  roleIds: [wellKnownRoles.reader.roleId] // user has read-only access to group data
+});
 
-// Read from in-memory RDF dataset
-const personas = Persona.readFrom(dataset);
+// Store the group and membership in an in-memory RDF dataset
+const dataset = groupIn.toDataset();
+membershipIn.writeTo(dataset);
 
-// Print out the persona.
-for (const persona of personas) {
-  console.info(`Group: ${persona.groupId}`);
-  console.info(`User:  ${persona.userId}`);
-  console.group('Roles:');
-  for (const role of persona.memberRoles) {
-    console.info(`${role}`);
-  }
-  console.groupEnd();
+// Now read the data back
+const
+groupOut      = Group.readOneFrom(dataset),
+membershipOut = Membership.readOneFrom(dataset);
+
+// Print out the group.
+console.group(`Group <${groupOut.groupId}>`);
+console.group(`Owners`);
+for (const ownerId of groupOut.ownerIds) {
+  console.info(`<${ownerId}>`);
 }
+console.groupEnd();
+console.group(`Members`);
+for (const memberId of groupOut.memberIds) {
+  console.info(`<${memberId}>`);
+}
+console.groupEnd();
+console.groupEnd();
+
+// Print out the membership restrictions.
+console.group(`Membership <${membershipOut.membershipId}>`);
+console.info(`Group <${membershipOut.groupId}>`);
+console.info(`User  <${membershipOut.userId}>`);
+console.group(`Roles`);
+for (const roleId of membershipOut.roleIds) {
+  console.info(`<${roleId}>`);
+}
+console.groupEnd();
+console.groupEnd();
 ```
 
 Sample output for the code above:
 
 ```text
-Group: urn:qworum:group:4f5aca14-150b-4bc6-82a1-d06d932cea09
-User:  urn:qworum:user:fbc797e5-796d-417e-b1ae-c682c83a61ba
-Roles:
-    https://vocab.qworum.net/id/memberrole/reader
+Group <urn:qworum:group:09a0a7e4-ce6e-49c3-bfec-39bb82f9752d>
+    Owners
+        <urn:qworum:user:067de11a-af79-4bbf-9f2c-93309225f2ea>
+    Members
+        <urn:qworum:user:067de11a-af79-4bbf-9f2c-93309225f2ea>
+        <urn:qworum:user:8ee6cc60-8b04-4815-8c9e-6d444d2d518f>
+Membership <urn:qworum:membership:1d254b89-e77c-4518-8d14-1096d10e1747>
+    Group <urn:qworum:group:09a0a7e4-ce6e-49c3-bfec-39bb82f9752d>
+    User  <urn:qworum:user:8ee6cc60-8b04-4815-8c9e-6d444d2d518f>
+    Roles
+        <https://vocab.qworum.net/id/role/reader>
 ```
 
 ### Running the usage example
