@@ -23,8 +23,12 @@ import { I18nText } from "./lib/util/i18n-text.mjs";
 import { Language } from "./deps.mjs";
 
 import {
-  Vcard, IndividualVcard, GroupVcard, OrgVcard, Name, Email, EmailUrl, Phone, PhoneUrl, Photo, Address, 
+  Vcard, IndividualVcard, GroupVcard, OrgVcard, Name, Email, Phone, Photo, Address, Types,
 } from './lib/vcard.mjs';
+
+import { DataUrl } from "./lib/util/data-url.mjs";
+import { EmailUrl } from "./lib/util/email-url.mjs";
+import { PhoneUrl } from "./lib/util/phone-url.mjs";
 
 import { Persona } from './lib/persona.mjs';
 
@@ -39,7 +43,9 @@ export {
 
   Org, Group, PersonalGroup, Membership, Partnership, PartnershipMembership, Password, User, Role, wellKnownRoles,
 
-  Vcard, IndividualVcard, GroupVcard, OrgVcard, Name, Email, EmailUrl, Phone, PhoneUrl, Photo, Address, 
+  Vcard, IndividualVcard, GroupVcard, OrgVcard, Name, Email, Phone, Photo, Address, Types,
 
-  Persona
+  DataUrl, EmailUrl, PhoneUrl,
+
+  Persona,
 };

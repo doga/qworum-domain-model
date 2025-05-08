@@ -12,7 +12,7 @@ import {
 
 const 
 individualVcardFiles = [
-  'user1-vcard3.vcard', 'user2-vcard3.vcard', 
+  'user1-vcard3.vcard', 'user2-vcard3.vcard', 'user3-vcard3.vcard'
 ],
 orgVcardFiles = [
   'org1-vcard3.vcard', 'org2-vcard3.vcard', 
@@ -76,24 +76,23 @@ Deno.test("individual vcard objects can be created from vcard strings", async ()
     vcardStr = await Deno.readTextFile(`./test/assets/${vcardFile}`),
     vcard    = IndividualVcard.fromString(userId, vcardStr);
 
-    vcard.ownerId = iri`urn:qworum:vcard:1234`;
+    // vcard.ownerId = iri`urn:qworum:vcard:1234`;
     // (vcard as {ownerId: any}).ownerId = iri`urn:qworum:vcard:1234`;
 
     // console.debug(`[test] vcard:`, vcard);
 
     assertInstanceOf(vcard, IndividualVcard);
-    assertInstanceOf(vcard.ownerId, IRI);
-    assertInstanceOf(vcard.ownerId, URN);
-    assert(typeof vcard?.formattedName === 'string');
-    if(vcard?.org) assert(typeof vcard?.org === 'string');
-    if(vcard?.nickname) assert(typeof vcard?.nickname === 'string');
-    assertInstanceOf(vcard?.emails, Array);
-    for (const email of vcard?.emails) {
+    assertInstanceOf(vcard.ownerId, Id);
+    assert(typeof vcard.formattedName === 'string');
+    if(vcard.org) assert(typeof vcard.org === 'string');
+    if(vcard.nickname) assert(typeof vcard.nickname === 'string');
+    assertInstanceOf(vcard.emails, Array);
+    for (const email of vcard.emails) {
       assertInstanceOf(email, Email);
     }
-    if(vcard?.photo) {
-      assertInstanceOf(vcard?.photo, Photo);
-      assert(`${vcard?.photo?.imageMimeType}`, 'image/jpeg');
+    if(vcard.photo) {
+      assertInstanceOf(vcard.photo, Photo);
+      assertEquals(`${vcard.photo.dataUrl.contentType}`, 'image/jpeg');
     }
   }
 });
@@ -179,72 +178,7 @@ Deno.test("Vcards are written to an RDF dataset and then read back", async () =>
 });
 
 
-// Deno.test("person vcard can be transformed to rdf", async () => {
-//   for (const vcardFile of individualVcardFiles) {
-//     const
-//     vcardStr = await Deno.readTextFile(`./test/assets/${vcardFile}`),
-//     vcard        = IndividualVcard.fromString(vcardStr);
-//     assertInstanceOf(vcard, IndividualVcard);
-    
-//     const
-//     vcardDataset = vcard?.toRdfDataset(UserId.create('1234')),
-//     vcardRdfJson = serialiseToRdfJson(vcardDataset);
-
-//     // console.debug(vcardRdfJson);
-
-//     assert(typeof vcardRdfJson === 'object' && !(vcardDataset instanceof Array));
-//   }
-// });
-
-
-// Deno.test("org vcard can be transformed to rdf", async () => {
-//   for (const vcardFile of orgVcardFiles) {
-//     const
-//     vcardStr = await Deno.readTextFile(`./test/assets/${vcardFile}`),
-//     vcard    = OrgVcard.fromString(vcardStr);
-//     assertInstanceOf(vcard, OrgVcard);
-    
-//     const
-//     vcardDataset = vcard?.toRdfDataset(UserId.create('1234')),
-//     vcardRdfJson = serialiseToRdfJson(vcardDataset);
-
-//     // console.debug(vcardRdfJson);
-
-//     assert(typeof vcardRdfJson === 'object' && !(vcardDataset instanceof Array));
-//   }
-// });
-
-
 Deno.test("bad vcard string throws error", () => {
   assertThrows(() => IndividualVcard.fromString(UserId.create('1234'), 'vcardStr'));
 });
-
-
-// Deno.test("user can set vcard in Qworum's central database", async () => {
-//   const 
-//   user     = await User.create(),
-//   userdata = new UserData(user.userId, user.password),
-//   vcardStr = await Deno.readTextFile('./test/assets/user1.vcard'),
-//   vcard    = IndividualVcard.fromString(vcardStr);
-
-//   assertInstanceOf(user, User);
-//   assertInstanceOf(userdata, UserData);
-//   assertInstanceOf(vcard, Vcard);
-
-//   await userdata.setVcard(vcard);
-// });
-
-Deno.test("tel url does not contains whitespace", async () => {
-  const 
-  tel = new PhoneUrl('+41 76 681 21 96');
-
-  // console.debug(`${tel}`);
-
-  assertInstanceOf(tel, PhoneUrl);
-});
-
-
-// Deno.test("template", async () => {
-
-// });
 

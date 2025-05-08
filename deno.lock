@@ -1,5 +1,5 @@
 {
-  "version": "4",
+  "version": "5",
   "specifiers": {
     "jsr:@david/dax@0.42.0": "0.42.0",
     "jsr:@david/path@0.2": "0.2.0",
@@ -95,6 +95,8 @@
     "https://esm.sh/gh/doga/punycode@1.0.0/mod.mjs": "4448b30deb82ecf333360321ee2e05b7a87f873c141fe0eec91b983a7e381152",
     "https://esm.sh/gh/doga/qworum-domain-model@0.10.0/denonext/mod.mjs": "23b7bb2b656ca36e47f43292700a950a6a9158ed2e815121d0ceff24d78d59cd",
     "https://esm.sh/gh/doga/qworum-domain-model@0.10.0/mod.mjs": "97cc8e1d99d23a87ad1c24b48d4ad19d4c86d5ebba2704e1640a8243a4426deb",
+    "https://esm.sh/gh/doga/qworum-domain-model@0.10.2/denonext/mod.mjs": "e5c3779aebb9e5c4af2682fca36212f4588257a2a0b042b5bc1f720a3008e148",
+    "https://esm.sh/gh/doga/qworum-domain-model@0.10.2/mod.mjs": "fdeef4d28a55b85013ee4c25b1f4a4738939caa42fd9f08ae50ba6732f9afd4e",
     "https://esm.sh/gh/doga/qworum-domain-model@0.9.0/denonext/mod.mjs": "3871635441e19e7e49c4ec737b46ed2af33dd994e54b49252bd0014be3c67311",
     "https://esm.sh/gh/doga/qworum-domain-model@0.9.0/mod.mjs": "09cf4f8529b3d069f9284e399844bceb07f95f2f0f891969172077e84a3b1a53",
     "https://esm.sh/gh/doga/qworum-domain-model@0.9.10/denonext/mod.mjs": "be59a433a9f0cfc385cc2a50c7bdb85a13659f3741010a759cf7517f6583270e",
@@ -119,6 +121,8 @@
     "https://esm.sh/gh/doga/qworum-domain-model@0.9.9/mod.mjs": "2676b37df180ad8f54f4b6a417f028e7bc6e0ebdb682ec077024a1ad804f073e",
     "https://esm.sh/gh/doga/rdf-json-parser@1.1.1/denonext/mod.mjs": "918f232679a878499786aa3bc09a34559169c70a49dabb8390d7e178c5eb102a",
     "https://esm.sh/gh/doga/rdf-json-parser@1.1.1/mod.mjs": "e101867b5516942efe541c2244868897f1321f2aae88c997a5b1ab009add310c",
+    "https://esm.sh/gh/kewisch/ical.js@v2.1.0/denonext/lib/ical/module.mjs": "d7f50b6ca876835c18795a856ce166aef80c12d0230f2adb38fc57cae15d70bf",
+    "https://esm.sh/gh/kewisch/ical.js@v2.1.0/lib/ical/module.js": "a40923b3103b6d7db023274846b7e447ca4416f85f647e649873add02aebc747",
     "https://esm.sh/gh/rdfjs/data-model@v2.1.0": "9bfd3d16878c50e4da8ba379e37f827e057b7ff9095550b423e145697fa028fa",
     "https://esm.sh/gh/rdfjs/data-model@v2.1.0/denonext/data-model.mjs": "a0a7331b2d11669ce20bb6de04b1cf343674f9b97dbd6e9775487b00077f15a0",
     "https://esm.sh/gh/rdfjs/dataset@v2.0.2": "66eadbc4b78d2d917216ff48ddfca496e424181cd36c66b23a4f4379b942b0a8",

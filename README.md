@@ -323,19 +323,20 @@ import {
   Vcard, IndividualVcard, GroupVcard, OrgVcard, Name, Email, EmailUrl, Phone, PhoneUrl, Photo, Address, 
 
   Persona
-} from 'https://esm.sh/gh/doga/qworum-domain-model@0.10.2/mod.mjs';
+} from './mod.mjs';
+// } from 'https://esm.sh/gh/doga/qworum-domain-model@0.10.2/mod.mjs';
 
 const
 // Create a group
-user1_Id  = UserId.uuid(),
-user2_Id  = UserId.uuid(),
-ownerIds  = [user1_Id],
-memberIds = [user1_Id, user2_Id],
+userId1   = UserId.uuid(),
+userId2   = UserId.uuid(),
+ownerIds  = [userId1],
+memberIds = [userId1, userId2],
 groupIn   = new Group({ownerIds, memberIds}),
 
 // Create membership restrictions for a member
 membershipIn = new Membership({
-  userId : user2_Id,
+  userId : userId2,
   groupId: groupIn.groupId,
   roleIds: [wellKnownRoles.reader.roleId] // user has read-only access to group data
 });
@@ -352,13 +353,13 @@ membershipOut = Membership.readOneFrom(dataset);
 // Print out the group.
 console.group(`Group <${groupOut.groupId}>`);
 console.group(`Owners`);
-for (const ownerId of groupOut.ownerIds) {
-  console.info(`<${ownerId}>`);
+for (const userId of groupOut.ownerIds) {
+  console.info(`<${userId}>`);
 }
 console.groupEnd();
 console.group(`Members`);
-for (const memberId of groupOut.memberIds) {
-  console.info(`<${memberId}>`);
+for (const userId of groupOut.memberIds) {
+  console.info(`<${userId}>`);
 }
 console.groupEnd();
 console.groupEnd();
