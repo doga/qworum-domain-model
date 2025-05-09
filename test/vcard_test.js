@@ -1,6 +1,12 @@
 // deno test --allow-import --allow-read ./test/vcard_test.js
 
-import {assertInstanceOf, assertEquals, assertGreaterOrEqual, assertThrows, assertNotEquals, assert } from "jsr:@std/assert@1";
+import {
+  assert,
+  assertInstanceOf, assertNotInstanceOf,
+  assertEquals, assertNotEquals, assertGreaterOrEqual, 
+  assertThrows, 
+  assertMatch,
+} from "jsr:@std/assert@1";
 import { 
   ICAL, IRI, URN, iri 
 } from "../deps.mjs";
@@ -66,6 +72,50 @@ END:VCARD`);
     const ds = vcard.toDataset();
     // console.debug('vcard ds', ds);
 
+});
+
+
+Deno.test('vcard is read from file', async () => {
+    const
+    userId   = UserId.create('1234'),
+    vcardStr = await Deno.readTextFile(`./test/assets/user3-vcard3.vcard`),
+    vcard    = IndividualVcard.fromString(userId, vcardStr);
+
+    assertInstanceOf(vcard, IndividualVcard);
+    assertInstanceOf(vcard.ownerId, Id);
+    assert(vcard.ownerId.equals(userId));
+    
+    assertEquals(vcard.formattedName, 'Aa Jasvvvajm');
+    assertEquals(`${vcard.emails[0].emailUrl.emailAddress}`, 'a.b@email.example');
+    assertMatch(`${vcard.phones[0].phoneUrl.phoneNumber}`, /^\+41\D*76\D*681\D*21\D*96$/);
+    assertInstanceOf(vcard.photo, Photo);
+});
+
+Deno.test('vcard is read from dataset', async () => {
+    const
+    userId   = UserId.create('1234'),
+    vcardStr = await Deno.readTextFile(`./test/assets/user3-vcard3.vcard`),
+    vcard    = IndividualVcard.fromString(userId, vcardStr),
+    dataset  = vcard.toDataset(),
+    vcard2   = IndividualVcard.readOneFrom(dataset);
+
+    // console.debug(`[test]`);
+    // console.debug(`[test] dataset`,dataset);
+    // console.debug(`[test] vcard2`,vcard2);
+
+    assertInstanceOf(vcard2, IndividualVcard);
+    assertInstanceOf(vcard2.ownerId, Id);
+    assert(vcard2.ownerId.equals(userId));
+    
+    assertEquals(vcard2.formattedName, 'Aa Jasvvvajm');
+
+    assertEquals(vcard2.emails.length,1);
+    assertEquals(`${vcard2.emails[0].emailUrl.emailAddress}`, 'a.b@email.example');
+
+    assertEquals(vcard2.phones.length,1);
+    assertMatch(`${vcard2.phones[0].phoneUrl.phoneNumber}`, /^\+41\D*76\D*681\D*21\D*96$/);
+
+    assertInstanceOf(vcard2.photo, Photo);
 });
 
 
