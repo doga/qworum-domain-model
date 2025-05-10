@@ -1,5 +1,5 @@
 // IRI
-export {iri, irl, urn, url, IRI, URN, IRL, IriParser} from 'https://esm.sh/gh/doga/IRI@3.1.3/mod.mjs';
+export {iri, irl, urn, url, IRI, URN, IRL, IriParser} from 'https://esm.sh/gh/doga/IRI@3.1.4/mod.mjs';
 
 // RDF
 import rdfTerm from 'https://esm.sh/gh/rdfjs/data-model@v2.1.0';

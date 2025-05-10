@@ -18,7 +18,7 @@ import { User } from './lib/user.mjs';
 
 import { Membership } from './lib/membership-annotations/membership.mjs';
 import { PartnershipMembership } from './lib/membership-annotations/partnership-membership.mjs';
-import { Role, wellKnownRoles } from './lib/membership-annotations/role.mjs';
+import { Role, platformRoleset } from './lib/membership-annotations/role.mjs';
 import { I18nText } from "./lib/util/i18n-text.mjs";
 import { Language } from "./deps.mjs";
 
@@ -41,7 +41,7 @@ export {
 
   I18nText, Language,
 
-  Org, Group, PersonalGroup, Membership, Partnership, PartnershipMembership, Password, User, Role, wellKnownRoles,
+  Org, Group, PersonalGroup, Membership, Partnership, PartnershipMembership, Password, User, Role, platformRoleset,
 
   Vcard, IndividualVcard, GroupVcard, OrgVcard, Name, Email, Phone, Photo, Address, Types,
 

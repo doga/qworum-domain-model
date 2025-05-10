@@ -8,7 +8,7 @@ import {
 import { 
   Id, baregroup_id, UserId, GroupId,
   Membership, MembershipId,
-  Role, RoleId, wellKnownRoles
+  Role, RoleId, platformRoleset
 } from '../mod.mjs';
 
 
@@ -16,8 +16,7 @@ Deno.test('membership can be written as rdf and then read back', () => {
   const
   userId  = UserId.uuid(),
   groupId = GroupId.uuid(),
-  roleIds = [wellKnownRoles.unrestricted.roleId],
-
+  roleIds = [platformRoleset.findRole(/unrestricted/).roleId],
   membershipIn  = new Membership({userId, groupId, roleIds}),
   dataset       = membershipIn.toDataset(),
   membershipOut = Membership.readOneFrom(dataset);

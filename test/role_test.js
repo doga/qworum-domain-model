@@ -6,8 +6,53 @@ import {
 } from 'jsr:@std/assert@1';
 
 import { 
-  Role, RoleId, role_id, I18nText, Language,
+  Role, RoleId, role_id, I18nText, Language, platformRoleset, irl,
 } from '../mod.mjs';
+
+
+Deno.test('roleset can be copied', () => {
+  const
+  roleIdBase = irl`https://site.example/id#`,
+  roleset    = platformRoleset.copy(roleIdBase);
+
+  // console.debug(`roleset`,JSON.stringify(roleset));
+  assertEquals(platformRoleset.all.length, roleset.all.length);
+  for (const role of roleset.all) {
+    const 
+    roleIdMatcher    = `${role.roleId}`.split('#').pop(),
+    platformPeerRole = platformRoleset.findRole(roleIdMatcher);
+
+    assertInstanceOf(platformPeerRole, Role);
+    for (const lang of role.description.getLangs()) {
+      assertEquals(role.description.getText(lang), platformPeerRole.description.getText(lang));
+    }
+  }
+
+  // console.group(`Platform roleset has base <${platformRoleset.base}>:`);
+  // for (const role of platformRoleset.all) {
+  //   console.group(`Role has ID <${role.roleId}>:`)
+  //   console.group(`Description:`)
+  //   for (const lang of role.description.getLangs()) {
+  //     console.info(role.description.getText(lang));
+  //   }
+  //   console.groupEnd();
+  //   console.groupEnd();
+  // }
+  // console.groupEnd();
+
+  // console.group(`Site roleset has base <${roleset.base}>:`);
+  // for (const role of roleset.all) {
+  //   console.group(`Role has ID <${role.roleId}>:`)
+  //   console.group(`Description:`)
+  //   for (const lang of role.description.getLangs()) {
+  //     console.info(role.description.getText(lang));
+  //   }
+  //   console.groupEnd();
+  //   console.groupEnd();
+  // }
+  // console.groupEnd();
+
+});
 
 
 Deno.test('role can be written as rdf and then read back', () => {
@@ -15,7 +60,7 @@ Deno.test('role can be written as rdf and then read back', () => {
   en     = Language.fromCode('en'),
   roleIn = new Role({
     roleId     : role_id`https://vocab.qworum.net/id/role/unrestricted`,
-    description: new I18nText().setTextForLang('The user can perform all actions in Qworum services.', en)
+    description: new I18nText().setText('The user can perform all actions in Qworum services.', en)
   }),
   dataset = roleIn.toDataset(),
   roleOut = Role.readOneFrom(dataset);

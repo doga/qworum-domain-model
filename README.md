@@ -318,7 +318,7 @@ import {
 
   I18nText, Language,
 
-  Org, Group, PersonalGroup, Membership, Partnership, PartnershipMembership, Password, User, Role, wellKnownRoles,
+  Org, Group, PersonalGroup, Membership, Partnership, PartnershipMembership, Password, User, Role, platformRoleset,
 
   Vcard, IndividualVcard, GroupVcard, OrgVcard, Name, Email, EmailUrl, Phone, PhoneUrl, Photo, Address, 
 
@@ -338,7 +338,7 @@ groupIn   = new Group({ownerIds, memberIds}),
 membershipIn = new Membership({
   userId : userId2,
   groupId: groupIn.groupId,
-  roleIds: [wellKnownRoles.reader.roleId] // user has read-only access to group data
+  roleIds: [platformRoleset.findRole(/reader/).roleId] // user has read-only access to group data
 });
 
 // Store the group and membership in an in-memory RDF dataset

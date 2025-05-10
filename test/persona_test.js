@@ -8,7 +8,7 @@ import {
 import { rdf } from '../deps.mjs';
 
 import { 
-  GroupId, Role, wellKnownRoles,
+  GroupId, Role, platformRoleset,
   UserId, Persona, RoleId, 
 } from '../mod.mjs';
 
@@ -24,7 +24,7 @@ Deno.test('persona can be written as rdf', () => {
   const
   groupId     = GroupId.uuid(),
   userId      = UserId.uuid(),
-  userRoleIds = [wellKnownRoles.reader.roleId],
+  userRoleIds = [platformRoleset.findRole(/reader/).roleId],
 
   personaIn   = new Persona({groupId, userId, userRoleIds} ),
   personaDs   = personaIn.toDataset(),
