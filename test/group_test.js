@@ -2,13 +2,15 @@
 
 import {
   assertInstanceOf, assertEquals, assertNotEquals, 
-  assertThrows, assertFalse, assert,
+  assertThrows, assertFalse, assert, assertExists,
 } from 'jsr:@std/assert@1';
 
 
 import { 
-  Org, Group, user_id, PersonalGroup,
-  OrgId, GroupId, UserId,
+  Group, PersonalGroup, GroupId, 
+  UserId, user_id,
+  Org, OrgId, 
+  PartnershipId,
 } from '../mod.mjs';
 
 
@@ -72,7 +74,44 @@ Deno.test('new personal group can be created', () => {
   ownerId = UserId.uuid(),
   group   = PersonalGroup.create({ ownerId });
 
+  assertInstanceOf(group, Group);
   assertInstanceOf(group, PersonalGroup);
+
+  // groupId
+  assertInstanceOf(group.groupId, GroupId);
+  
+  // isPersonalGroup
+  assertEquals(group.isPersonalGroup, true);
+
+  // orgId
+  assertFalse(group.orgId ?? false);
+
+  // parentGroupId
+  assertFalse(group.parentGroupId ?? false);
+
+  // partnershipIds
+  assertEquals(group.partnershipIds.length,0);
+
+  // ownerIds
+  assertEquals(group.ownerIds.length,1);
+  assert(group.ownerIds[0].equals(ownerId));
+  assertEquals(group.ownerIds[0].bareId, group.groupId.bareId);
+  
+  // subgroupsManagerIds
+  assertEquals(group.subgroupsManagerIds.length,0);
+
+  // partnershipsManagerIds
+  assertEquals(group.partnershipsManagerIds.length,1);
+  assert(group.partnershipsManagerIds[0].equals(ownerId));
+
+  // membershipsManagerIds
+  assertEquals(group.membershipsManagerIds.length,1);
+  assert(group.membershipsManagerIds[0].equals(ownerId));
+
+  // memberIds
+  assertEquals(group.memberIds.length,1);
+  assert(group.memberIds[0].equals(ownerId));
+  
 });
 
 
