@@ -1,4 +1,4 @@
-// deno test --allow-import ./test/membership_test.js
+// deno test --allow-import ./test/role_test.js
 
 import {
   assertInstanceOf, assertEquals, assertNotEquals, 
@@ -10,10 +10,39 @@ import {
 } from '../mod.mjs';
 
 
+Deno.test('platform has a default roleset', () => {
+  // console.group(`Platform roleset has base <${platformRoleset.base}>:`);
+  // for (const role of platformRoleset.all) {
+  //   console.group(`Role has ID <${role.roleId}>:`)
+  //   console.group(`Description:`)
+  //   for (const lang of role.description.getLangs()) {
+  //     console.info(role.description.getText(lang));
+  //   }
+  //   console.groupEnd();
+  //   console.groupEnd();
+  // }
+  // console.groupEnd();
+
+  const 
+  lastBaseChar = `${platformRoleset.base}`[`${platformRoleset.base}`.length];
+  for (const role of platformRoleset.all) {
+    const 
+    roleIdMatcher    = `${role.roleId}`.split(lastBaseChar).pop(),
+    platformPeerRole = platformRoleset.findRole(roleIdMatcher);
+
+    assertInstanceOf(platformPeerRole, Role);
+    for (const lang of role.description.getLangs()) {
+      assertEquals(role.description.getText(lang), platformPeerRole.description.getText(lang));
+    }
+  }
+
+});
+
+
 Deno.test('roleset can be copied', () => {
   const
-  roleIdBase = irl`https://site.example/id#`,
-  roleset    = platformRoleset.copy(roleIdBase);
+  rolesetBase = irl`https://site.example/id#`,
+  roleset     = platformRoleset.copy(rolesetBase);
 
   // console.debug(`roleset`,JSON.stringify(roleset));
   assertEquals(platformRoleset.all.length, roleset.all.length);
@@ -27,18 +56,6 @@ Deno.test('roleset can be copied', () => {
       assertEquals(role.description.getText(lang), platformPeerRole.description.getText(lang));
     }
   }
-
-  // console.group(`Platform roleset has base <${platformRoleset.base}>:`);
-  // for (const role of platformRoleset.all) {
-  //   console.group(`Role has ID <${role.roleId}>:`)
-  //   console.group(`Description:`)
-  //   for (const lang of role.description.getLangs()) {
-  //     console.info(role.description.getText(lang));
-  //   }
-  //   console.groupEnd();
-  //   console.groupEnd();
-  // }
-  // console.groupEnd();
 
   // console.group(`Site roleset has base <${roleset.base}>:`);
   // for (const role of roleset.all) {
