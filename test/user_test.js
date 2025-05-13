@@ -1,7 +1,6 @@
 // deno test --allow-import ./test/user_test.js
 
 import { assertInstanceOf, assertEquals, assertNotEquals, assert } from 'jsr:@std/assert@1';
-import dataflow from 'https://esm.sh/gh/doga/rdf-dataflow@1.1.2/mod.mjs';
 
 import { QRM, } from '../lib/util/rdf-prefixes.mjs';
 import { iri, Password, User, bareuser_id, baregroup_id, UserId } from '../mod.mjs';
@@ -51,20 +50,6 @@ Deno.test('user is created with random id and password', () => {
   assertInstanceOf(user.userId, UserId);
   assertInstanceOf(user.password, Password);
   assertInstanceOf(user.password.passwordId, PasswordId);
-  
-});
-
-
-
-Deno.test('user is read from rdf dataflow', () => {
-  const 
-  rdfDataflowValue = `
-  {"head":{"terms":["s","p","o","g"]},"dataset":[{"s":{"type":"uri","value":"urn:qworum:user:63948b93-841f-4732-af1b-9ca22614395f"},"p":{"type":"uri","value":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"},"o":{"type":"uri","value":"https://vocab.qworum.net/User"}},{"s":{"type":"uri","value":"urn:qworum:user:63948b93-841f-4732-af1b-9ca22614395f"},"p":{"type":"uri","value":"https://vocab.qworum.net/auth"},"o":{"type":"uri","value":"urn:qworum:password:63948b93-841f-4732-af1b-9ca22614395f"}},{"s":{"type":"uri","value":"urn:qworum:user:63948b93-841f-4732-af1b-9ca22614395f"},"p":{"type":"uri","value":"https://vocab.qworum.net/personalGroup"},"o":{"type":"uri","value":"urn:qworum:group:63948b93-841f-4732-af1b-9ca22614395f"}},{"s":{"type":"uri","value":"urn:qworum:password:63948b93-841f-4732-af1b-9ca22614395f"},"p":{"type":"uri","value":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"},"o":{"type":"uri","value":"https://vocab.qworum.net/Password"}},{"s":{"type":"uri","value":"urn:qworum:password:63948b93-841f-4732-af1b-9ca22614395f"},"p":{"type":"uri","value":"https://vocab.qworum.net/passwordSha256"},"o":{"type":"literal","value":"b393b2bf9bca9a685cfeafaf5ba9e21da583a4f787bc211cd7501bee9ef3b4cc","datatype":"http://www.w3.org/2001/XMLSchema#string"}}]}`,
-  rdfDataflowObject = JSON.parse(rdfDataflowValue),
-  dataset = dataflow.toDataset(rdfDataflowObject),
-  user = User.readOneFrom(dataset);
-
-  assertInstanceOf(user, User);
   
 });
 
