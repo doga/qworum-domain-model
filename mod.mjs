@@ -7,8 +7,8 @@ import {
 
 import { 
   Id, OrgId, GroupId, UserId, PasswordId, MembershipId, PartnershipId, PartnershipMembershipId, RoleId,
-  orgid, group_id, user_id, membership_id, partnership_id, partnership_membership_id, role_id,
-  bareorgid, baregroup_id, bareuser_id, barepartnership_id,
+  org_id, group_id, user_id, membership_id, partnership_id, partnership_membership_id, role_id,
+  bareorg_id, baregroup_id, bareuser_id, barepartnership_id,
 } from './lib/id.mjs';
 
 import { Org, Group, PersonalGroup } from './lib/group.mjs';
@@ -36,8 +36,8 @@ export {
   IriParser, IRI, iri, URN, urn, IRL, irl, url, 
 
   Id, OrgId, GroupId, UserId, PasswordId, MembershipId, PartnershipId, PartnershipMembershipId, RoleId,
-  orgid, group_id, user_id, membership_id, partnership_id, partnership_membership_id, role_id,
-  bareorgid, baregroup_id, bareuser_id, barepartnership_id,
+  org_id, group_id, user_id, membership_id, partnership_id, partnership_membership_id, role_id,
+  bareorg_id, baregroup_id, bareuser_id, barepartnership_id,
 
   I18nText, Language,
 

@@ -1,7 +1,7 @@
 // deno test --allow-import ./test/id_test.js
 
 import {assertInstanceOf, assertEquals, assertNotEquals, assertThrows, assertFalse, assert } from "jsr:@std/assert@1";
-import {IRI, iri, Id, OrgId, GroupId, UserId, MembershipId, PartnershipId, partnership_id, PartnershipMembershipId, partnership_membership_id, RoleId, role_id, PasswordId, user_id, orgid } from '../mod.mjs';
+import {IRI, iri, Id, OrgId, GroupId, UserId, MembershipId, PartnershipId, partnership_id, PartnershipMembershipId, partnership_membership_id, RoleId, role_id, PasswordId, user_id, org_id } from '../mod.mjs';
 
 
 Deno.test('ids can be written as rdf and then read back', () => {
@@ -35,7 +35,7 @@ Deno.test('generate password id', () => {
 });
 
 Deno.test('generate org id', () => {
-  const id = orgid`urn:qworum:org:1234`;
+  const id = org_id`urn:qworum:org:1234`;
   // console.debug(`[test] id: ${id}`, id);
   assertInstanceOf(id, OrgId); 
 });
@@ -62,5 +62,5 @@ Deno.test('generate user id', () => {
 // });
 
 Deno.test('non-conforming org id', () => {
-  assertThrows(() => new OrgId('not an orgid'));
+  assertThrows(() => new OrgId('not an org_id'));
 });
