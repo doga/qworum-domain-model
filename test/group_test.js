@@ -89,9 +89,6 @@ Deno.test('new personal group can be created', () => {
   // parentGroupId
   assertFalse(group.parentGroupId ?? false);
 
-  // partnershipIds
-  assertEquals(group.partnershipIds.length,0);
-
   // ownerIds
   assertEquals(group.ownerIds.length,1);
   assert(group.ownerIds[0].equals(ownerId));

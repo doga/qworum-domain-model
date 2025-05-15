@@ -124,7 +124,7 @@ Deno.test("individual vcard can be created in-memory", async () => {
   ownerId = UserId.uuid(),
   vcard = new IndividualVcard(ownerId, { formattedName: 'Yglkjlut Aaaroiuy' });
 
-  console.debug(`[test] vcard`, vcard);
+  // console.debug(`[test] vcard`, vcard);
 
 });
 
