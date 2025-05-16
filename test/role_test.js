@@ -6,7 +6,7 @@ import {
 } from 'jsr:@std/assert@1';
 
 import { 
-  Role, RoleId, role_id, I18nText, Language, platformRoleset, irl,
+  Role, RoleId, role_id, I18nText, Language, platformRoleset, irl, iri,
 } from '../mod.mjs';
 
 
@@ -36,6 +36,42 @@ Deno.test('platform has a default roleset', () => {
     }
   }
 
+});
+
+
+Deno.test('role applicability depends on service url', () => {
+  const
+  platformRole        = platformRoleset.findRole(/reader/),
+  serviceSpecificRole = new Role({
+    roleId     : role_id`https://vocab.org/id/player`,
+    description: new I18nText().setText('A player.', Language.fromCode('en'))
+  }),
+  serviceSpecificRole2 = new Role({
+    roleId     : role_id`https://vocab.site.org/id/player`,
+    description: new I18nText().setText('A player.', Language.fromCode('en'))
+  }),
+  serviceSpecificRole3 = new Role({
+    roleId     : role_id`https://site.org/id/player`,
+    description: new I18nText().setText('A player.', Language.fromCode('en'))
+  }),
+  service1 = iri`https://site.org/`,
+  service2 = iri`https://a.site.org/`,
+  service3 = iri`https://a.vocab.org/`;
+
+  assert(platformRole.isApplicableToQworumService(service1));
+  assert(platformRole.isApplicableToQworumService(service2));
+
+  assertFalse(serviceSpecificRole.isApplicableToQworumService(service1));
+  assertFalse(serviceSpecificRole.isApplicableToQworumService(service2));
+  assert(serviceSpecificRole.isApplicableToQworumService(service3));
+
+  assert(serviceSpecificRole2.isApplicableToQworumService(service1));
+  assert(serviceSpecificRole2.isApplicableToQworumService(service2));
+  assertFalse(serviceSpecificRole2.isApplicableToQworumService(service3));
+
+  assert(serviceSpecificRole3.isApplicableToQworumService(service1));
+  assert(serviceSpecificRole3.isApplicableToQworumService(service2));
+  assertFalse(serviceSpecificRole3.isApplicableToQworumService(service3));
 });
 
 

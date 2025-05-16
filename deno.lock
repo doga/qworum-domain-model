@@ -93,6 +93,8 @@
     "https://esm.sh/gh/doga/IRI@3.1.4/mod.mjs": "69c52c8c3d3c594f4d9012f64b301abb497bd710c6d7e967e60d376b37bb4a15",
     "https://esm.sh/gh/doga/base64@1.0.0/denonext/mod.mjs": "b8473de8503718ecd17af86c9aaa00e8054e0ecdb9787e8f55827f7224385d5a",
     "https://esm.sh/gh/doga/base64@1.0.0/mod.mjs": "70714d2677cf6ff1f731dfd66cc5f1a9ac029392ff27978b2024e6d434ec3e17",
+    "https://esm.sh/gh/doga/dns-domain@1.0.0/denonext/mod.mjs": "8077d019bb348542ad250a31eff0e859b18d0b429f9a7108dace93b928e2ed73",
+    "https://esm.sh/gh/doga/dns-domain@1.0.0/mod.mjs": "7854501625e6f5dce0ba91de27a97581461e3219f58c8e29007189388292571f",
     "https://esm.sh/gh/doga/language@1.0.2/mod.mjs": "ab55f04297172510609ddc77f54affe6f378a4ade2b71427a0e963b2e2d3f0c8",
     "https://esm.sh/gh/doga/punycode@1.0.0/mod.mjs": "4448b30deb82ecf333360321ee2e05b7a87f873c141fe0eec91b983a7e381152",
     "https://esm.sh/gh/doga/qworum-domain-model@0.10.0/denonext/mod.mjs": "23b7bb2b656ca36e47f43292700a950a6a9158ed2e815121d0ceff24d78d59cd",
