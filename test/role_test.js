@@ -77,7 +77,7 @@ Deno.test('role applicability depends on service url', () => {
 
 Deno.test('roleset can be copied', () => {
   const
-  rolesetBase = irl`https://site.example/id#`,
+  rolesetBase = irl`https://example.org/id#`,
   roleset     = platformRoleset.copy(rolesetBase);
 
   // console.debug(`roleset`,JSON.stringify(roleset));
