@@ -16,7 +16,7 @@ Deno.test('partnership membership can be written as rdf and then read back', () 
   const
   partnershipId = PartnershipId.uuid(),
   groupId       = GroupId.uuid(),
-  roleIds       = [platformRoleset.findRole(/unrestricted/).roleId],
+  roleIds       = [platformRoleset.findRole(/reader/).roleId],
 
   mpIn    = new PartnershipMembership({partnershipId, groupId, roleIds}),
   dataset = mpIn.toDataset(),

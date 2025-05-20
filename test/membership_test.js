@@ -16,7 +16,7 @@ Deno.test('membership can be written as rdf and then read back', () => {
   const
   userId  = UserId.uuid(),
   groupId = GroupId.uuid(),
-  roleIds = [platformRoleset.findRole(/unrestricted/).roleId],
+  roleIds = [platformRoleset.findRole(/reader/).roleId],
   membershipIn  = new Membership({userId, groupId, roleIds}),
   dataset       = membershipIn.toDataset(),
   membershipOut = Membership.readOneFrom(dataset);
