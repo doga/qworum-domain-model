@@ -14,6 +14,7 @@ import {
 import { Org, Group, PersonalGroup } from './lib/group.mjs';
 import { Partnership } from './lib/partnership.mjs';
 import { Password } from './lib/user/password.mjs';
+import { UserExtras } from './lib/user/extras.mjs';
 import { User } from './lib/user.mjs';
 
 import { Membership } from './lib/membership-annotations/membership.mjs';
@@ -41,7 +42,7 @@ export {
 
   I18nText, Language,
 
-  Org, Group, PersonalGroup, Membership, Partnership, PartnershipMembership, Password, User, Role, RoleSet, platformRoleset,
+  Org, Group, PersonalGroup, Membership, Partnership, PartnershipMembership, Password, User, UserExtras, Role, RoleSet, platformRoleset,
 
   Vcard, IndividualVcard, GroupVcard, OrgVcard, Name, Email, Phone, Photo, Address, Types,
 
