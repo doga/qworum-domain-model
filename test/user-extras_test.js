@@ -20,7 +20,7 @@ Deno.test('user extra is written to rdf dataset and read back', () => {
   uesOut = UserExtras.readFrom(ds),
   ueOut = UserExtras.readOneFrom(ds);
 
-  console.debug(`[test] ds`,ds);
+  // console.debug(`[test] ds`,ds);
   assertInstanceOf(ueIn, UserExtras);
   assert(ueIn.userId.equals(ueIn.userId));
   assertEquals(ueIn.groupIds.length,1);

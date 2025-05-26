@@ -102,7 +102,7 @@ classDiagram
   class Org{
     +OrgId orgId
     +UserId[] ownerIds
-    +UserId[] rootGroupsManagerIds
+    +UserId[] groupsManagerIds
     +UserId[] membershipsManagerIds
     +UserId[] memberIds
   }
@@ -150,7 +150,7 @@ classDiagram
   Group *-- User : collabManager
   Group *-- User : membershipsManager
   Org -- User : owner
-  Org -- User : rootGroupsManager
+  Org -- User : groupsManager
   Org -- User : membershipsManager
   Org -- User : member
   Persona *-- User : user
@@ -318,7 +318,7 @@ import {
 
   I18nText, Language,
 
-  Org, Group, PersonalGroup, Membership, Partnership, PartnershipMembership, Password, User, Role, platformRoleset,
+  Org, Group, PersonalGroup, Membership, Partnership, PartnershipMembership, Password, User, UserExtras, Role, platformRoleset,
 
   Vcard, IndividualVcard, GroupVcard, OrgVcard, Name, Email, EmailUrl, Phone, PhoneUrl, Photo, Address, 
 

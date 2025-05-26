@@ -22,7 +22,7 @@ Deno.test('org can be written as rdf and then read back', () => {
   assertInstanceOf(orgId, OrgId);
 
   const
-  orgIn   = new Org({orgId, ownerIds, rootGroupsManagerIds: ownerIds, membershipsManagerIds: ownerIds, memberIds: ownerIds}),
+  orgIn   = new Org({orgId, ownerIds, groupsManagerIds: ownerIds, membershipsManagerIds: ownerIds, memberIds: ownerIds}),
   dataset = orgIn.toDataset();
   // console.debug(dataset);
   const orgsOut = Org.readFrom(dataset);
