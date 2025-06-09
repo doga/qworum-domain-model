@@ -14,13 +14,28 @@
 					"label": ""
 				},
 				{
-					"line": 872,
+					"line": 868,
 					"column": 0,
 					"label": ""
 				},
 				{
-					"line": 1108,
+					"line": 1103,
 					"column": 28,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "lib/membership-annotations/role.mjs",
+			"bookmarks": [
+				{
+					"line": 209,
+					"column": 24,
+					"label": ""
+				},
+				{
+					"line": 565,
+					"column": 1,
 					"label": ""
 				}
 			]

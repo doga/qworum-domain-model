@@ -1,7 +1,7 @@
 // deno test --allow-import ./test/id_test.js
 
 import {assertInstanceOf, assertEquals, assertNotEquals, assertThrows, assertFalse, assert } from "jsr:@std/assert@1";
-import {IRI, iri, Id, OrgId, GroupId, UserId, MembershipId, PartnershipId, partnership_id, PartnershipMembershipId, partnership_membership_id, RoleId, role_id, PasswordId, user_id, org_id } from '../mod.mjs';
+import {IRI, iri, Id, OrgId, GroupId, UserId, MembershipId, PartnershipId, partnership_id, PartnershipMembershipId, partnership_membership_id, PasswordId, user_id, org_id } from '../mod.mjs';
 
 
 Deno.test('ids can be written as rdf and then read back', () => {

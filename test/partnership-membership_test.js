@@ -8,7 +8,7 @@ import {
 import { 
   Id, baregroup_id, UserId, GroupId,
   Partnership, PartnershipId, PartnershipMembership, PartnershipMembershipId,
-  Role, RoleId, platformRoleset
+  Role, IRI, defaultRoleset
 } from '../mod.mjs';
 
 
@@ -16,7 +16,7 @@ Deno.test('partnership membership can be written as rdf and then read back', () 
   const
   partnershipId = PartnershipId.uuid(),
   groupId       = GroupId.uuid(),
-  roleIds       = [platformRoleset.findRole(/reader/).roleId],
+  roleIds       = [defaultRoleset.findRole(/reader/).roleId],
 
   mpIn    = new PartnershipMembership({partnershipId, groupId, roleIds}),
   dataset = mpIn.toDataset(),
@@ -28,7 +28,7 @@ Deno.test('partnership membership can be written as rdf and then read back', () 
   [mpIn, mpOut].forEach(m => {
     assertInstanceOf(m, PartnershipMembership);
     assertEquals(m.roleIds.length, 1);
-    assertInstanceOf(m.roleIds[0], RoleId);
+    assertInstanceOf(m.roleIds[0], IRI);
   });
 
   assert(mpIn.partnershipMembershipId.equals(mpOut.partnershipMembershipId));

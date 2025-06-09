@@ -13,6 +13,3 @@ export { ICAL };
 
 // Human languages
 export { Language } from 'https://esm.sh/gh/doga/language@1.0.2/mod.mjs';
-
-// DNS
-export { DnsDomain, effective_toplevel_domains } from 'https://esm.sh/gh/doga/dns-domain@1.0.0/mod.mjs';

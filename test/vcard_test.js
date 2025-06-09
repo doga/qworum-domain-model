@@ -95,8 +95,14 @@ Deno.test('vcard is read from dataset', async () => {
     const
     userId   = UserId.create('1234'),
     vcardStr = await Deno.readTextFile(`./test/assets/user3-vcard3.vcard`),
-    vcard    = IndividualVcard.fromString(userId, vcardStr),
-    dataset  = vcard.toDataset(),
+    vcard    = IndividualVcard.fromString(userId, vcardStr);
+    // console.debug(`[test] vcard`,vcard);
+
+    const
+    dataset  = vcard.toDataset();
+    // console.debug(`[test] dataset`,dataset._quads);
+
+    const
     vcard2   = IndividualVcard.readOneFrom(dataset);
 
     // console.debug(`[test]`);
@@ -122,7 +128,7 @@ Deno.test('vcard is read from dataset', async () => {
 Deno.test("individual vcard can be created in-memory", async () => {
   const
   ownerId = UserId.uuid(),
-  vcard = new IndividualVcard(ownerId, { formattedName: 'Yglkjlut Aaaroiuy' });
+  vcard   = new IndividualVcard(ownerId, { formattedName: 'Yglkjlut Aaaroiuy' });
 
   // console.debug(`[test] vcard`, vcard);
 

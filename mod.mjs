@@ -6,8 +6,8 @@ import {
 } from "./deps.mjs";
 
 import { 
-  Id, OrgId, GroupId, UserId, PasswordId, MembershipId, PartnershipId, PartnershipMembershipId, RoleId,
-  org_id, group_id, user_id, membership_id, partnership_id, partnership_membership_id, role_id,
+  Id, OrgId, GroupId, UserId, PasswordId, MembershipId, PartnershipId, PartnershipMembershipId,
+  org_id, group_id, user_id, membership_id, partnership_id, partnership_membership_id,
   bareorg_id, baregroup_id, bareuser_id, barepartnership_id,
 } from './lib/id.mjs';
 
@@ -19,7 +19,7 @@ import { User } from './lib/user.mjs';
 
 import { Membership } from './lib/membership-annotations/membership.mjs';
 import { PartnershipMembership } from './lib/membership-annotations/partnership-membership.mjs';
-import { Role, RoleSet, platformRoleset } from './lib/membership-annotations/role.mjs';
+import { Role, Roleset, defaultRoleset } from './lib/membership-annotations/role.mjs';
 import { I18nText } from "./lib/util/i18n-text.mjs";
 import { Language } from "./deps.mjs";
 
@@ -36,13 +36,13 @@ import { Persona } from './lib/persona.mjs';
 export { 
   IriParser, IRI, iri, URN, urn, IRL, irl, url, 
 
-  Id, OrgId, GroupId, UserId, PasswordId, MembershipId, PartnershipId, PartnershipMembershipId, RoleId,
-  org_id, group_id, user_id, membership_id, partnership_id, partnership_membership_id, role_id,
+  Id, OrgId, GroupId, UserId, PasswordId, MembershipId, PartnershipId, PartnershipMembershipId,
+  org_id, group_id, user_id, membership_id, partnership_id, partnership_membership_id,
   bareorg_id, baregroup_id, bareuser_id, barepartnership_id,
 
   I18nText, Language,
 
-  Org, Group, PersonalGroup, Membership, Partnership, PartnershipMembership, Password, User, UserExtras, Role, RoleSet, platformRoleset,
+  Org, Group, PersonalGroup, Membership, Partnership, PartnershipMembership, Password, User, UserExtras, Role, Roleset, defaultRoleset,
 
   Vcard, IndividualVcard, GroupVcard, OrgVcard, Name, Email, Phone, Photo, Address, Types,
 

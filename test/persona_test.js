@@ -8,8 +8,8 @@ import {
 import { rdf } from '../deps.mjs';
 
 import { 
-  GroupId, Role, platformRoleset,
-  UserId, Persona, RoleId, 
+  GroupId, Role, defaultRoleset,
+  UserId, Persona, IRI, 
 } from '../mod.mjs';
 
 // type PersonaType = {
@@ -24,7 +24,7 @@ Deno.test('persona can be written as rdf', () => {
   const
   groupId     = GroupId.uuid(),
   userId      = UserId.uuid(),
-  userRoleIds = [platformRoleset.findRole(/reader/).roleId],
+  userRoleIds = [defaultRoleset.findRole(/reader/).roleId],
 
   personaIn   = new Persona({groupId, userId, userRoleIds} ),
   personaDs   = personaIn.toDataset(),
@@ -37,7 +37,7 @@ Deno.test('persona can be written as rdf', () => {
   assert(personaIn.userId.equals(personaOut.userId));
   assertEquals(personaIn.userRoleIds.length, 1);
   assertEquals(personaIn.userRoleIds.length, personaOut.userRoleIds.length);
-  assertInstanceOf(personaOut.userRoleIds[0], RoleId);
+  assertInstanceOf(personaOut.userRoleIds[0], IRI);
   assert(personaIn.userRoleIds[0].equals(personaOut.userRoleIds[0]));
 });
 
