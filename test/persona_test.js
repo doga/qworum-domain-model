@@ -10,6 +10,7 @@ import { rdf } from '../deps.mjs';
 import { 
   GroupId, Role, defaultRoleset,
   UserId, Persona, IRI, 
+  IndividualVcard, GroupVcard,
 } from '../mod.mjs';
 
 // type PersonaType = {
@@ -19,25 +20,33 @@ import {
 //   memberRoles: any,
 // };
 
+const
+groupId     = GroupId.uuid(),
+userId      = UserId.uuid(),
+groupVcard  = new GroupVcard(groupId, {formattedName: 'a group'}),
+userVcard   = new IndividualVcard(userId, {formattedName: 'a user'}),
+userRoleIds = [defaultRoleset.findRole(/\/reader$/).roleId],
 
-Deno.test('persona can be written as rdf', () => {
+persona  = new Persona({groupId, userId, groupVcard, userVcard, userRoleIds});
+
+
+Deno.test('persona can be written to a dataset and read back', () => {
   const
-  groupId     = GroupId.uuid(),
-  userId      = UserId.uuid(),
-  userRoleIds = [defaultRoleset.findRole(/reader/).roleId],
+  personaDs  = persona.toDataset(),
+  personaOut = Persona.readFrom(personaDs);
 
-  personaIn   = new Persona({groupId, userId, userRoleIds} ),
-  personaDs   = personaIn.toDataset(),
-  personaOut  = Persona.readFrom(personaDs);
-
-  // console.debug(personaIn);
+  console.debug(persona);
   // console.debug(personaDs);
   // console.debug(personaOut);
-  assert(personaIn.groupId.equals(personaOut.groupId));
-  assert(personaIn.userId.equals(personaOut.userId));
-  assertEquals(personaIn.userRoleIds.length, 1);
-  assertEquals(personaIn.userRoleIds.length, personaOut.userRoleIds.length);
+  assert(persona.groupId.equals(personaOut.groupId));
+  assert(persona.userId.equals(personaOut.userId));
+  assertEquals(persona.userRoleIds.length, 1);
+  assertEquals(persona.userRoleIds.length, personaOut.userRoleIds.length);
   assertInstanceOf(personaOut.userRoleIds[0], IRI);
-  assert(personaIn.userRoleIds[0].equals(personaOut.userRoleIds[0]));
+  assert(persona.userRoleIds[0].equals(personaOut.userRoleIds[0]));
+
+  assertFalse(personaOut.userFitsAnyOf([]));
+  assertFalse(personaOut.userFitsAnyOf([defaultRoleset.findRole(/\/top$/).roleId]));
+  assert(personaOut.userFitsAnyOf([defaultRoleset.findRole(/\/reader$/).roleId]));
 });
 
