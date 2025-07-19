@@ -9,6 +9,7 @@ import {
   Id, OrgId, GroupId, UserId, PasswordId, MembershipId, PartnershipId, PartnershipMembershipId,
   org_id, group_id, user_id, membership_id, partnership_id, partnership_membership_id,
   bareorg_id, baregroup_id, bareuser_id, barepartnership_id,
+  UserIdSet,
 } from './lib/id.mjs';
 
 import { Org, Group, PersonalGroup } from './lib/group.mjs';
@@ -39,6 +40,8 @@ export {
   Id, OrgId, GroupId, UserId, PasswordId, MembershipId, PartnershipId, PartnershipMembershipId,
   org_id, group_id, user_id, membership_id, partnership_id, partnership_membership_id,
   bareorg_id, baregroup_id, bareuser_id, barepartnership_id,
+
+  UserIdSet,
 
   I18nText, Language,
 

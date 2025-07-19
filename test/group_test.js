@@ -8,7 +8,7 @@ import {
 
 import { 
   Group, PersonalGroup, GroupId, 
-  UserId, user_id,
+  UserId, user_id, UserIdSet,
   Org, OrgId, 
   PartnershipId,
 } from '../mod.mjs';
@@ -16,7 +16,7 @@ import {
 
 Deno.test('org can be written as rdf and then read back', () => {
   const
-  ownerIds = [UserId.uuid()],
+  ownerIds = new UserIdSet().add(UserId.uuid()),
   orgId    = OrgId.uuid();
 
   assertInstanceOf(orgId, OrgId);
@@ -46,6 +46,7 @@ Deno.test('personal group can be written as rdf and then read back', () => {
 
   assertInstanceOf(groupId, GroupId);
   assertInstanceOf(ownerId, UserId);
+  assertInstanceOf(partnershipId, PartnershipId);
   
   const
   groupIn = new PersonalGroup({ 
@@ -96,24 +97,24 @@ Deno.test('new personal group can be created', () => {
   assertFalse(group.parentGroupId ?? false);
 
   // ownerIds
-  assertEquals(group.ownerIds.length,1);
-  assert(group.ownerIds[0].equals(ownerId));
-  assertEquals(group.ownerIds[0].bareId, group.groupId.bareId);
+  assertEquals(group.ownerIds.size,1);
+  assert(group.ownerIds.members[0].equals(ownerId));
+  assertEquals(group.ownerIds.members[0].bareId, group.groupId.bareId);
   
   // subgroupsManagerIds
-  assertEquals(group.subgroupsManagerIds.length,0);
+  assert(group.subgroupsManagerIds.isEmpty);
 
   // partnershipsManagerIds
-  assertEquals(group.partnershipsManagerIds.length,1);
-  assert(group.partnershipsManagerIds[0].equals(ownerId));
+  assertEquals(group.partnershipsManagerIds.size,1);
+  assert(group.partnershipsManagerIds.members[0].equals(ownerId));
 
   // membershipsManagerIds
-  assertEquals(group.membershipsManagerIds.length,1);
-  assert(group.membershipsManagerIds[0].equals(ownerId));
+  assertEquals(group.membershipsManagerIds.size,1);
+  assert(group.membershipsManagerIds.members[0].equals(ownerId));
 
   // memberIds
-  assertEquals(group.memberIds.length,1);
-  assert(group.memberIds[0].equals(ownerId));
+  assertEquals(group.memberIds.size,1);
+  assert(group.memberIds.members[0].equals(ownerId));
   
 });
 
@@ -121,7 +122,7 @@ Deno.test('new personal group can be created', () => {
 Deno.test('group can be written as rdf and then read back', () => {
   const
   isPersonalGroup = false,
-  ownerIds        = [UserId.uuid()],
+  ownerIds        = new UserIdSet().add(UserId.uuid()),
   orgId           = OrgId.uuid(),
   groupId         = GroupId.uuid(),
   parentGroupId   = GroupId.uuid();
@@ -129,8 +130,8 @@ Deno.test('group can be written as rdf and then read back', () => {
   assertInstanceOf(orgId, OrgId);
   assertInstanceOf(groupId, GroupId);
   assertInstanceOf(parentGroupId, GroupId);
-  assertInstanceOf(ownerIds, Array);
-  assertInstanceOf(ownerIds[0], UserId);
+  assertInstanceOf(ownerIds, UserIdSet);
+  assertInstanceOf(ownerIds.members[0], UserId);
 
   const
   groupIn = new Group({groupId, orgId, isPersonalGroup, parentGroupId, ownerIds, subgroupsManagerIds: ownerIds, partnershipsManagersIds: ownerIds, membershipsManagerIds: ownerIds, memberIds: ownerIds} ),

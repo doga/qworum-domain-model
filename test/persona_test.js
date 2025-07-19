@@ -35,7 +35,7 @@ Deno.test('persona can be written to a dataset and read back', () => {
   personaDs  = persona.toDataset(),
   personaOut = Persona.readFrom(personaDs);
 
-  console.debug(persona);
+  // console.debug(persona);
   // console.debug(personaDs);
   // console.debug(personaOut);
   assert(persona.groupId.equals(personaOut.groupId));
