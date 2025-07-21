@@ -1,7 +1,10 @@
 // deno test --allow-import ./test/id_test.js
 
 import {assertInstanceOf, assertEquals, assertNotEquals, assertThrows, assertFalse, assert } from "jsr:@std/assert@1";
-import {IRI, iri, Id, OrgId, GroupId, UserId, MembershipId, PartnershipId, partnership_id, PartnershipMembershipId, partnership_membership_id, PasswordId, user_id, org_id } from '../mod.mjs';
+import {
+  IRI, iri, Id, OrgId, GroupId, UserId, MembershipId, PartnershipId, partnership_id, PartnershipMembershipId, partnership_membership_id, PasswordId, user_id, org_id,
+  UserIdSet, GroupIdSet,
+} from '../mod.mjs';
 
 
 Deno.test('ids can be written as rdf and then read back', () => {
@@ -25,6 +28,27 @@ Deno.test('ids can be written as rdf and then read back', () => {
     }
   );
 
+});
+
+
+Deno.test('user id set', () => {
+  const
+  id1 = UserId.uuid(),
+  id2 = UserId.uuid(),
+  ids = new UserIdSet().add(id1).add(id2);
+
+  // console.debug(`[test] id1: ${id1}`, id1);
+  console.debug(`[test] ids:`, ids.members);
+  console.debug(`[test] ids.size:`, ids.size);
+
+
+  assert(ids.has(id1));
+  assert(ids.has(id2));
+  assertEquals(ids.size, 2);
+  ids.remove(id2);
+  assertEquals(ids.size, 1);
+  assert(ids.has(id1));
+  assertFalse(ids.has(id2));
 });
 
 
