@@ -39,6 +39,21 @@
 					"label": ""
 				}
 			]
+		},
+		{
+			"path": "lib/group.mjs",
+			"bookmarks": [
+				{
+					"line": 98,
+					"column": 20,
+					"label": ""
+				},
+				{
+					"line": 508,
+					"column": 13,
+					"label": ""
+				}
+			]
 		}
 	]
 }

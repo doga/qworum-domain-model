@@ -119,6 +119,31 @@ Deno.test('new personal group can be created', () => {
 });
 
 
+Deno.test('group must have owners', () => {
+  assertThrows(
+    () => {
+      new Group({});
+    }
+  );
+  assertInstanceOf(
+    new Group({ownerIds: new UserIdSet().add(UserId.uuid())}),
+    Group
+  )
+});
+
+Deno.test('org must have owners', () => {
+  assertThrows(
+    () => {
+      new Org({});
+    }
+  );
+  assertInstanceOf(
+    new Org({ownerIds: new UserIdSet().add(UserId.uuid())}),
+    Org
+  )
+});
+
+
 Deno.test('group can be written as rdf and then read back', () => {
   const
   isPersonalGroup = false,
