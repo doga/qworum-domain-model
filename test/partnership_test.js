@@ -34,7 +34,7 @@ Deno.test('partnership can be written as rdf and then read back', () => {
   partnershipsOut = Partnership.readFrom(dataset),
   partnershipOut  = Partnership.readOneFrom(dataset);
 
-  // console.debug(partnershipsOut);
+  console.debug(dataset._quads);
   assertInstanceOf(partnershipsOut, Array);
   assertEquals(partnershipsOut.length, 1);
 
