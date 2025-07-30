@@ -55,6 +55,7 @@ Deno.test('personal group can be written as rdf and then read back', () => {
 
   dataset = groupIn.toDataset(),
   groupsOut = PersonalGroup.readFrom(dataset);
+  console.debug(dataset._quads);
   // console.debug('read groups from dataset');
   // console.debug(groupsOut);
 
@@ -68,7 +69,7 @@ Deno.test('personal group can be written as rdf and then read back', () => {
   assert(groupIn.groupId.equals(groupOut.groupId));
 
   // console.debug(`[test] partnershipId`,partnershipId);
-  // console.debug(`[test] group.partnershipId`,groupOut.partnershipId);
+  // console.debug(`[test] groupOut.partnershipId`,groupOut.partnershipId);
 
   // partnershipId
   assert(partnershipId.equals(groupOut.partnershipId));
@@ -159,7 +160,7 @@ Deno.test('group can be written as rdf and then read back', () => {
   assertInstanceOf(ownerIds.members[0], UserId);
 
   const
-  groupIn = new Group({groupId, orgId, isPersonalGroup, parentGroupId, ownerIds, subgroupsManagerIds: ownerIds, partnershipsManagersIds: ownerIds, membershipsManagerIds: ownerIds, memberIds: ownerIds} ),
+  groupIn = new Group({groupId,  orgId, isPersonalGroup, parentGroupId, ownerIds, subgroupsManagerIds: ownerIds, partnershipsManagersIds: ownerIds, membershipsManagerIds: ownerIds, memberIds: ownerIds} ),
   // groupIn = new Group({groupId, orgId, isPersonalGroup, parentGroupId, ownerIds, subgroupsManagerIds: ownerIds, collabManagerIds: ownerIds, membershipsManagerIds: ownerIds, memberIds: ownerIds} as GroupType),
   dataset = groupIn.toDataset();
   // console.debug(dataset);

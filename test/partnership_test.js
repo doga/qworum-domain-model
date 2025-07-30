@@ -28,13 +28,14 @@ Deno.test('partnership can be written as rdf and then read back', () => {
   assert(memberIds.members.every(id => id instanceof GroupId));
 
   const
-  partnershipIn   = new Partnership({partnershipId, ownerId, memberIds: memberIds }),
+  partnershipIn   = new Partnership({ partnershipId, ownerId, memberIds }),
   // partnershipIn   = new Partnership({partnershipId, ownerId, memberIds: memberIds as Id[]}),
   dataset    = partnershipIn.toDataset(),
   partnershipsOut = Partnership.readFrom(dataset),
   partnershipOut  = Partnership.readOneFrom(dataset);
 
-  console.debug(dataset._quads);
+  // console.debug(dataset._quads);
+  console.debug(`partnershipOut.partnershipId`, partnershipOut.partnershipId);
   assertInstanceOf(partnershipsOut, Array);
   assertEquals(partnershipsOut.length, 1);
 
@@ -42,10 +43,23 @@ Deno.test('partnership can be written as rdf and then read back', () => {
   assertInstanceOf(partnershipOut, Partnership);
   assertEquals(partnershipOut, partnershipsOut[0]);
   assert(partnershipOut.equals(partnershipIn));
+  assert(partnershipOut.partnershipId.equals(partnershipIn.partnershipId));
   assert(partnershipOut.ownerId.equals(partnershipIn.ownerId));
   assertEquals(partnershipOut.memberIds.size, partnershipIn.memberIds.size);
   assert(partnershipOut.memberIds.isSubsetOf(partnershipIn.memberIds));
   assert(partnershipOut.memberIds.isSupersetOf(partnershipIn.memberIds));
 });
+
+Deno.test('partnership id', () => {
+  const
+  ownerId = GroupId.uuid(),
+  partnership = new Partnership({ownerId});
+
+  // console.debug(`partnership`,partnership);
+  console.debug(`partnership id`,partnership.partnershipId);
+
+  assertInstanceOf(partnership.partnershipId, PartnershipId);
+});
+
 
 
