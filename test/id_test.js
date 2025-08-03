@@ -3,6 +3,7 @@
 import {assertInstanceOf, assertNotInstanceOf, assertEquals, assertNotEquals, assertThrows, assertFalse, assert } from "jsr:@std/assert@1";
 import {
   IRI, iri, Id, OrgId, GroupId, UserId, MembershipId, PartnershipId, partnership_id, PartnershipMembershipId, partnership_membership_id, PasswordId, user_id, org_id,
+  barepartnership_id,
   UserIdSet, GroupIdSet,
 } from '../mod.mjs';
 
@@ -28,6 +29,16 @@ Deno.test('ids can be written as rdf and then read back', () => {
     }
   );
 
+});
+
+
+Deno.test('partnership id from bare id', () => {
+  const
+  bareId = '1234',
+  partnershipId = barepartnership_id`${bareId}`;
+
+  assertInstanceOf(partnershipId, PartnershipId);
+  assertEquals(partnershipId.bareId, bareId);
 });
 
 
