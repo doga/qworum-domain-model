@@ -54,16 +54,6 @@
 					"label": ""
 				}
 			]
-		},
-		{
-			"path": "lib/persona.mjs",
-			"bookmarks": [
-				{
-					"line": 155,
-					"column": 25,
-					"label": ""
-				}
-			]
 		}
 	]
 }
