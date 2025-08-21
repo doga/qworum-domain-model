@@ -55,7 +55,7 @@ Deno.test('personal group can be written as rdf and then read back', () => {
 
   dataset = groupIn.toDataset(),
   groupsOut = PersonalGroup.readFrom(dataset);
-  console.debug(dataset._quads);
+  // console.debug(dataset._quads);
   // console.debug('read groups from dataset');
   // console.debug(groupsOut);
 
