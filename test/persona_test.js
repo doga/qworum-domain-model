@@ -2,14 +2,15 @@
 
 import {
   assertInstanceOf, assertEquals, assertNotEquals, 
-  assertThrows, assertFalse, assert,
+  assertThrows, assertFalse, assert, assertArrayIncludes,
 } from 'jsr:@std/assert@1';
 
-import { rdf } from '../deps.mjs';
+// import { rdf } from '../deps.mjs';
 
 import { 
-  GroupId, Role, defaultRoleset,
-  UserId, Persona, IRI, 
+  GroupId, 
+  // Role, defaultRoleset, IRI, 
+  UserId, Persona, 
   IndividualVcard, GroupVcard,
 } from '../mod.mjs';
 
@@ -21,13 +22,15 @@ import {
 // };
 
 const
-groupId     = GroupId.uuid(),
-userId      = UserId.uuid(),
-groupVcard  = new GroupVcard(groupId, {formattedName: 'a group'}),
-userVcard   = new IndividualVcard(userId, {formattedName: 'a user'}),
-userRoleIds = [defaultRoleset.findRole(/\/reader$/).roleId],
+groupId         = GroupId.uuid(),
+userId          = UserId.uuid(),
+groupVcard      = new GroupVcard(groupId, {formattedName: 'a group'}),
+userVcard       = new IndividualVcard(userId, {formattedName: 'a user'}),
+partnerGroupIds = [GroupId.uuid(), GroupId.uuid()],
+persona         = new Persona({groupId, userId, groupVcard, userVcard, partnerGroupIds});
 
-persona  = new Persona({groupId, userId, groupVcard, userVcard, userRoleIds});
+// userRoleIds = [defaultRoleset.findRole(/\/reader$/).roleId],
+// persona  = new Persona({groupId, userId, groupVcard, userVcard, userRoleIds});
 
 
 Deno.test('persona can be written to a dataset and read back', () => {
@@ -36,17 +39,21 @@ Deno.test('persona can be written to a dataset and read back', () => {
   personaOut = Persona.readFrom(personaDs);
 
   // console.debug(persona);
-  // console.debug(personaDs);
+  console.debug(personaDs._quads);
   // console.debug(personaOut);
   assert(persona.groupId.equals(personaOut.groupId));
   assert(persona.userId.equals(personaOut.userId));
-  assertEquals(persona.userRoleIds.length, 1);
-  assertEquals(persona.userRoleIds.length, personaOut.userRoleIds.length);
-  assertInstanceOf(personaOut.userRoleIds[0], IRI);
-  assert(persona.userRoleIds[0].equals(personaOut.userRoleIds[0]));
+  assertEquals(persona.partnerGroupIds.length, personaOut.partnerGroupIds.length);
+  assertArrayIncludes(persona.partnerGroupIds, personaOut.partnerGroupIds);
+  assertArrayIncludes(personaOut.partnerGroupIds, persona.partnerGroupIds);
 
-  assertFalse(personaOut.userFitsAnyOf([]));
-  assertFalse(personaOut.userFitsAnyOf([defaultRoleset.findRole(/\/top$/).roleId]));
-  assert(personaOut.userFitsAnyOf([defaultRoleset.findRole(/\/reader$/).roleId]));
+  // assertEquals(persona.userRoleIds.length, 1);
+  // assertEquals(persona.userRoleIds.length, personaOut.userRoleIds.length);
+  // assertInstanceOf(personaOut.userRoleIds[0], IRI);
+  // assert(persona.userRoleIds[0].equals(personaOut.userRoleIds[0]));
+
+  // assertFalse(personaOut.userFitsAnyOf([]));
+  // assertFalse(personaOut.userFitsAnyOf([defaultRoleset.findRole(/\/top$/).roleId]));
+  // assert(personaOut.userFitsAnyOf([defaultRoleset.findRole(/\/reader$/).roleId]));
 });
 
