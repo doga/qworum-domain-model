@@ -8,7 +8,7 @@ import {
 // import { rdf } from '../deps.mjs';
 
 import { 
-  GroupId, 
+  GroupId, GroupIdSet,
   // Role, defaultRoleset, IRI, 
   UserId, Persona, 
   IndividualVcard, GroupVcard,
@@ -26,7 +26,7 @@ groupId         = GroupId.uuid(),
 userId          = UserId.uuid(),
 groupVcard      = new GroupVcard(groupId, {formattedName: 'a group'}),
 userVcard       = new IndividualVcard(userId, {formattedName: 'a user'}),
-partnerGroupIds = [GroupId.uuid(), GroupId.uuid()],
+partnerGroupIds = new GroupIdSet().add(GroupId.uuid()).add(GroupId.uuid()),
 persona         = new Persona({groupId, userId, groupVcard, userVcard, partnerGroupIds});
 
 // userRoleIds = [defaultRoleset.findRole(/\/reader$/).roleId],
@@ -44,8 +44,7 @@ Deno.test('persona can be written to a dataset and read back', () => {
   assert(persona.groupId.equals(personaOut.groupId));
   assert(persona.userId.equals(personaOut.userId));
   assertEquals(persona.partnerGroupIds.length, personaOut.partnerGroupIds.length);
-  assertArrayIncludes(persona.partnerGroupIds, personaOut.partnerGroupIds);
-  assertArrayIncludes(personaOut.partnerGroupIds, persona.partnerGroupIds);
+  assert(persona.partnerGroupIds.isSameAs(personaOut.partnerGroupIds));
 
   // assertEquals(persona.userRoleIds.length, 1);
   // assertEquals(persona.userRoleIds.length, personaOut.userRoleIds.length);
