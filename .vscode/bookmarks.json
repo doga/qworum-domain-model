@@ -29,12 +29,17 @@
 			"path": "lib/membership-annotations/role.mjs",
 			"bookmarks": [
 				{
-					"line": 209,
+					"line": 187,
+					"column": 15,
+					"label": ""
+				},
+				{
+					"line": 212,
 					"column": 24,
 					"label": ""
 				},
 				{
-					"line": 565,
+					"line": 530,
 					"column": 1,
 					"label": ""
 				}
@@ -51,6 +56,21 @@
 				{
 					"line": 514,
 					"column": 13,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "lib/persona.mjs",
+			"bookmarks": [
+				{
+					"line": 108,
+					"column": 24,
+					"label": ""
+				},
+				{
+					"line": 174,
+					"column": 28,
 					"label": ""
 				}
 			]

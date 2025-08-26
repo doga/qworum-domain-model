@@ -18,7 +18,7 @@ Deno.test('partnership can be written as rdf and then read back', () => {
   ownerId       = baregroup_id`g-6kjh`,
   memberId1     = baregroup_id`mdfgh765`,
   memberId2     = baregroup_id`m-rbc-443`,
-  memberIds     = new GroupIdSet().add([ memberId1, memberId2 ]);
+  memberIds     = new GroupIdSet().add([ ownerId, memberId1, memberId2 ]);
 
   if(!(partnershipId && ownerId && memberId1 && memberId2))return;
 
