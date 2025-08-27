@@ -67,6 +67,44 @@ Deno.test('role can be written as rdf and then read back', () => {
 
 
 
+Deno.test('roleset can be queried', () => {
+  const
+  /** @type {Roleset} */
+  roleset  = defaultRoleset,
+  
+  /** @type {(Role | null)} */
+  drafter  = roleset.findRole('drafter'),
+  /** @type {(Role | null)} */
+  reader   = roleset.findRole('reader'),
+  /** @type {(Role | null)} */
+  upserter = roleset.findRole('upserter'),
+  /** @type {(Role | null)} */
+  writer   = roleset.findRole('writer'),
+  
+  /** @type {Role[]} */
+  drafterDescendents  = roleset.getDescendentsOf(drafter),
+  /** @type {Role[]} */
+  readerDescendents   = roleset.getDescendentsOf(reader),
+  /** @type {Role[]} */
+  upserterDescendents = roleset.getDescendentsOf(upserter),
+  /** @type {Role[]} */
+  writerDescendents   = roleset.getDescendentsOf(writer);
+
+  // console.debug(`writer ${writer.roleId}`,);
+
+  assertEquals(drafterDescendents.length,  0, 'drafter does not have any descendents');
+  assertEquals(readerDescendents.length,   2, 'reader has 2 descendents');
+  assertEquals(upserterDescendents.length, 1, 'upserter has 1 descendent');
+  assertEquals(writerDescendents.length,   0, 'writer does not have any descendents');
+
+  assertInstanceOf(readerDescendents.find(r => r.equals(upserter)), Role);
+  assertInstanceOf(readerDescendents.find(r => r.equals(writer)), Role);
+  assertInstanceOf(upserterDescendents.find(r => r.equals(writer)), Role);
+
+});
+
+
+
 Deno.test('roleset can be written as rdf and then read back', () => {
   const
   rsIn  = defaultRoleset,
@@ -74,13 +112,12 @@ Deno.test('roleset can be written as rdf and then read back', () => {
   rsOut = Roleset.readOneFrom(ds);
 
   // console.debug(`rsIn`, rsIn);
-  console.debug(`dataset`, ds._quads);
+  // console.debug(`dataset`, ds._quads);
   // console.debug(`rsOut`, rsOut);
-  
+
   assertInstanceOf(rsOut, Roleset);
   assert(rsIn.rolesetId.equals(rsOut.rolesetId));
   
-  // console.debug(`rsOut`);
   assertInstanceOf(rsOut.rolesetId, IRL);
   assertInstanceOf(rsOut.description, I18nText);
 
@@ -97,7 +134,7 @@ Deno.test('roleset can be written as rdf and then read back', () => {
 
   assertFalse(reader.parentRoleId);
   assertFalse(drafter.parentRoleId);
-  assert(writer.parentRoleId.equals(reader.roleId));
+  assert(writer.parentRoleId.equals(upserter.roleId));
   assert(upserter.parentRoleId.equals(reader.roleId));
 
   const

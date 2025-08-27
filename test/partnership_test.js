@@ -35,7 +35,7 @@ Deno.test('partnership can be written as rdf and then read back', () => {
   partnershipOut  = Partnership.readOneFrom(dataset);
 
   // console.debug(dataset._quads);
-  console.debug(`partnershipOut.partnershipId`, partnershipOut.partnershipId);
+  // console.debug(`partnershipOut.partnershipId`, partnershipOut.partnershipId);
   assertInstanceOf(partnershipsOut, Array);
   assertEquals(partnershipsOut.length, 1);
 
@@ -56,7 +56,7 @@ Deno.test('partnership id', () => {
   partnership = new Partnership({ownerId});
 
   // console.debug(`partnership`,partnership);
-  console.debug(`partnership id`,partnership.partnershipId);
+  // console.debug(`partnership id`,partnership.partnershipId);
 
   assertInstanceOf(partnership.partnershipId, PartnershipId);
 });

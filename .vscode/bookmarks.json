@@ -29,12 +29,12 @@
 			"path": "lib/membership-annotations/role.mjs",
 			"bookmarks": [
 				{
-					"line": 187,
+					"line": 188,
 					"column": 15,
 					"label": ""
 				},
 				{
-					"line": 212,
+					"line": 213,
 					"column": 24,
 					"label": ""
 				}
@@ -59,12 +59,12 @@
 			"path": "lib/persona.mjs",
 			"bookmarks": [
 				{
-					"line": 108,
+					"line": 112,
 					"column": 24,
 					"label": ""
 				},
 				{
-					"line": 174,
+					"line": 188,
 					"column": 28,
 					"label": ""
 				}
