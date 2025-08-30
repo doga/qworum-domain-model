@@ -171,7 +171,7 @@ Deno.test('group can be written as rdf and then read back', () => {
   } ),
   // groupIn = new Group({groupId, orgId, isPersonalGroup, parentGroupId, ownerIds, subgroupsManagerIds: ownerIds, collabManagerIds: ownerIds, membershipsManagerIds: ownerIds, memberIds: ownerIds} as GroupType),
   dataset = groupIn.toDataset();
-  console.debug(dataset._quads);
+  // console.debug(dataset._quads);
   const groupsOut = Group.readFrom(dataset);
 
   // console.debug(groupsOut);
