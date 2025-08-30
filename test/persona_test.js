@@ -9,7 +9,7 @@ import {
 
 import { 
   GroupId, GroupIdSet,
-  Role, defaultRoleset, IRL, 
+  Role, defaultRoleset, IRL, irl,
   UserId, Persona, 
   IndividualVcard, GroupVcard,
 } from '../mod.mjs';
@@ -55,5 +55,7 @@ Deno.test('persona can be written to a dataset and read back', () => {
   assertThrows(() => personaOut.hasRole(defaultRoleset.findRole(/\/top$/).roleId));
   assert(personaOut.hasRole(defaultRoleset.findRole(/\/reader$/).roleId));
   assert(personaOut.hasRole(new URL(`${defaultRoleset.findRole(/\/reader$/).roleId}`)));
+  assertFalse(personaOut.hasRole(defaultRoleset.findRole(/\/drafter$/).roleId));
+  assert(personaOut.hasRole(irl`http://site.example/roles/1`));
 });
 
