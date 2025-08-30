@@ -28,7 +28,8 @@ Deno.test('partnership can be written as rdf and then read back', () => {
   assert(memberIds.members.every(id => id instanceof GroupId));
 
   const
-  partnershipIn   = new Partnership({ partnershipId, ownerId, memberIds }),
+  membersHaveAllRolesByDefault = false,
+  partnershipIn   = new Partnership({ partnershipId, ownerId, memberIds, membersHaveAllRolesByDefault }),
   // partnershipIn   = new Partnership({partnershipId, ownerId, memberIds: memberIds as Id[]}),
   dataset    = partnershipIn.toDataset(),
   partnershipsOut = Partnership.readFrom(dataset),
@@ -48,6 +49,7 @@ Deno.test('partnership can be written as rdf and then read back', () => {
   assertEquals(partnershipOut.memberIds.size, partnershipIn.memberIds.size);
   assert(partnershipOut.memberIds.isSubsetOf(partnershipIn.memberIds));
   assert(partnershipOut.memberIds.isSupersetOf(partnershipIn.memberIds));
+  assertFalse(partnershipOut.membersHaveAllRolesByDefault);
 });
 
 Deno.test('partnership id', () => {
@@ -59,6 +61,7 @@ Deno.test('partnership id', () => {
   // console.debug(`partnership id`,partnership.partnershipId);
 
   assertInstanceOf(partnership.partnershipId, PartnershipId);
+  assert(partnership.membersHaveAllRolesByDefault);
 });
 
 
