@@ -28,8 +28,23 @@ groupVcard      = new GroupVcard(groupId, {formattedName: 'a group'}),
 userVcard       = new IndividualVcard(userId, {formattedName: 'a user'}),
 partnerGroupIds = new GroupIdSet().add(GroupId.uuid()).add(GroupId.uuid()),
 
-userRoleIds = [defaultRoleset.findRole(/\/reader$/).roleId],
-persona  = new Persona({groupId, userId, groupVcard, userVcard, userRoleIds, partnerGroupIds});
+readerRoleId  = defaultRoleset.findRole(/\/reader$/).roleId,
+writerRoleId  = defaultRoleset.findRole(/\/writer$/).roleId,
+drafterRoleId = defaultRoleset.findRole(/\/drafter$/).roleId,
+xRoleId       = irl`http://x.example/roles/1`,
+yRoleId       = irl`http://y.example/roles/1`,
+userRoleIds   = [readerRoleId, drafterRoleId, xRoleId], // user has all roles in defaultRoleset, plus another role in another roleset
+groupRoleIds  = [readerRoleId], // group only has reader role in defaultRoleset
+userHasAllRolesByDefault = false,
+groupHasAllRolesByDefault = false,
+persona       = new Persona({
+  groupId, userId, groupVcard, userVcard, 
+  partnerGroupIds,
+  userRoleIds, 
+  groupRoleIds, 
+  userHasAllRolesByDefault,
+  groupHasAllRolesByDefault,
+});
 
 
 Deno.test('persona can be written to a dataset and read back', () => {
@@ -46,16 +61,95 @@ Deno.test('persona can be written to a dataset and read back', () => {
   assertEquals(persona.partnerGroupIds.length, personaOut.partnerGroupIds.length);
   assert(persona.partnerGroupIds.isSameAs(personaOut.partnerGroupIds));
 
-  assertEquals(persona.userRoleIds.length, 1);
+  assertEquals(persona.userRoleIds.length, userRoleIds.length);
   assertEquals(persona.userRoleIds.length, personaOut.userRoleIds.length);
   assertInstanceOf(personaOut.userRoleIds[0], IRL);
   assert(persona.userRoleIds[0].equals(personaOut.userRoleIds[0]));
 
-  assertThrows(() => personaOut.hasRole([]));
-  assertThrows(() => personaOut.hasRole(defaultRoleset.findRole(/\/top$/).roleId));
-  assert(personaOut.hasRole(defaultRoleset.findRole(/\/reader$/).roleId));
-  assert(personaOut.hasRole(new URL(`${defaultRoleset.findRole(/\/reader$/).roleId}`)));
-  assertFalse(personaOut.hasRole(defaultRoleset.findRole(/\/drafter$/).roleId));
+  assertThrows(() => personaOut.hasRole());
+  assert(personaOut.hasRole(readerRoleId));
+  assert(personaOut.hasRole(new URL(`${readerRoleId}`)));
+  assertFalse(personaOut.hasRole(drafterRoleId));
   assert(personaOut.hasRole(irl`http://site.example/roles/1`));
+});
+
+
+
+Deno.test('persona can decide if user+group has a certain role', () => {
+  const
+  personas = {
+    closedPartnership: {
+      closedGroup: new Persona({
+        groupId, userId, groupVcard, userVcard, 
+        partnerGroupIds,
+        userRoleIds, 
+        groupRoleIds, 
+        userHasAllRolesByDefault: false, // user in group
+        groupHasAllRolesByDefault: false, // group in partnership
+      }),
+      openGroup: new Persona({
+        groupId, userId, groupVcard, userVcard, 
+        partnerGroupIds,
+        userRoleIds, 
+        groupRoleIds, 
+        userHasAllRolesByDefault: true,
+        groupHasAllRolesByDefault: false,
+      }),
+    },
+    openPartnership: {
+      closedGroup: new Persona({
+        groupId, userId, groupVcard, userVcard, 
+        partnerGroupIds,
+        userRoleIds, 
+        groupRoleIds, 
+        userHasAllRolesByDefault: false, // user in group
+        groupHasAllRolesByDefault: true, // group in partnership
+      }),
+      openGroup: new Persona({
+        groupId, userId, groupVcard, userVcard, 
+        partnerGroupIds,
+        userRoleIds, 
+        groupRoleIds, 
+        userHasAllRolesByDefault: true,
+        groupHasAllRolesByDefault: true,
+      }),
+    },
+  };
+
+  /** @type {Persona} */
+  let persona = personas.closedPartnership.closedGroup;
+
+  // partnership closed, group closed
+  persona = personas.closedPartnership.closedGroup;
+  assert(persona.hasRole(readerRoleId));
+  assertFalse(persona.hasRole(drafterRoleId));
+  assertFalse(persona.hasRole(writerRoleId));
+  assertFalse(persona.hasRole(xRoleId));
+  assertFalse(persona.hasRole(yRoleId));
+
+  // partnership closed, group open
+  persona = personas.closedPartnership.openGroup;
+  assert(persona.hasRole(readerRoleId));
+  assertFalse(persona.hasRole(drafterRoleId));
+  assertFalse(persona.hasRole(writerRoleId));
+  assertFalse(persona.hasRole(xRoleId));
+  assertFalse(persona.hasRole(yRoleId));
+
+  // partnership open, group closed
+  persona = personas.openPartnership.closedGroup;
+  assert(persona.hasRole(readerRoleId));
+  assertFalse(persona.hasRole(drafterRoleId));
+  assertFalse(persona.hasRole(writerRoleId));
+  assert(persona.hasRole(xRoleId));
+  assertFalse(persona.hasRole(yRoleId));
+
+  // partnership open, group open
+  persona = personas.openPartnership.openGroup;
+  assert(persona.hasRole(readerRoleId));
+  assertFalse(persona.hasRole(drafterRoleId));
+  assertFalse(persona.hasRole(writerRoleId));
+  assert(persona.hasRole(xRoleId));
+  assert(persona.hasRole(yRoleId));
+
 });
 
