@@ -8,7 +8,7 @@ import {
 import { 
   Id, baregroup_id, UserId, GroupId,
   Membership, MembershipId,
-  Role, IRI, defaultRoleset
+  Role, IRL, defaultRoleset
 } from '../mod.mjs';
 
 
@@ -28,7 +28,7 @@ Deno.test('membership can be written as rdf and then read back', () => {
   [membershipIn, membershipOut].forEach(m => {
     assertInstanceOf(m, Membership);
     assertEquals(m.roleIds.length, 1);
-    assertInstanceOf(m.roleIds[0], IRI);
+    assertInstanceOf(m.roleIds[0], IRL);
   });
 
   assert(membershipIn.membershipId.equals(membershipOut.membershipId));
