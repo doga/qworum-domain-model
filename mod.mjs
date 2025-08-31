@@ -15,7 +15,7 @@
  * // The user is created in-memory, without publishing it to the global Qworum database.
  * import { 
  *   User, UserId, GroupId, Password, PasswordId
- * } from 'https://esm.sh/gh/doga/qworum-domain-model@0.34.0/mod.mjs';
+ * } from 'https://esm.sh/gh/doga/qworum-domain-model@0.35.0/mod.mjs';
  * const user = User.create();
  * user;                     // a User instance
  * user.userId;              // a UserId instance
@@ -28,7 +28,7 @@
  * // The group is created in-memory, without publishing it to the global Qworum database.
  * import {
  *   Group, GroupId, OrgId, UserId, UserIdSet
- * } from 'https://esm.sh/gh/doga/qworum-domain-model@0.34.0/mod.mjs';
+ * } from 'https://esm.sh/gh/doga/qworum-domain-model@0.35.0/mod.mjs';
  * const
  * ownerIds      = new UserIdSet().add(UserId.uuid()).add(UserId.uuid()),
  * orgId         = OrgId.uuid(),
@@ -48,7 +48,7 @@
  * // The partnership is created in-memory, without publishing it to the global Qworum database.
  * import {
  *   Partnership, PartnershipId, GroupId 
- * } from 'https://esm.sh/gh/doga/qworum-domain-model@0.34.0/mod.mjs';
+ * } from 'https://esm.sh/gh/doga/qworum-domain-model@0.35.0/mod.mjs';
  * const
  * ownerId     = GroupId.uuid(),
  * memberIds   = new GroupIdSet().add(ownerId).add(GroupId.uuid()).add(GroupId.uuid()),
