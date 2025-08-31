@@ -23,7 +23,6 @@ Deno.test('platform has a default roleset', () => {
   upserterRole = rs.findRole('upserter');
 
   assert(writerRole instanceof Role);
-  // assert(writerRole.hasAncestor(rs.topRole));
 
   assert(upserterRole instanceof Role);
   // assert(upserterRole.hasAncestor(writerRole));
