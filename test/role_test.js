@@ -84,16 +84,16 @@ Deno.test('roleset can be queried', () => {
   writer   = roleset.findRole('writer'),
   
   /** @type {Role[]} */
-  drafterDescendents  = roleset.getDescendentsOf(drafter),
+  drafterDescendents  = roleset.getSuperRolesOf(drafter),
 
   /** @type {Role[]} */
-  readerDescendents   = roleset.getDescendentsOf(reader),
+  readerDescendents   = roleset.getSuperRolesOf(reader),
 
   /** @type {Role[]} */
-  upserterDescendents = roleset.getDescendentsOf(upserter),
+  upserterDescendents = roleset.getSuperRolesOf(upserter),
 
   /** @type {Role[]} */
-  writerDescendents   = roleset.getDescendentsOf(writer);
+  writerDescendents   = roleset.getSuperRolesOf(writer);
 
   // console.debug(`writer ${writer.roleId}`,);
 
@@ -118,14 +118,42 @@ Deno.test(`roleset's general set seems valid`, () => {
   /** @type {Role[]} */
   generalSet = roleset.generalSet;
 
-  // for (const generalRole of generalSet) {
-  //   console.debug(`generalRole <${generalRole.roleId}>`);
-  // }
+  console.debug(`generalSet`, generalSet.map(r => `${r.roleId}`));
 
   for (const role of roleset.roles) {
+    console.group(`role ${role.roleId}`);
+    // if role is no other role's parent, then it's in general set
     if (!roleset.roles.find(r => role.roleId.equals(r.parentRoleId))) {
       assert(generalSet.find(r => r.roleId.equals(role.roleId)));
     }
+
+    // if role is not in general set, then it has a general role as descendent
+    if (!generalSet.find(r => r.roleId.equals(role.roleId))) {
+      /** @type {Role[]} */
+      const superRoles = roleset.getSuperRolesOf(role);
+
+      console.debug(`descendents`, superRoles.map(r => `${r.roleId}`));
+
+      assert(superRoles.find(r => generalSet.find(r2 => r2.roleId.equals(r.roleId))));
+
+      // let foundGeneralRole = false, r = role;
+      // while(!foundGeneralRole){
+      //   r = roleset.findRole(r.parentRoleId);
+      //   if(!r)break;
+      //   if(!r.parentRoleId){
+      //     if (generalSet.find(r2 => r2.roleId.equals(r.roleId))) {
+      //       foundGeneralRole = true; 
+      //     }
+      //     break;
+      //   }
+      // }
+      // console.debug(`role <${role.roleId}>`);
+      // console.debug(`foundGeneralRole <${foundGeneralRole}>`);
+      // console.debug(`r <${r.roleId}>`);
+      // assert(foundGeneralRole);
+    }
+    console.debug('\n');
+    console.groupEnd();
   }
 });
 
