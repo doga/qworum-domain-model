@@ -73,19 +73,25 @@ Deno.test('roleset can be queried', () => {
   
   /** @type {(Role | null)} */
   drafter  = roleset.findRole('drafter'),
+
   /** @type {(Role | null)} */
   reader   = roleset.findRole('reader'),
+
   /** @type {(Role | null)} */
   upserter = roleset.findRole('upserter'),
+
   /** @type {(Role | null)} */
   writer   = roleset.findRole('writer'),
   
   /** @type {Role[]} */
   drafterDescendents  = roleset.getDescendentsOf(drafter),
+
   /** @type {Role[]} */
   readerDescendents   = roleset.getDescendentsOf(reader),
+
   /** @type {Role[]} */
   upserterDescendents = roleset.getDescendentsOf(upserter),
+
   /** @type {Role[]} */
   writerDescendents   = roleset.getDescendentsOf(writer);
 
@@ -100,6 +106,27 @@ Deno.test('roleset can be queried', () => {
   assertInstanceOf(readerDescendents.find(r => r.equals(writer)), Role);
   assertInstanceOf(upserterDescendents.find(r => r.equals(writer)), Role);
 
+});
+
+
+
+Deno.test(`roleset's general set seems valid`, () => {
+  const
+  /** @type {Roleset} */
+  roleset = defaultRoleset,
+
+  /** @type {Role[]} */
+  generalSet = roleset.generalSet;
+
+  // for (const generalRole of generalSet) {
+  //   console.debug(`generalRole <${generalRole.roleId}>`);
+  // }
+
+  for (const role of roleset.roles) {
+    if (!roleset.roles.find(r => role.roleId.equals(r.parentRoleId))) {
+      assert(generalSet.find(r => r.roleId.equals(role.roleId)));
+    }
+  }
 });
 
 
