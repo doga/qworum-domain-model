@@ -1,5 +1,5 @@
 /**
- * `Qworum domain model` is a JavaScript library that defines how Qworum applications deal with the end-users.
+ * A JavaScript library that defines how Qworum applications deal with the end-users.
  * 
  * Chief among the concepts defined and/or supported here are:
  * - The {@link Persona}, consisting of a {@link Group} and a {@link User} who is acting on behalf of the group.
