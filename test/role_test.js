@@ -72,7 +72,13 @@ Deno.test('roleset can be queried', () => {
   roleset  = defaultRoleset,
   
   /** @type {(Role | null)} */
-  drafter  = roleset.findRole('drafter'),
+  uploader  = roleset.findRole('uploader'),
+  
+  /** @type {(Role | null)} */
+  downloader  = roleset.findRole('downloader'),
+  
+  /** @type {(Role | null)} */
+  transferrer  = roleset.findRole('transferrer'),
 
   /** @type {(Role | null)} */
   reader   = roleset.findRole('reader'),
@@ -84,28 +90,35 @@ Deno.test('roleset can be queried', () => {
   writer   = roleset.findRole('writer'),
   
   /** @type {Role[]} */
-  drafterDescendents  = roleset.getSuperRolesOf(drafter),
+  downloaderSuperRoles  = roleset.getSuperRolesOf(downloader),
+  
+  /** @type {Role[]} */
+  uploaderSuperRoles  = roleset.getSuperRolesOf(uploader),
+  
+  /** @type {Role[]} */
+  transferrerSuperRoles  = roleset.getSuperRolesOf(transferrer),
 
   /** @type {Role[]} */
-  readerDescendents   = roleset.getSuperRolesOf(reader),
+  readerSuperRoles   = roleset.getSuperRolesOf(reader),
 
   /** @type {Role[]} */
-  upserterDescendents = roleset.getSuperRolesOf(upserter),
+  upserterSuperRoles = roleset.getSuperRolesOf(upserter),
 
   /** @type {Role[]} */
-  writerDescendents   = roleset.getSuperRolesOf(writer);
+  writerSuperRoles   = roleset.getSuperRolesOf(writer);
 
   // console.debug(`writer ${writer.roleId}`,);
 
-  assertEquals(drafterDescendents.length,  0, 'drafter does not have any descendents');
-  assertEquals(readerDescendents.length,   2, 'reader has 2 descendents');
-  assertEquals(upserterDescendents.length, 1, 'upserter has 1 descendent');
-  assertEquals(writerDescendents.length,   0, 'writer does not have any descendents');
+  assertEquals(downloaderSuperRoles.length,  1, 'downloader has 1 descendent');
+  assertEquals(uploaderSuperRoles.length,  0, 'uploader does not have any descendents');
+  assertEquals(transferrerSuperRoles.length,  0, 'transferrer does not have any descendents');
+  assertEquals(readerSuperRoles.length,   2, 'reader has 2 descendents');
+  assertEquals(upserterSuperRoles.length, 1, 'upserter has 1 descendent');
+  assertEquals(writerSuperRoles.length,   0, 'writer does not have any descendents');
 
-  assertInstanceOf(readerDescendents.find(r => r.equals(upserter)), Role);
-  assertInstanceOf(readerDescendents.find(r => r.equals(writer)), Role);
-  assertInstanceOf(upserterDescendents.find(r => r.equals(writer)), Role);
-
+  assertInstanceOf(readerSuperRoles.find(r => r.equals(upserter)), Role);
+  assertInstanceOf(readerSuperRoles.find(r => r.equals(writer)), Role);
+  assertInstanceOf(upserterSuperRoles.find(r => r.equals(writer)), Role);
 });
 
 
@@ -118,10 +131,7 @@ Deno.test(`roleset's general set seems valid`, () => {
   /** @type {Role[]} */
   generalSet = roleset.generalSet;
 
-  console.debug(`generalSet`, generalSet.map(r => `${r.roleId}`));
-
   for (const role of roleset.roles) {
-    console.group(`role ${role.roleId}`);
     // if role is no other role's parent, then it's in general set
     if (!roleset.roles.find(r => role.roleId.equals(r.parentRoleId))) {
       assert(generalSet.find(r => r.roleId.equals(role.roleId)));
@@ -132,28 +142,8 @@ Deno.test(`roleset's general set seems valid`, () => {
       /** @type {Role[]} */
       const superRoles = roleset.getSuperRolesOf(role);
 
-      console.debug(`descendents`, superRoles.map(r => `${r.roleId}`));
-
       assert(superRoles.find(r => generalSet.find(r2 => r2.roleId.equals(r.roleId))));
-
-      // let foundGeneralRole = false, r = role;
-      // while(!foundGeneralRole){
-      //   r = roleset.findRole(r.parentRoleId);
-      //   if(!r)break;
-      //   if(!r.parentRoleId){
-      //     if (generalSet.find(r2 => r2.roleId.equals(r.roleId))) {
-      //       foundGeneralRole = true; 
-      //     }
-      //     break;
-      //   }
-      // }
-      // console.debug(`role <${role.roleId}>`);
-      // console.debug(`foundGeneralRole <${foundGeneralRole}>`);
-      // console.debug(`r <${r.roleId}>`);
-      // assert(foundGeneralRole);
     }
-    console.debug('\n');
-    console.groupEnd();
   }
 });
 
@@ -179,15 +169,15 @@ Deno.test('roleset can be written as rdf and then read back', () => {
   writer   = rsOut.findRole('writer'),
   upserter = rsOut.findRole('upserter'),
   reader   = rsOut.findRole('reader'),
-  drafter  = rsOut.findRole('drafter');
+  transferrer  = rsOut.findRole('transferrer');
 
   assertInstanceOf(writer, Role);
   assertInstanceOf(upserter, Role);
   assertInstanceOf(reader, Role);
-  assertInstanceOf(drafter, Role);
+  assertInstanceOf(transferrer, Role);
 
   assertFalse(reader.parentRoleId);
-  assertFalse(drafter.parentRoleId);
+  assertFalse(transferrer.parentRoleId);
   assert(writer.parentRoleId.equals(upserter.roleId));
   assert(upserter.parentRoleId.equals(reader.roleId));
 

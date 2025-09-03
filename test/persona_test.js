@@ -28,14 +28,16 @@ groupVcard      = new GroupVcard(groupId, {formattedName: 'a group'}),
 userVcard       = new IndividualVcard(userId, {formattedName: 'a user'}),
 partnerGroupIds = new GroupIdSet().add(GroupId.uuid()).add(GroupId.uuid()),
 
+downloaderRoleId          = defaultRoleset.findRole(/\/downloader$/).roleId,
+uploaderRoleId            = defaultRoleset.findRole(/\/uploader$/).roleId,
+transferrerRoleId         = defaultRoleset.findRole(/\/transferrer$/).roleId,
 readerRoleId              = defaultRoleset.findRole(/\/reader$/).roleId,
 upserterRoleId            = defaultRoleset.findRole(/\/upserter$/).roleId,
 writerRoleId              = defaultRoleset.findRole(/\/writer$/).roleId,
-drafterRoleId             = defaultRoleset.findRole(/\/drafter$/).roleId,
 xRoleId                   = irl`http://x.example/roles/1`,
 yRoleId                   = irl`http://y.example/roles/1`,
-userRoleIds               = [upserterRoleId, drafterRoleId, xRoleId],          // user has all roles in defaultRoleset, plus another role in another roleset
-groupRoleIds              = [upserterRoleId],                                  // group only has reader role in defaultRoleset
+userRoleIds               = [upserterRoleId, uploaderRoleId, xRoleId],           // user has all roles in defaultRoleset, plus another role in another roleset
+groupRoleIds              = [upserterRoleId],                                   // group only has reader role in defaultRoleset
 userHasAllRolesByDefault  = false,
 groupHasAllRolesByDefault = false,
 persona                   = new Persona({
@@ -70,7 +72,7 @@ Deno.test('persona can be written to a dataset and read back', () => {
   assertThrows(() => personaOut.hasRole(1));
   assert(personaOut.hasRole(readerRoleId, upserterRoleId, writerRoleId));
   assert(personaOut.hasRole(new URL(`${readerRoleId}`), upserterRoleId, writerRoleId));
-  assertFalse(personaOut.hasRole(drafterRoleId));
+  assertFalse(personaOut.hasRole(uploaderRoleId));
   assert(personaOut.hasRole(irl`http://site.example/roles/1`));
 });
 
@@ -122,33 +124,33 @@ Deno.test('persona can decide if user+group has a certain role', () => {
 
   // partnership closed, group closed
   persona = personas.closedPartnership.closedGroup;
-  assert(persona.hasRole(readerRoleId, upserterRoleId, writerRoleId));
-  assertFalse(persona.hasRole(drafterRoleId));
-  assertFalse(persona.hasRole(writerRoleId));
+  assert(persona.hasRole(readerRoleId, defaultRoleset.getSuperRolesOf(readerRoleId)));
+  assertFalse(persona.hasRole(uploaderRoleId, defaultRoleset.getSuperRolesOf(uploaderRoleId)));
+  assertFalse(persona.hasRole(writerRoleId, defaultRoleset.getSuperRolesOf(writerRoleId)));
   assertFalse(persona.hasRole(xRoleId));
   assertFalse(persona.hasRole(yRoleId));
 
   // partnership closed, group open
   persona = personas.closedPartnership.openGroup;
-  assert(persona.hasRole(readerRoleId, upserterRoleId, writerRoleId));
-  assertFalse(persona.hasRole(drafterRoleId));
-  assertFalse(persona.hasRole(writerRoleId));
+  assert(persona.hasRole(readerRoleId, defaultRoleset.getSuperRolesOf(readerRoleId)));
+  assertFalse(persona.hasRole(uploaderRoleId, defaultRoleset.getSuperRolesOf(uploaderRoleId)));
+  assertFalse(persona.hasRole(writerRoleId, defaultRoleset.getSuperRolesOf(writerRoleId)));
   assertFalse(persona.hasRole(xRoleId));
   assertFalse(persona.hasRole(yRoleId));
 
   // partnership open, group closed
   persona = personas.openPartnership.closedGroup;
-  assert(persona.hasRole(readerRoleId, upserterRoleId, writerRoleId));
-  assertFalse(persona.hasRole(drafterRoleId));
-  assertFalse(persona.hasRole(writerRoleId));
+  assert(persona.hasRole(readerRoleId, defaultRoleset.getSuperRolesOf(readerRoleId)));
+  assertFalse(persona.hasRole(uploaderRoleId, defaultRoleset.getSuperRolesOf(uploaderRoleId)));
+  assertFalse(persona.hasRole(writerRoleId, defaultRoleset.getSuperRolesOf(writerRoleId)));
   assert(persona.hasRole(xRoleId));
   assertFalse(persona.hasRole(yRoleId));
 
   // partnership open, group open
   persona = personas.openPartnership.openGroup;
-  assert(persona.hasRole(readerRoleId, upserterRoleId, writerRoleId));
-  assertFalse(persona.hasRole(drafterRoleId));
-  assertFalse(persona.hasRole(writerRoleId));
+  assert(persona.hasRole(readerRoleId, defaultRoleset.getSuperRolesOf(readerRoleId)));
+  assertFalse(persona.hasRole(uploaderRoleId, defaultRoleset.getSuperRolesOf(uploaderRoleId)));
+  assertFalse(persona.hasRole(writerRoleId, defaultRoleset.getSuperRolesOf(writerRoleId)));
   assert(persona.hasRole(xRoleId));
   assert(persona.hasRole(yRoleId));
 

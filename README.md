@@ -245,6 +245,36 @@ Here is how it works:
 1. The partnership managers of the partner groups are notified and can link their group to the partnership.
 1. A partnership is for Internet-wide teamwork; it is valid on all Qworum applications.
 
+## The default roleset
+
+This library defines a roleset that is industry-agnostic and application-category-agnostic and application-agnostic. Its focus is on what a persona (i.e. a user within a given group) is allowed to do in terms of data CRUD operations.
+
+Note that data ownership works differently than in other IT systems for Qworum services that use Qworum's built-in persona-based group-centric IAM system:
+
+- The data is normally owned by the group.
+- The data is never owned by the user.
+- The one case where the data is owned by the persona rather than the group is when a Qworum service allows the user to draft a document or another type of content or asset in private. When the persona makes the data available to the group, then the Qworum service is expected to automatically transfer data ownership to the group.
+
+This group-centric data ownership model, and the associated group-centric IAM model, bring new primitives to organisations, such as virtual groups (aka partnerships) for easily setting up collabs comprising multiple groups within orgs and/or across orgs.
+
+```mermaid
+---
+title: The roles contained in defaultRoleset
+---
+flowchart LR
+  subgraph gs["General set"]
+    comment@{shape: braces, label: "For a persona, having all general roles implies having all roles in this roleset"}
+    uploader
+    transferrer
+    writer
+  end
+  uploader -- parent role --> downloader
+  upserter -- parent role --> reader
+  writer -- parent role --> upserter
+  upserter_comment@{shape: braces, label: "The upserter has CRU (create, read, update) permissions, but not delete."}
+  transferrer_comment@{shape: braces, label: "The transferrer can transfer to another group any data that is owned by the group."}
+```
+
 ## Lifecycle of a domain model
 
 1. On the client side, domain model instances are first put into an in-memory RDF dataset.
