@@ -87,6 +87,7 @@ Deno.test('user id set', () => {
 
   ids_ids2_intersection        = ids.intersection(ids2),
   ids_ids2_union               = ids.union(ids2),
+  ids_ids2_difference          = ids.difference(ids2),
   ids_ids2_symmetricDifference = ids.symmetricDifference(ids2);
 
   assert(
@@ -95,6 +96,16 @@ Deno.test('user id set', () => {
         ids.has(id) && ids2.has(id)
       )
     )
+  );
+
+  assertNotInstanceOf(
+    ids_ids2_intersection.members.find(
+      id => (
+        (ids2.has(id) && !ids.has(id)) ||
+        (ids.has(id) && !ids2.has(id))
+      )
+    ),
+    UserId
   );
 
   assert(
@@ -106,12 +117,34 @@ Deno.test('user id set', () => {
   );
 
   assertNotInstanceOf(
+    ids_ids2_difference.members.find(
+      id => ids2.has(id)
+    ),
+    UserId
+  );
+
+  assert(
+    ids_ids2_difference.members.every(
+      id => ids.has(id)
+    ),
+    UserId
+  );
+
+  assertNotInstanceOf(
     ids_ids2_symmetricDifference.members.find(
       id => (
         ids.has(id) && ids2.has(id)
       )
     ),
     UserId
+  );
+
+  assert(
+    ids_ids2_symmetricDifference.members.every(
+      id => (
+        ids.has(id) || ids2.has(id)
+      )
+    )
   );
 
   // no duplicates

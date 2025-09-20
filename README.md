@@ -263,7 +263,7 @@ title: The roles contained in defaultRoleset
 ---
 flowchart LR
   subgraph gs["General set"]
-    comment@{shape: braces, label: "For a persona, having all general roles implies having all roles in this roleset"}
+    comment@{shape: braces, label: "Having all of these general roles implies having all roles in this roleset."}
     uploader
     transferrer
     writer
@@ -342,33 +342,36 @@ Restrict the role of a group member to a read-only capacity.
 import { 
   IriParser, IRI, iri, URN, urn, IRL, irl, url, 
 
-  Id, OrgId, GroupId, UserId, PasswordId, MembershipId, PartnershipId, PartnershipMembershipId, RoleId,
-  org_id, group_id, user_id, membership_id, partnership_id, partnership_membership_id, role_id,
+  Id, OrgId, GroupId, UserId, PasswordId, MembershipId, PartnershipId, PartnershipMembershipId,
+  org_id, group_id, user_id, membership_id, partnership_id, partnership_membership_id,
   bareorg_id, baregroup_id, bareuser_id, barepartnership_id,
+
+  UserIdSet, GroupIdSet,
 
   I18nText, Language,
 
-  Org, Group, PersonalGroup, Membership, Partnership, PartnershipMembership, Password, User, UserExtras, Role, platformRoleset,
+  Org, Group, PersonalGroup, Membership, Partnership, PartnershipMembership, Password, User, UserExtras, Role, Roleset, defaultRoleset,
 
-  Vcard, IndividualVcard, GroupVcard, OrgVcard, Name, Email, EmailUrl, Phone, PhoneUrl, Photo, Address, 
+  Vcard, IndividualVcard, GroupVcard, OrgVcard, Name, Email, Phone, Photo, Address, Types,
 
-  Persona
-} from './mod.mjs';
-// } from 'https://esm.sh/gh/doga/qworum-domain-model@0.10.2/mod.mjs';
+  DataUrl, EmailUrl, PhoneUrl,
+
+  Persona,
+} from 'https://esm.sh/gh/doga/qworum-domain-model@0.40.0/mod.mjs';
 
 const
 // Create a group
 userId1   = UserId.uuid(),
 userId2   = UserId.uuid(),
-ownerIds  = [userId1],
-memberIds = [userId1, userId2],
+ownerIds  = new UserIdSet().add([userId1]),
+memberIds = new UserIdSet().add([userId1, userId2]),
 groupIn   = new Group({ownerIds, memberIds}),
 
 // Create membership restrictions for a member
 membershipIn = new Membership({
   userId : userId2,
   groupId: groupIn.groupId,
-  roleIds: [platformRoleset.findRole(/reader/).roleId] // user has read-only access to group data
+  roleIds: [defaultRoleset.findRole(/reader/).roleId] // user has read-only access to group data
 });
 
 // Store the group and membership in an in-memory RDF dataset
@@ -383,12 +386,12 @@ membershipOut = Membership.readOneFrom(dataset);
 // Print out the group.
 console.group(`Group <${groupOut.groupId}>`);
 console.group(`Owners`);
-for (const userId of groupOut.ownerIds) {
+for (const userId of groupOut.ownerIds.members) {
   console.info(`<${userId}>`);
 }
 console.groupEnd();
 console.group(`Members`);
-for (const userId of groupOut.memberIds) {
+for (const userId of groupOut.memberIds.members) {
   console.info(`<${userId}>`);
 }
 console.groupEnd();
